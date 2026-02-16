@@ -1,0 +1,4 @@
+<h1>Panel Administrador</h1>
+<p>Bienvenido {{ request.user.first_name }}</p>
+<a href="/admin/">Ir al admin</a>
+<a href="{% url 'logout' %}">Cerrar sesión</a>
