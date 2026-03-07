@@ -72,7 +72,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'albercas_cecufid',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'ADMIN',
         'HOST': 'localhost',
         'PORT': '5432',
     }

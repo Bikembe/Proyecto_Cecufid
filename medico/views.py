@@ -26,7 +26,7 @@ def escanear_medico(request):
     })
 
 @login_required
-@rol_requerido(['Medico'])
+@rol_requerido(['Medico', 'Administrador'])
 def crear_certificado(request, nadador_id):
 
     nadador = get_object_or_404(Nadador, id=nadador_id)
@@ -77,4 +77,14 @@ def historial_medico(request, nadador_id):
     return render(request, "medico/historial.html", {
         "nadador": nadador,
         "certificados": certificados
+    })
+
+@login_required
+@rol_requerido(['Medico', 'Administrador'])
+def imprimir_evaluacion (request, certificado_id):
+    
+    certificado = get_object_or_404(CertificadoMedico, id=certificado_id)
+
+    return render(request, "medico/imprimir.html", {
+        "certificado": certificado
     })
