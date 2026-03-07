@@ -26,7 +26,7 @@ def escanear_medico(request):
     })
 
 @login_required
-@rol_requerido(['Medico', 'Administrador'])
+@rol_requerido(['Medico'])
 def crear_certificado(request, nadador_id):
 
     nadador = get_object_or_404(Nadador, id=nadador_id)
