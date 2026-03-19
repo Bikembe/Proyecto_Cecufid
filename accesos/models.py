@@ -1,11 +1,26 @@
 from django.db import models
-from usuarios.models import Usuario
+from django.utils import timezone
 
-class BitacoraSistema(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    accion = models.CharField(max_length=150)
-    modulo = models.CharField(max_length=100)
-    fecha = models.DateTimeField(auto_now_add=True)
+
+class Acceso(models.Model):
+
+    nadador = models.ForeignKey(
+        'usuarios.Nadador',
+        on_delete=models.CASCADE
+    )
+
+    fecha = models.DateTimeField(default=timezone.now)
+
+    TIPO_CHOICES = [
+        ('ENTRADA', 'Entrada'),
+        ('SALIDA', 'Salida'),
+    ]
+
+    tipo = models.CharField(
+        max_length=10,
+        choices=TIPO_CHOICES,
+        default='ENTRADA'
+    )
 
     def __str__(self):
-        return f"{self.usuario.email} - {self.accion}"
+        return f"{self.nadador} - {self.tipo} - {self.fecha}"

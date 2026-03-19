@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control de Accesos</title>
+</head>
+<body>
+
+<h1>Escanear Código</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="codigo" autofocus>
+    <button type="submit">Validar</button>
+</form>
+
+{% if mensaje %}
+    <h2>
+        {{ mensaje }}
+    </h2>
+{% endif %}
+
+{% if estado_actual %}
+    <h3>
+        {% if estado_actual == "DENTRO" %}
+            Nadador actualmente DENTRO
+        {% else %}
+            Nadador actualmente FUERA
+        {% endif %}
+    </h3>
+{% endif %}
+
+{% if nadador %}
+    <hr>
+    <h2>Datos del Nadador</h2>
+
+    <p><strong>Nombre:</strong> {{ nadador }}</p>
+
+    {% if info_horario %}
+        <p><strong>Nivel:</strong> {{ info_horario.nivel }}</p>
+        <p><strong>Carril:</strong> {{ info_horario.carril }}</p>
+        <p><strong>Maestro:</strong> {{ info_horario.maestro }}</p>
+        <p><strong>Día:</strong> {{ info_horario.dia_semana }}</p>
+        <p><strong>Hora:</strong> {{ info_horario.hora_inicio }} - {{ info_horario.hora_fin }}</p>
+    {% else %}
+        <p><strong>Sin horario asignado</strong></p>
+    {% endif %}
+{% endif %}
+
+<hr>
+
+<h4>
+    Nadadores actualmente dentro: {{ dentro_count }}
+</h4>
+
+<a href="{% url 'logout' %}">Cerrar sesión</a>
+
+<script>
+    document.querySelector("input[name='codigo']").focus();
+</script>
+
+</body>
+</html>

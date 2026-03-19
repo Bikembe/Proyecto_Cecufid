@@ -1,5 +1,5 @@
 from django.db import models
-from asignaciones.models import Inscripcion
+from usuarios.models import Inscripcion
 
 class Pago(models.Model):
     inscripcion = models.ForeignKey(Inscripcion, on_delete=models.CASCADE)

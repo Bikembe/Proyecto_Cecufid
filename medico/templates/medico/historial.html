@@ -1,0 +1,30 @@
+<h2>Historial médico</h2>
+
+<p>Nadador: {{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+
+<table border="1">
+
+<tr>
+<th>Fecha</th>
+<th>Médico</th>
+<th>Acción</th>
+</tr>
+
+{% for c in certificados %}
+
+<tr>
+
+<td>{{ c.fecha_examen }}</td>
+<td>{{ c.medico.usuario.get_full_name }}</td>
+
+<td>
+<a href="{% url 'imprimir_evaluacion' c.id %}">
+Ver / imprimir
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>

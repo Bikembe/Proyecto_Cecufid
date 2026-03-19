@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel Interno</title>
+</head>
+<body>
+    <h1>Bienvenido {{ request.user.first_name }}</h1>
+    <p>Rol: {{ request.user.rol.nombre }}</p>
+
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+</body>
+</html>

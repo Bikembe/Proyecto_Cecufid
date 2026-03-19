@@ -1,0 +1,46 @@
+<h2>Certificado médico</h2>
+
+<p>Nadador: {{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+
+<form method="POST">
+
+{% csrf_token %}
+
+Temperatura
+<input type="number" name="temperatura">
+
+Presión arterial
+<input type="number" name="presion">
+
+Frecuencia cardiaca
+<input type="number" name="fc">
+
+Frecuencia respiratoria
+<input type="number" name="fr">
+
+Peso
+<input type="number" name="peso">
+
+Talla
+<input type="number" name="talla">
+
+Saturación
+<input type="number" name="sat">
+
+Grupo RH
+<input type="text" name="rh">
+
+Alergias
+<input type="text" name="alergias">
+
+Afiliación
+<input type="text" name="afiliacion">
+
+Conclusión
+<textarea name="conclusion"></textarea>
+
+<button type="submit">
+Guardar certificado
+</button>
+
+</form>

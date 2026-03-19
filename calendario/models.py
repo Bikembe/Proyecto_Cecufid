@@ -1,8 +1,15 @@
 from django.db import models
-from asignaciones.models import Grupo, Inscripcion
+from usuarios.models import Inscripcion
+from asignaciones.models import HorarioCarril
+
 
 class Horario(models.Model):
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    horario_carril = models.ForeignKey(
+        HorarioCarril,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     dia_semana = models.CharField(max_length=20)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
