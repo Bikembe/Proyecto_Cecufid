@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Asignaciones{% endblock %} - CECUFID</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; font-size: 14px; color: #000; background: #fff; }
+    nav { background: #333; padding: 8px 16px; display: flex; gap: 16px; align-items: center; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; }
+    nav a:hover { text-decoration: underline; }
+    .brand { font-weight: bold; margin-right: 16px; }
+    .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 20px; margin-bottom: 16px; }
+    h2 { font-size: 16px; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    th { background: #333; color: #fff; padding: 8px; text-align: left; font-size: 13px; }
+    td { padding: 8px; border-bottom: 1px solid #ccc; font-size: 13px; }
+    tr:hover td { background: #f5f5f5; }
+    .btn { display: inline-block; padding: 6px 12px; border: 1px solid #333; background: #fff; color: #000; text-decoration: none; font-size: 13px; cursor: pointer; }
+    .btn:hover { background: #333; color: #fff; }
+    .btn-primary { background: #333; color: #fff; }
+    .btn-primary:hover { background: #000; }
+    .btn-danger { border-color: #900; color: #900; }
+    .btn-danger:hover { background: #900; color: #fff; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+    input, select, textarea {
+      width: 100%; padding: 6px 8px; border: 1px solid #999;
+      font-size: 13px; font-family: Arial, sans-serif;
+    }
+    input:focus, select:focus, textarea:focus { outline: 2px solid #333; }
+    textarea { resize: vertical; min-height: 80px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 13px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .form-grid .full { grid-column: 1 / -1; }
+    .form-actions { margin-top: 16px; display: flex; gap: 8px; }
+    .alert { padding: 8px 12px; border: 1px solid #000; margin-bottom: 14px; font-size: 13px; }
+    .alert-success { border-color: #090; color: #090; }
+    .alert-error { border-color: #900; color: #900; }
+    .alert-warning { border-color: #960; color: #960; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-box { border: 1px solid #ccc; padding: 12px; }
+    .stat-box .label { font-size: 12px; color: #666; }
+    .stat-box .value { font-size: 28px; font-weight: bold; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .panel { border: 1px solid #ccc; margin-bottom: 20px; }
+    .panel-header { background: #eee; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+    .panel-body { padding: 12px; }
+    .acciones { display: flex; gap: 6px; }
+    .empty { text-align: center; padding: 30px; color: #666; }
+    .filtros { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; border: 1px solid #ccc; padding: 10px; margin-bottom: 16px; }
+    .filtros select, .filtros input { width: auto; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .badge { display: inline-block; padding: 2px 8px; border: 1px solid #999; font-size: 11px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="{% url 'asignaciones:dashboard' %}" class="brand">CECUFID - Asignaciones</a>
+  <a href="{% url 'asignaciones:cuadricula' %}">Cuadricula</a>
+  <a href="{% url 'asignaciones:horario_lista' %}">Horarios</a>
+  <a href="{% url 'asignaciones:grupo_lista' %}">Grupos</a>
+  <a href="{% url 'asignaciones:carril_lista' %}">Carriles</a>
+  <a href="{% url 'asignaciones:reporte' %}">Reportes</a>
+</nav>
+
+<div class="container">
+  {% for msg in messages %}
+    <div class="alert alert-{% if msg.tags == 'error' %}error{% elif msg.tags == 'success' %}success{% else %}warning{% endif %}">
+      {{ msg }}
+    </div>
+  {% endfor %}
+
+  {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}{{ accion }} Curso{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>{{ accion }} Curso</h1></div>
+  <a href="{% url 'asignaciones:curso_lista' %}" class="btn btn-outline">← Volver</a>
+</div>
+<div class="card" style="max-width:640px;">
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Nombre del Curso *</label>
+          <input type="text" name="nombre" value="{{ curso.nombre|default:'' }}" required/>
+        </div>
+        <div class="form-group">
+          <label>Nivel *</label>
+          <select name="nivel" required>
+            {% for val, label in niveles %}
+              <option value="{{ val }}" {% if curso and curso.nivel == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Duración (semanas) *</label>
+          <input type="number" name="duracion_semanas" min="1" value="{{ curso.duracion_semanas|default:'' }}" required/>
+        </div>
+        <div class="form-group">
+          <label>Costo ($) *</label>
+          <input type="number" name="costo" step="0.01" min="0" value="{{ curso.costo|default:'' }}" required/>
+        </div>
+        <div class="form-group full">
+          <label>Descripción</label>
+          <textarea name="descripcion">{{ curso.descripcion|default:'' }}</textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">💾 Guardar</button>
+        <a href="{% url 'asignaciones:curso_lista' %}" class="btn btn-outline">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

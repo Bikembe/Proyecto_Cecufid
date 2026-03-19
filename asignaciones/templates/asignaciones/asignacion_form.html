@@ -1,0 +1,130 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}{{ accion }} Asignación{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{{ accion }} Asignación</h1>
+    <p>Asigna un maestro a un carril en un horario específico</p>
+  </div>
+  <a href="{% url 'asignaciones:cuadricula' %}" class="btn btn-outline">← Volver a Cuadrícula</a>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
+
+  <div class="card">
+    <div class="card-header"><h2>Datos de la Asignación</h2></div>
+    <div class="card-body">
+      <form method="post" id="form-asignacion">
+        {% csrf_token %}
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Carril *</label>
+            <select name="carril" required id="sel-carril">
+              <option value="">— Selecciona —</option>
+              {% for c in carriles %}
+                <option value="{{ c.id }}"
+                  {% if asignacion and asignacion.carril_id == c.id %}selected
+                  {% elif carril_preseleccionado == c.id|stringformat:"s" %}selected
+                  {% endif %}>
+                  Carril {{ c.numero }} — {{ c.alberca.nombre }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Maestro / Entrenador *</label>
+            <select name="entrenador" required>
+              <option value="">— Selecciona —</option>
+              {% for e in entrenadores %}
+                <option value="{{ e.id }}" {% if asignacion and asignacion.entrenador_id == e.id %}selected{% endif %}>
+                  {{ e.nombre }} {{ e.apellido_paterno }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Grupo *</label>
+            <select name="grupo" required>
+              <option value="">— Selecciona —</option>
+              {% for g in grupos %}
+                <option value="{{ g.id }}" {% if asignacion and asignacion.grupo_id == g.id %}selected{% endif %}>
+                  {{ g.curso.nombre }} ({{ g.get_turno_display }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Día de la Semana *</label>
+            <select name="dia_semana" required id="sel-dia">
+              <option value="">— Selecciona —</option>
+              {% for val, label in dias %}
+                <option value="{{ val }}"
+                  {% if asignacion and asignacion.dia_semana == val %}selected
+                  {% elif dia_preseleccionado == val %}selected
+                  {% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Hora de Inicio *</label>
+            <input type="time" name="hora_inicio" value="{{ asignacion.hora_inicio|time:'H:i'|default:'' }}" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Hora de Fin *</label>
+            <input type="time" name="hora_fin" value="{{ asignacion.hora_fin|time:'H:i'|default:'' }}" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de Inicio de Vigencia *</label>
+            <input type="date" name="fecha_inicio_vigencia" value="{{ asignacion.fecha_inicio_vigencia|default:'' }}" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de Fin de Vigencia <span style="color:var(--gris);font-weight:400">(opcional)</span></label>
+            <input type="date" name="fecha_fin_vigencia" value="{{ asignacion.fecha_fin_vigencia|default:'' }}"/>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">💾 Guardar Asignación</button>
+          <a href="{% url 'asignaciones:cuadricula' %}" class="btn btn-outline">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Panel lateral de ayuda -->
+  <div style="display:flex;flex-direction:column;gap:1rem;">
+    <div class="card">
+      <div class="card-header"><h2>ℹ️ Validaciones</h2></div>
+      <div class="card-body" style="font-size:.87rem;color:var(--gris);line-height:1.6;">
+        <p>El sistema verificará automáticamente:</p>
+        <br/>
+        <ul style="padding-left:1.1rem;display:flex;flex-direction:column;gap:.4rem;">
+          <li>Que el <strong style="color:var(--azul)">maestro</strong> no tenga otra clase al mismo tiempo</li>
+          <li>Que el <strong style="color:var(--azul)">carril</strong> no esté ocupado en ese horario</li>
+          <li>Que la hora de fin sea mayor a la de inicio</li>
+        </ul>
+        <br/>
+        <p style="font-size:.8rem;">Si existe un conflicto, el sistema mostrará un mensaje de error y <strong>no guardará</strong> la asignación.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>📋 Estados de Carril</h2></div>
+      <div class="card-body" style="font-size:.85rem;display:flex;flex-direction:column;gap:.5rem;">
+        <div><span class="badge badge-disponible">Disponible</span> — Listo para asignar</div>
+        <div><span class="badge badge-ocupado">Ocupado</span> — Tiene clases asignadas</div>
+        <div><span class="badge badge-mantenimiento">Mantenimiento</span> — No disponible</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

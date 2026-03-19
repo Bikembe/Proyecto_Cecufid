@@ -1,0 +1,43 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Reporte de Uso{% endblock %}
+{% block content %}
+<h1>Reporte de Uso de Carriles</h1>
+<p style="color:#666;margin-bottom:16px;">Generado: {{ hoy }}</p>
+
+<h2 style="margin-bottom:8px;">Estado de Carriles</h2>
+<table>
+  <thead>
+    <tr><th>Carril</th><th>Alberca</th><th>Capacidad</th><th>Estado</th></tr>
+  </thead>
+  <tbody>
+    {% for c in carriles %}
+    <tr>
+      <td>Carril {{ c.numero }}</td>
+      <td>{{ c.alberca.nombre }}</td>
+      <td>{{ c.capacidad_usuarios }}</td>
+      <td>{{ c.estado }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4"><div class="empty">Sin carriles</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 style="margin:20px 0 8px;">Carga por Maestro</h2>
+<table>
+  <thead>
+    <tr><th>Maestro</th><th>Asignaciones</th><th>Horas semanales</th></tr>
+  </thead>
+  <tbody>
+    {% for m in maestros_stats %}
+    <tr>
+      <td>{{ m.entrenador.first_name }} {{ m.entrenador.last_name }}</td>
+      <td>{{ m.num_asignaciones }}</td>
+      <td>{{ m.horas_semanales }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3"><div class="empty">Sin datos</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

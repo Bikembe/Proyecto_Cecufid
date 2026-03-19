@@ -1,0 +1,67 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}{{ accion }} Grupo{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ accion }} Grupo</h1>
+  <a href="{% url 'asignaciones:grupo_lista' %}" class="btn">Volver</a>
+</div>
+<div style="max-width:600px;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Curso *</label>
+        <select name="curso" required>
+          <option value="">-- Selecciona --</option>
+          {% for c in cursos %}
+            <option value="{{ c.id }}" {% if grupo and grupo.curso_id == c.id %}selected{% endif %}>{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Maestro *</label>
+        <select name="entrenador" required>
+          <option value="">-- Selecciona --</option>
+          {% for e in entrenadores %}
+            <option value="{{ e.id }}" {% if grupo and grupo.entrenador_id == e.id %}selected{% endif %}>{{ e.first_name }} {{ e.last_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Alberca *</label>
+        <select name="alberca" required>
+          <option value="">-- Selecciona --</option>
+          {% for a in albercas %}
+            <option value="{{ a.id }}" {% if grupo and grupo.alberca_id == a.id %}selected{% endif %}>{{ a.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Carril (opcional)</label>
+        <select name="carril">
+          <option value="">-- Sin asignar --</option>
+          {% for c in carriles %}
+            <option value="{{ c.id }}" {% if grupo and grupo.carril_id == c.id %}selected{% endif %}>Carril {{ c.numero }} - {{ c.alberca.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Cupo maximo *</label>
+        <input type="number" name="cupo_maximo" min="1" value="{{ grupo.cupo_maximo|default:'15' }}" required/>
+      </div>
+      <div class="form-group">
+        <label>Turno *</label>
+        <select name="turno" required>
+          {% for val, label in turnos %}
+            <option value="{{ val }}" {% if grupo and grupo.turno == val %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="{% url 'asignaciones:grupo_lista' %}" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

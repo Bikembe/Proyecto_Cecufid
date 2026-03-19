@@ -1,0 +1,67 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Cuadricula{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Cuadricula de Horarios</h1>
+  <a href="{% url 'asignaciones:horario_crear' %}" class="btn btn-primary">+ Nueva Asignacion</a>
+</div>
+
+<form method="get" class="filtros">
+  <label>Alberca:</label>
+  <select name="alberca" onchange="this.form.submit()">
+    <option value="">-- Todas --</option>
+    {% for a in albercas %}
+      <option value="{{ a.id }}" {% if alberca_seleccionada == a.id|stringformat:"s" %}selected{% endif %}>{{ a.nombre }}</option>
+    {% endfor %}
+  </select>
+  {% if alberca_seleccionada %}
+    <a href="{% url 'asignaciones:cuadricula' %}" class="btn btn-sm">Limpiar</a>
+  {% endif %}
+</form>
+
+{% if carriles %}
+<div style="overflow-x:auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Horario</th>
+        {% for c in carriles %}
+        <th>Carril {{ c.numero }}<br><small>{{ c.alberca.nombre }}</small></th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for horario in horarios %}
+      <tr>
+        <td>{{ horario.hora_inicio|time:"H:i" }} - {{ horario.hora_fin|time:"H:i" }}</td>
+        {% for c in carriles %}
+        <td>
+          {% if horario.carril_id == c.id %}
+            {{ horario.maestro.first_name }} {{ horario.maestro.last_name }}<br>
+            <small>{{ horario.nivel.nombre }}</small><br>
+            <div class="acciones" style="margin-top:4px;">
+              <a href="{% url 'asignaciones:horario_editar' horario.pk %}" class="btn btn-sm">Editar</a>
+              <a href="{% url 'asignaciones:horario_eliminar' horario.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </div>
+          {% else %}
+            <a href="{% url 'asignaciones:horario_crear' %}?carril={{ c.id }}" class="btn btn-sm">+ Asignar</a>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="{{ carriles|length|add:1 }}">
+          <div class="empty">Sin horarios. <a href="{% url 'asignaciones:horario_crear' %}">Crear primero</a></div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">No hay carriles registrados. <a href="{% url 'asignaciones:carril_crear' %}">Registrar carril</a></div>
+{% endif %}
+
+{% endblock %}

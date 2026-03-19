@@ -1,0 +1,51 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}{{ accion }} Carril{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ accion }} Carril</h1>
+  <a href="{% url 'asignaciones:carril_lista' %}" class="btn">Volver</a>
+</div>
+
+<div style="max-width:500px;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Alberca *</label>
+        <select name="alberca" required>
+          <option value="">-- Selecciona --</option>
+          {% for a in albercas %}
+            <option value="{{ a.id }}" {% if carril and carril.alberca_id == a.id %}selected{% endif %}>{{ a.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Numero de Carril *</label>
+        <input type="number" name="numero" min="1" value="{{ carril.numero|default:'' }}" required/>
+      </div>
+      <div class="form-group">
+        <label>Profundidad (metros)</label>
+        <input type="number" name="profundidad" step="0.01" min="0" value="{{ carril.profundidad|default:'' }}"/>
+      </div>
+      <div class="form-group">
+        <label>Capacidad maxima *</label>
+        <input type="number" name="capacidad_usuarios" min="1" value="{{ carril.capacidad_usuarios|default:'10' }}" required/>
+      </div>
+      <div class="form-group">
+        <label>Estado</label>
+        <select name="estado">
+          <option value="disponible" {% if not carril or carril.estado == 'disponible' %}selected{% endif %}>Disponible</option>
+          <option value="ocupado" {% if carril and carril.estado == 'ocupado' %}selected{% endif %}>Ocupado</option>
+          <option value="mantenimiento" {% if carril and carril.estado == 'mantenimiento' %}selected{% endif %}>Mantenimiento</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="{% url 'asignaciones:carril_lista' %}" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

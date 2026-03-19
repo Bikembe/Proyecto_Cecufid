@@ -1,0 +1,66 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Historial de Asignaciones{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Historial de Asignaciones</h1><p>Registro completo de todas las asignaciones</p></div>
+</div>
+
+<form method="get" class="filtros-bar">
+  <select name="entrenador">
+    <option value="">— Todos los maestros —</option>
+    {% for e in entrenadores %}
+      <option value="{{ e.id }}" {% if filtro_entrenador == e.id|stringformat:"s" %}selected{% endif %}>{{ e.nombre }} {{ e.apellido_paterno }}</option>
+    {% endfor %}
+  </select>
+  <select name="carril">
+    <option value="">— Todos los carriles —</option>
+    {% for c in carriles %}
+      <option value="{{ c.id }}" {% if filtro_carril == c.id|stringformat:"s" %}selected{% endif %}>Carril {{ c.numero }} — {{ c.alberca.nombre }}</option>
+    {% endfor %}
+  </select>
+  <select name="dia">
+    <option value="">— Todos los días —</option>
+    {% for val, label in dias %}
+      <option value="{{ val }}" {% if filtro_dia == val %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+  <a href="{% url 'asignaciones:historial' %}" class="btn btn-outline btn-sm">Limpiar</a>
+</form>
+
+<div class="card">
+  <div class="table-wrapper">
+    {% if asignaciones %}
+    <table>
+      <thead>
+        <tr><th>Carril</th><th>Maestro</th><th>Grupo / Curso</th><th>Día</th><th>Horario</th><th>Vigencia</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        {% for a in asignaciones %}
+        <tr>
+          <td>Carril {{ a.carril.numero }} — {{ a.carril.alberca.nombre }}</td>
+          <td>{{ a.entrenador.nombre }} {{ a.entrenador.apellido_paterno }}</td>
+          <td>{{ a.grupo.curso.nombre }}</td>
+          <td style="text-transform:capitalize">{{ a.dia_semana }}</td>
+          <td>{{ a.hora_inicio|time:"H:i" }} – {{ a.hora_fin|time:"H:i" }}</td>
+          <td style="font-size:.82rem">
+            {{ a.fecha_inicio_vigencia }}
+            {% if a.fecha_fin_vigencia %} → {{ a.fecha_fin_vigencia }}{% endif %}
+          </td>
+          <td>
+            {% if a.activa %}
+              <span class="badge badge-activo">Activa</span>
+            {% else %}
+              <span class="badge badge-inactivo">Inactiva</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><div class="icon">📋</div><h3>No hay asignaciones con esos filtros</h3></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

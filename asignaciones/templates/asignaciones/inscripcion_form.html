@@ -1,0 +1,28 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Inscribir Nadador{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Inscribir Nadador</h1>
+  <a href="{% url 'asignaciones:grupo_detalle' grupo.pk %}" class="btn">Volver</a>
+</div>
+<p>Grupo: <strong>{{ grupo.curso.nombre }}</strong> | Cupo: {{ grupo.inscritos_count }}/{{ grupo.cupo_maximo }}</p>
+<br/>
+<div style="max-width:400px;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Nadador *</label>
+      <select name="nadador" required>
+        <option value="">-- Selecciona --</option>
+        {% for n in nadadores %}
+          <option value="{{ n.id }}">{{ n.nombre }} {{ n.apellido_paterno }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Inscribir</button>
+      <a href="{% url 'asignaciones:grupo_detalle' grupo.pk %}" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

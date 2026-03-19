@@ -1,0 +1,45 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Carriles{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Carriles</h1>
+  <a href="{% url 'asignaciones:carril_crear' %}" class="btn btn-primary">+ Nuevo Carril</a>
+</div>
+
+<form method="get" class="filtros">
+  <label>Alberca:</label>
+  <select name="alberca" onchange="this.form.submit()">
+    <option value="">-- Todas --</option>
+    {% for a in albercas %}
+      <option value="{{ a.id }}" {% if alberca_seleccionada == a.id|stringformat:"s" %}selected{% endif %}>{{ a.nombre }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<table>
+  <thead>
+    <tr><th>Numero</th><th>Alberca</th><th>Profundidad</th><th>Capacidad</th><th>Estado</th><th>Acciones</th></tr>
+  </thead>
+  <tbody>
+    {% for c in carriles %}
+    <tr>
+      <td>Carril {{ c.numero }}</td>
+      <td>{{ c.alberca.nombre }}</td>
+      <td>{% if c.profundidad %}{{ c.profundidad }} m{% else %}-{% endif %}</td>
+      <td>{{ c.capacidad_usuarios }}</td>
+      <td>{{ c.estado }}</td>
+      <td>
+        <div class="acciones">
+          <a href="{% url 'asignaciones:carril_editar' c.pk %}" class="btn btn-sm">Editar</a>
+          <a href="{% url 'asignaciones:carril_eliminar' c.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6"><div class="empty">Sin carriles registrados</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

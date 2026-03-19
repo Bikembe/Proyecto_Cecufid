@@ -1,0 +1,60 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Detalle Grupo{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ grupo.curso.nombre }}</h1>
+  <div class="acciones">
+    <a href="{% url 'asignaciones:inscripcion_crear' grupo.pk %}" class="btn btn-primary">+ Inscribir Nadador</a>
+    <a href="{% url 'asignaciones:grupo_editar' grupo.pk %}" class="btn">Editar</a>
+    <a href="{% url 'asignaciones:grupo_lista' %}" class="btn">Volver</a>
+  </div>
+</div>
+
+<div class="two-col" style="margin-bottom:20px;">
+  <div class="panel">
+    <div class="panel-header"><h2>Informacion del Grupo</h2></div>
+    <div class="panel-body">
+      <table>
+        <tr><td><strong>Maestro</strong></td><td>{{ grupo.entrenador.first_name }} {{ grupo.entrenador.last_name }}</td></tr>
+        <tr><td><strong>Alberca</strong></td><td>{{ grupo.alberca.nombre }}</td></tr>
+        <tr><td><strong>Carril</strong></td><td>{% if grupo.carril %}{{ grupo.carril.numero }}{% else %}-{% endif %}</td></tr>
+        <tr><td><strong>Turno</strong></td><td>{{ grupo.get_turno_display }}</td></tr>
+        <tr><td><strong>Cupo</strong></td><td>{{ grupo.inscritos_count }} / {{ grupo.cupo_maximo }}</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <h2>Nadadores Inscritos ({{ inscripciones.count }})</h2>
+  </div>
+  <div class="panel-body">
+    <table>
+      <thead>
+        <tr><th>Nombre</th><th>Telefono</th><th>Estado</th><th>Fecha Inscripcion</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        {% for i in inscripciones %}
+        <tr>
+          <td>{{ i.nadador.nombre }} {{ i.nadador.apellido_paterno }}</td>
+          <td>{{ i.nadador.telefono }}</td>
+          <td>{{ i.get_estado_display }}</td>
+          <td>{{ i.fecha_inscripcion }}</td>
+          <td>
+            <form method="post" action="{% url 'asignaciones:inscripcion_baja' i.pk %}" style="display:inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Dar de baja?')">Baja</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5"><div class="empty">Sin nadadores inscritos</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

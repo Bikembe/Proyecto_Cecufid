@@ -1,0 +1,13 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Confirmar Eliminacion{% endblock %}
+{% block content %}
+<h1>Confirmar Eliminacion</h1>
+<p style="margin:16px 0;">¿Estas seguro de que deseas eliminar: <strong>{{ objeto }}</strong>?</p>
+<form method="post">
+  {% csrf_token %}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url cancelar_url %}" class="btn">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

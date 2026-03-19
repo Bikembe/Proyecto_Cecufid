@@ -1,0 +1,35 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Horarios{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Horarios de Carril</h1>
+  <a href="{% url 'asignaciones:horario_crear' %}" class="btn btn-primary">+ Nuevo Horario</a>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Carril</th><th>Maestro</th><th>Nivel</th><th>Horario</th><th>Capacidad</th><th>Acciones</th></tr>
+  </thead>
+  <tbody>
+    {% for h in horarios %}
+    <tr>
+      <td>Carril {{ h.carril.numero }} - {{ h.carril.alberca.nombre }}</td>
+      <td>{{ h.maestro.first_name }} {{ h.maestro.last_name }}</td>
+      <td>{{ h.nivel.nombre }}</td>
+      <td>{{ h.hora_inicio|time:"H:i" }} - {{ h.hora_fin|time:"H:i" }}</td>
+      <td>{{ h.capacidad_maxima }}</td>
+      <td>
+        <div class="acciones">
+          <a href="{% url 'asignaciones:horario_editar' h.pk %}" class="btn btn-sm">Editar</a>
+          <a href="{% url 'asignaciones:horario_eliminar' h.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6"><div class="empty">Sin horarios registrados</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

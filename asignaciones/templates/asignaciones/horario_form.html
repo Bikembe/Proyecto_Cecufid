@@ -1,0 +1,79 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}{{ accion }} Horario{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ accion }} Horario de Carril</h1>
+  <a href="{% url 'asignaciones:horario_lista' %}" class="btn">Volver</a>
+</div>
+
+<div style="max-width:600px;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Carril *</label>
+        <select name="carril" required>
+          <option value="">-- Selecciona --</option>
+          {% for c in carriles %}
+            <option value="{{ c.id }}"
+              {% if horario and horario.carril_id == c.id %}selected
+              {% elif request.GET.carril == c.id|stringformat:"s" %}selected{% endif %}>
+              Carril {{ c.numero }} - {{ c.alberca.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Maestro *</label>
+        <select name="maestro" required>
+          <option value="">-- Selecciona --</option>
+          {% for m in maestros %}
+            <option value="{{ m.id }}" {% if horario and horario.maestro_id == m.id %}selected{% endif %}>
+              {{ m.first_name }} {{ m.last_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Nivel *</label>
+        <select name="nivel" required>
+          <option value="">-- Selecciona --</option>
+          {% for n in niveles %}
+            <option value="{{ n.id }}" {% if horario and horario.nivel_id == n.id %}selected{% endif %}>
+              {{ n.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Capacidad maxima *</label>
+        <input type="number" name="capacidad_maxima" min="1" value="{{ horario.capacidad_maxima|default:'15' }}" required/>
+      </div>
+
+      <div class="form-group">
+        <label>Hora de Inicio *</label>
+        <input type="time" name="hora_inicio" value="{{ horario.hora_inicio|time:'H:i'|default:'' }}" required/>
+      </div>
+
+      <div class="form-group">
+        <label>Hora de Fin *</label>
+        <input type="time" name="hora_fin" value="{{ horario.hora_fin|time:'H:i'|default:'' }}" required/>
+      </div>
+    </div>
+
+    <p style="font-size:12px;color:#666;margin-bottom:12px;">
+      El sistema validara automaticamente que el maestro y el carril no tengan conflictos de horario.
+    </p>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="{% url 'asignaciones:horario_lista' %}" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

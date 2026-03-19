@@ -1,0 +1,38 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Cursos{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Cursos</h1><p>Niveles y tipos de curso disponibles</p></div>
+  <a href="{% url 'asignaciones:curso_crear' %}" class="btn btn-primary">＋ Nuevo Curso</a>
+</div>
+<div class="card">
+  <div class="table-wrapper">
+    {% if cursos %}
+    <table>
+      <thead><tr><th>Nombre</th><th>Nivel</th><th>Duración</th><th>Costo</th><th>Grupos</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for c in cursos %}
+        <tr>
+          <td><strong>{{ c.nombre }}</strong></td>
+          <td><span class="badge badge-{{ c.nivel }}">{{ c.get_nivel_display }}</span></td>
+          <td>{{ c.duracion_semanas }} semanas</td>
+          <td>${{ c.costo }}</td>
+          <td>{{ c.num_grupos }}</td>
+          <td>
+            <div class="acciones">
+              <a href="{% url 'asignaciones:curso_editar' c.pk %}" class="btn btn-outline btn-sm">✏ Editar</a>
+              <a href="{% url 'asignaciones:curso_eliminar' c.pk %}" class="btn btn-ghost btn-sm">🗑</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><div class="icon">📚</div><h3>No hay cursos registrados</h3>
+      <a href="{% url 'asignaciones:curso_crear' %}" class="btn btn-primary">Crear Curso</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

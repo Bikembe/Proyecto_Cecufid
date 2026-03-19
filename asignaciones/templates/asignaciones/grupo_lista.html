@@ -1,0 +1,33 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Grupos{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Grupos</h1>
+  <a href="{% url 'asignaciones:grupo_crear' %}" class="btn btn-primary">+ Nuevo Grupo</a>
+</div>
+<table>
+  <thead>
+    <tr><th>Curso</th><th>Maestro</th><th>Alberca</th><th>Carril</th><th>Turno</th><th>Inscritos</th><th>Acciones</th></tr>
+  </thead>
+  <tbody>
+    {% for g in grupos %}
+    <tr>
+      <td>{{ g.curso.nombre }}</td>
+      <td>{{ g.entrenador.first_name }} {{ g.entrenador.last_name }}</td>
+      <td>{{ g.alberca.nombre }}</td>
+      <td>{% if g.carril %}{{ g.carril.numero }}{% else %}-{% endif %}</td>
+      <td>{{ g.get_turno_display }}</td>
+      <td>{{ g.inscritos_count }}/{{ g.cupo_maximo }}</td>
+      <td>
+        <div class="acciones">
+          <a href="{% url 'asignaciones:grupo_detalle' g.pk %}" class="btn btn-sm">Ver</a>
+          <a href="{% url 'asignaciones:grupo_editar' g.pk %}" class="btn btn-sm">Editar</a>
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7"><div class="empty">Sin grupos activos</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

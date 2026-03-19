@@ -1,0 +1,67 @@
+{% extends "asignaciones/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<h1>Panel de Asignaciones</h1>
+
+<div class="stats-grid">
+  <div class="stat-box">
+    <div class="label">Total Carriles</div>
+    <div class="value">{{ total_carriles }}</div>
+  </div>
+  <div class="stat-box">
+    <div class="label">Disponibles</div>
+    <div class="value">{{ carriles_disponibles }}</div>
+  </div>
+  <div class="stat-box">
+    <div class="label">Ocupados</div>
+    <div class="value">{{ carriles_ocupados }}</div>
+  </div>
+  <div class="stat-box">
+    <div class="label">Grupos Activos</div>
+    <div class="value">{{ total_grupos }}</div>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Grupos Recientes</h2>
+      <a href="{% url 'asignaciones:grupo_lista' %}" class="btn btn-sm">Ver todos</a>
+    </div>
+    <div class="panel-body">
+      {% if grupos_recientes %}
+      <table>
+        <thead>
+          <tr><th>Curso</th><th>Maestro</th><th>Carril</th><th>Turno</th></tr>
+        </thead>
+        <tbody>
+          {% for g in grupos_recientes %}
+          <tr>
+            <td><a href="{% url 'asignaciones:grupo_detalle' g.pk %}">{{ g.curso.nombre }}</a></td>
+            <td>{{ g.entrenador.first_name }} {{ g.entrenador.last_name }}</td>
+            <td>{% if g.carril %}{{ g.carril.numero }}{% else %}-{% endif %}</td>
+            <td>{{ g.get_turno_display }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty">Sin grupos registrados</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><h2>Accesos Rapidos</h2></div>
+    <div class="panel-body" style="display:flex;flex-direction:column;gap:8px;">
+      <a href="{% url 'asignaciones:cuadricula' %}" class="btn">Ver Cuadricula de Horarios</a>
+      <a href="{% url 'asignaciones:horario_crear' %}" class="btn">Nueva Asignacion Maestro-Carril</a>
+      <a href="{% url 'asignaciones:carril_crear' %}" class="btn">Registrar Carril</a>
+      <a href="{% url 'asignaciones:grupo_crear' %}" class="btn">Crear Grupo</a>
+      <a href="{% url 'asignaciones:reporte' %}" class="btn">Ver Reporte de Uso</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
