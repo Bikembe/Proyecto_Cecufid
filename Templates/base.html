@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CECUFID - Sistema de Albercas</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .navbar {
+            background-color: #0d47a1;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .menu {
+            background-color: #1565c0;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 6px 10px;
+            border-radius: 5px;
+        }
+
+        .menu a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #c8e6c9;
+            color: #256029;
+        }
+
+        .error {
+            background-color: #ffcdd2;
+            color: #c62828;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>CECUFID</h2>
+
+    <div>
+        {% if request.user.is_authenticated %}
+            {{ request.user.first_name }} {{ request.user.last_name }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="menu">
+
+    {% if request.user.is_authenticated %}
+
+        {% with rol=request.user.rol.nombre|default_if_none:'' %}
+
+            <a href="/">Dashboard</a>
+
+            {% if rol == "Administrador" %}
+                <a href="/admin/">Admin</a>
+                <a href="/asignaciones/">Asignaciones</a>
+                <a href="/accesos/escanear/">Accesos</a>
+                <a href="/medico/escanear/">Médico</a>
+            {% endif %}
+
+            {% if rol == "Coordinador" %}
+                <a href="/asignaciones/">Asignaciones</a>
+                <a href="/asignaciones/horarios/">Horarios</a>
+                <a href="/asignaciones/reportes/">Reportes</a>
+                <a href="/asignaciones/inscripciones/">Inscripciones</a>
+            {% endif %}
+
+            {% if rol == "Maestro" %}
+                <a href="/asignaciones/horarios/">Mis Horarios</a>
+            {% endif %}
+
+            {% if rol == "Recepcionista" %}
+                <a href="/accesos/escanear/">Accesos</a>
+            {% endif %}
+
+            {% if rol == "Médico" %}
+                <a href="/medico/escanear/">Escanear Nadador</a>
+                <a href="/medico/historial/">Historial</a>
+            {% endif %}
+
+            {% if rol == "Caja" %}
+                <a href="/accesos/escanear/">Control de Acceso</a>
+            {% endif %}
+
+        {% endwith %}
+
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="
+        background:none;
+        border:none;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+        padding:6px 10px;
+    ">
+        Cerrar sesión
+    </button>
+</form>
+
+    {% endif %}
+
+</div>
+
+<div class="content">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

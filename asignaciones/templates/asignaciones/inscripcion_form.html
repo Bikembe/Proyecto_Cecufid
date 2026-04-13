@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Nueva Inscripción</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>Nadador:</label>
+    <select name="nadador">
+        {% for n in nadadores %}
+            <option value="{{ n.id }}">{{ n }}</option>
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label>Maestro:</label>
+    <select id="maestro">
+        <option value="">Todos</option>
+        {% for m in maestros %}
+            <option value="{{ m.id }}">{{ m.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label>Horario:</label>
+    <select id="horario" name="horario">
+        <option>Cargando...</option>
+    </select>
+
+    <p id="mensaje" style="color:red;"></p>
+
+    <br><br>
+
+    <button type="submit">Inscribir</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    function cargarHorarios() {
+        let maestro = document.getElementById("maestro").value;
+        let url = "/asignaciones/api/horarios/";
+
+        if (maestro) {
+            url += "?maestro=" + maestro;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let select = document.getElementById("horario");
+                select.innerHTML = '<option value="">Seleccionar</option>';
+
+                data.forEach(h => {
+                    let option = document.createElement("option");
+
+                    option.value = h.id;
+                    option.text = h.texto +
+                        (h.disponibles <= 0
+                            ? " (LLENO)"
+                            : ` (${h.disponibles} disponibles)`);
+
+                    option.setAttribute("data-disponibles", h.disponibles);
+
+                    if (h.disponibles <= 0) {
+                        option.disabled = true;
+                    }
+
+                    select.appendChild(option);
+                });
+            });
+    }
+
+    cargarHorarios();
+    setInterval(cargarHorarios, 5000);
+
+    document.getElementById("maestro").addEventListener("change", cargarHorarios);
+
+    document.getElementById("horario").addEventListener("change", function(e) {
+        let selected = e.target.options[e.target.selectedIndex];
+        let disponibles = selected.getAttribute("data-disponibles");
+
+        let mensaje = document.getElementById("mensaje");
+
+        mensaje.innerText = (disponibles == 0) ? "Este horario está lleno" : "";
+    });
+
+});
+</script>
+
+{% endblock %}

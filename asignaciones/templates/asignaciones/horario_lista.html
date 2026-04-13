@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Horarios de Carril</h2>
+
+<a href="{% url 'asignaciones:horario_crear' %}">Nuevo Horario</a>
+
+<table border="1">
+    <tr>
+        <th>Carril</th>
+        <th>Maestro</th>
+        <th>Nivel</th>
+        <th>Horario</th>
+        <th>Capacidad</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for h in horarios %}
+    <tr>
+        <td>{{ h.carril }}</td>
+        <td>{{ h.maestro }}</td>
+        <td>{{ h.nivel }}</td>
+        <td>{{ h.hora_inicio }} - {{ h.hora_fin }}</td>
+        <td>{{ h.capacidad_maxima }}</td>
+        <td>
+            <a href="{% url 'asignaciones:horario_editar' h.id %}">Editar</a>
+            <a href="{% url 'asignaciones:horario_eliminar' h.id %}">Eliminar</a>
+            <a href="{% url 'asignaciones:grupo_detalle' h.id %}">
+    Ver grupo
+</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

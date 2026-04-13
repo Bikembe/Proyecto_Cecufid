@@ -1,46 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h2>Certificado médico</h2>
 
 <p>Nadador: {{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
 
+{% if error %}
+    <p style="color:red;">{{ error }}</p>
+{% endif %}
+
 <form method="POST">
+    {% csrf_token %}
 
-{% csrf_token %}
+    Temperatura
+    <input type="number" name="temperatura"><br>
 
-Temperatura
-<input type="number" name="temperatura">
+    Presión arterial
+    <input type="number" name="presion"><br>
 
-Presión arterial
-<input type="number" name="presion">
+    Frecuencia cardiaca
+    <input type="number" name="fc"><br>
 
-Frecuencia cardiaca
-<input type="number" name="fc">
+    Frecuencia respiratoria
+    <input type="number" name="fr"><br>
 
-Frecuencia respiratoria
-<input type="number" name="fr">
+    Peso
+    <input type="number" name="peso"><br>
 
-Peso
-<input type="number" name="peso">
+    Talla
+    <input type="number" name="talla"><br>
 
-Talla
-<input type="number" name="talla">
+    Saturación
+    <input type="number" name="sat"><br>
 
-Saturación
-<input type="number" name="sat">
+    Grupo RH
+    <input type="text" name="rh"><br>
 
-Grupo RH
-<input type="text" name="rh">
+    Alergias
+    <input type="text" name="alergias"><br>
 
-Alergias
-<input type="text" name="alergias">
+    Afiliación
+    <input type="text" name="afiliacion"><br>
 
-Afiliación
-<input type="text" name="afiliacion">
+    Conclusión
+    <textarea name="conclusion"></textarea><br>
 
-Conclusión
-<textarea name="conclusion"></textarea>
-
-<button type="submit">
-Guardar certificado
-</button>
-
+    <button type="submit">Guardar certificado</button>
 </form>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Cuadrícula de Horarios</h2>
+
+<table border="1">
+    <tr>
+        <th>Carril</th>
+        <th>Horario</th>
+        <th>Maestro</th>
+        <th>Nivel</th>
+    </tr>
+
+    {% for h in horarios %}
+    <tr>
+        <td>{{ h.carril }}</td>
+        <td>{{ h.hora_inicio }} - {{ h.hora_fin }}</td>
+        <td>{{ h.maestro }}</td>
+        <td>{{ h.nivel }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

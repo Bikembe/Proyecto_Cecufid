@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Reporte de Uso de Carriles</h2>
+
+<table border="1">
+    <tr>
+        <th>Horario</th>
+        <th>Ocupados</th>
+        <th>Disponibles</th>
+    </tr>
+
+    {% for item in data %}
+    <tr>
+        <td>
+            {{ item.horario.carril }} |
+            {{ item.horario.hora_inicio }} - {{ item.horario.hora_fin }}
+        </td>
+        <td>{{ item.ocupados }}</td>
+        <td>{{ item.disponibles }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+.dashboard {
+    padding: 20px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+}
+
+.card.blue { background: #3498db; }
+.card.green { background: #2ecc71; }
+.card.orange { background: #f39c12; }
+.card.red { background: #e74c3c; }
+
+.table-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: white;
+    font-size: 12px;
+}
+
+.badge.ok { background: #2ecc71; }
+.badge.mid { background: #f39c12; }
+.badge.low { background: #e74c3c; }
+
+</style>
+
+<div class="dashboard">
+
+<h2>📊 Panel de Evaluaciones</h2>
+
+<div class="cards">
+    <div class="card blue">
+        Total Evaluaciones<br>
+        {{ total }}
+    </div>
+
+    <div class="card green">
+        Promedio General<br>
+        {{ promedio_general|floatformat:2 }}
+    </div>
+
+    <div class="card orange">
+        Aprobados<br>
+        {{ aprobados }}
+    </div>
+
+    <div class="card red">
+        Reprobados<br>
+        {{ reprobados }}
+    </div>
+</div>
+
+<div class="table-box">
+
+<h3>Últimas Evaluaciones</h3>
+
+<table>
+    <tr>
+        <th>Nadador</th>
+        <th>Grupo</th>
+        <th>Promedio</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+    </tr>
+
+    {% for e in evaluaciones %}
+    <tr>
+        <td>{{ e.nadador }}</td>
+        <td>{{ e.horario_carril }}</td>
+        <td>{{ e.promedio }}</td>
+
+        <td>
+            {% if e.promedio >= 4 %}
+                <span class="badge ok">APTO</span>
+            {% elif e.promedio >= 3 %}
+                <span class="badge mid">EN PROCESO</span>
+            {% else %}
+                <span class="badge low">NO APTO</span>
+            {% endif %}
+        </td>
+
+        <td>{{ e.fecha }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No hay evaluaciones</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

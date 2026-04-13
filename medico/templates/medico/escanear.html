@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h2>Escanear credencial</h2>
 
 <form method="POST">
@@ -5,25 +9,26 @@
 
     <input type="text" name="codigo" autofocus placeholder="Escanea código">
     <button type="submit">Buscar</button>
-
 </form>
 
 {% if mensaje %}
-<p style="color:red;">{{ mensaje }}</p>
+    <p style="color:red;">{{ mensaje }}</p>
 {% endif %}
 
 {% if nadador %}
 
-<h3>Nadador encontrado</h3>
+    <h3>Nadador encontrado</h3>
 
-<p>{{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+    <p>{{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
 
-<a href="{% url 'crear_certificado' nadador.id %}">
-    Realizar examen médico
-</a>
+    <a href="{% url 'crear_certificado' nadador.id %}">
+        Realizar examen médico
+    </a>
 
-<a href="{% url 'historial_medico' nadador.id %}">
-    Ver historial
-</a>
+    <a href="{% url 'historial_medico' nadador.id %}">
+        Ver historial
+    </a>
 
 {% endif %}
+
+{% endblock %}

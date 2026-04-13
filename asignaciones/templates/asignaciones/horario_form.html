@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if horario %}Editar{% else %}Nuevo{% endif %} Horario</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>Carril:</label>
+    <select name="carril">
+        {% for c in carriles %}
+            <option value="{{ c.id }}"
+                {% if horario and horario.carril.id == c.id %}selected{% endif %}>
+                Carril {{ c.numero }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label>Nivel:</label>
+    <select name="nivel">
+        {% for n in niveles %}
+            <option value="{{ n.id }}"
+                {% if horario and horario.nivel.id == n.id %}selected{% endif %}>
+                {{ n.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <a href="{% url 'asignaciones:nivel_crear' %}">➕ Agregar Nivel</a>
+
+    <br>
+
+    <label>Maestro:</label>
+    <select name="maestro">
+        {% for m in maestros %}
+            <option value="{{ m.id }}"
+                {% if horario and horario.maestro.id == m.id %}selected{% endif %}>
+                {% if m.first_name %}
+                    {{ m.first_name }} {{ m.last_name }}
+                {% else %}
+                    {{ m.email }}
+                {% endif %}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label>Hora Inicio:</label>
+    <input type="time" name="hora_inicio"
+           value="{{ horario.hora_inicio|default:'' }}">
+
+    <br>
+
+    <label>Hora Fin:</label>
+    <input type="time" name="hora_fin"
+           value="{{ horario.hora_fin|default:'' }}">
+
+    <br>
+
+    <label>Capacidad:</label>
+    <input type="number" name="capacidad"
+           value="{{ horario.capacidad_maxima|default:'' }}">
+
+    <br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

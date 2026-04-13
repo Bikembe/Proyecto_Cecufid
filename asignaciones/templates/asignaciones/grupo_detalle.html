@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Grupo (Horario)</h2>
+
+<p><strong>Carril:</strong> {{ horario.carril }}</p>
+<p><strong>Maestro:</strong> {{ horario.maestro }}</p>
+<p><strong>Nivel:</strong> {{ horario.nivel }}</p>
+<p><strong>Horario:</strong> {{ horario.hora_inicio }} - {{ horario.hora_fin }}</p>
+<p><strong>Cupo:</strong> {{ horario.capacidad_maxima }}</p>
+
+<h3>Inscritos</h3>
+
+<table border="1">
+    <tr>
+        <th>Nadador</th>
+        <th>Estado</th>
+        <th>Acción</th>
+    </tr>
+
+    {% for ins in inscripciones %}
+    <tr>
+        <td>{{ ins.nadador }}</td>
+
+        <td>
+            {% if ins.activo %}
+                Activo
+            {% else %}
+                Inactivo
+            {% endif %}
+        </td>
+
+        <td>
+            <a href="{% url 'evaluaciones:evaluar' ins.id %}">
+                Evaluar
+            </a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">No hay inscritos</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

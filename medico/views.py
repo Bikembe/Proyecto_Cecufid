@@ -6,13 +6,13 @@ from .models import CertificadoMedico, Medico
 
 
 @login_required
-@rol_requerido(['Medico'])
+@rol_requerido(['Medico', 'Administrador'])
 def escanear_medico(request):
 
     nadador = None
     mensaje = None
 
-    if request.method == "POST" and "codigo" in request.POST:
+    if request.method == "POST":
         codigo = request.POST.get("codigo")
 
         try:
@@ -25,12 +25,20 @@ def escanear_medico(request):
         "mensaje": mensaje
     })
 
+
 @login_required
-@rol_requerido(['Medico'])
+@rol_requerido(['Medico', 'Administrador'])
 def crear_certificado(request, nadador_id):
 
     nadador = get_object_or_404(Nadador, id=nadador_id)
-    medico = get_object_or_404(Medico, usuario=request.user)
+
+    medico = Medico.objects.filter(usuario=request.user).first()
+
+    if not medico:
+        return render(request, "medico/formulario.html", {
+            "nadador": nadador,
+            "error": "Este usuario no tiene perfil médico asignado en el sistema"
+        })
 
     if request.method == "POST":
 
@@ -55,7 +63,8 @@ def crear_certificado(request, nadador_id):
             grupo_rh=request.POST.get("rh"),
             alergias=request.POST.get("alergias"),
             afiliacion=request.POST.get("afiliacion"),
-            conclusion=request.POST.get("conclusion")
+            conclusion=request.POST.get("conclusion"),
+            estatus="APTO"
         )
 
         return redirect("historial_medico", nadador_id=nadador.id)
@@ -63,6 +72,7 @@ def crear_certificado(request, nadador_id):
     return render(request, "medico/formulario.html", {
         "nadador": nadador
     })
+
 
 @login_required
 @rol_requerido(['Medico', 'Administrador'])
@@ -79,10 +89,11 @@ def historial_medico(request, nadador_id):
         "certificados": certificados
     })
 
+
 @login_required
 @rol_requerido(['Medico', 'Administrador'])
-def imprimir_evaluacion (request, certificado_id):
-    
+def imprimir_evaluacion(request, certificado_id):
+
     certificado = get_object_or_404(CertificadoMedico, id=certificado_id)
 
     return render(request, "medico/imprimir.html", {

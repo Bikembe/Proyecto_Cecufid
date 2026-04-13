@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>👨‍🏫 Panel Maestro</h2>
+
+<h3>📌 Mis Grupos</h3>
+<ul>
+    {% for h in horarios %}
+        <li>{{ h.carril }} - {{ h.nivel }}</li>
+    {% endfor %}
+</ul>
+
+<h3>🏊 Inscritos</h3>
+<ul>
+    {% for i in inscripciones %}
+        <li>
+            {{ i.nadador }} - {{ i.horario_carril }}
+            <a href="{% url 'evaluaciones:evaluar' i.id %}">Evaluar</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>📊 Mis Evaluaciones</h3>
+<table border="1">
+    <tr>
+        <th>Nadador</th>
+        <th>Grupo</th>
+        <th>Promedio</th>
+        <th>Fecha</th>
+    </tr>
+
+    {% for e in evaluaciones %}
+    <tr>
+        <td>{{ e.nadador }}</td>
+        <td>{{ e.horario_carril }}</td>
+        <td>{{ e.promedio }}</td>
+        <td>{{ e.fecha }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Evaluar nadador</h2>
+
+<p><strong>Nadador:</strong> {{ inscripcion.nadador }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Respiración</label>
+    <input type="number" name="respiracion" min="0" max="10">
+
+    <label>Libre</label>
+    <input type="number" name="libre" min="0" max="10">
+
+    <label>Espalda</label>
+    <input type="number" name="espalda" min="0" max="10">
+
+    <label>Mariposa</label>
+    <input type="number" name="mariposa" min="0" max="10">
+
+    <label>Resistencia</label>
+    <input type="number" name="resistencia" min="0" max="10">
+
+    <label>Observaciones</label>
+    <textarea name="observaciones"></textarea>
+
+    <button type="submit">Guardar evaluación</button>
+</form>
+
+{% endblock %}

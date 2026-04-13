@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Nuevo Nivel</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>Nombre:</label>
+    <input type="text" name="nombre">
+
+    <br>
+
+    <label>Descripción:</label>
+    <textarea name="descripcion"></textarea>
+
+    <br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

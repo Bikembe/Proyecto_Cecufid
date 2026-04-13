@@ -19,15 +19,15 @@ def dashboard(request):
     rol = request.user.rol.nombre
 
     if rol == "Administrador":
-        return render(request, "dashboard_admin.html")
+        return render(request, "dashboard.html")
 
     elif rol == "Maestro":
-        return render(request, "dashboard_maestro.html")
+        return render(request, "dashboard.html")
 
     elif rol == "Médico":
-        return render(request, "dashboard_medico.html")
+        return render(request, "dashboard.html")
 
     elif rol == "Caja":
-        return render(request, "dashboard_caja.html")
+        return render(request, "dashboard.html")
 
     return render(request, "dashboard.html")

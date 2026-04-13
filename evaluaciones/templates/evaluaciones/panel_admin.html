@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>🧑‍💼 Panel Administrador</h2>
+
+<div>
+    <p>Total Evaluaciones: {{ total }}</p>
+    <p>Aprobados: {{ aprobados }}</p>
+    <p>Reprobados: {{ reprobados }}</p>
+    <p>Promedio General: {{ promedio_general|floatformat:2 }}</p>
+</div>
+
+<h3>📊 Evaluaciones recientes</h3>
+
+<table border="1">
+    <tr>
+        <th>Nadador</th>
+        <th>Maestro</th>
+        <th>Grupo</th>
+        <th>Promedio</th>
+        <th>Fecha</th>
+    </tr>
+
+    {% for e in evaluaciones %}
+    <tr>
+        <td>{{ e.nadador }}</td>
+        <td>{{ e.maestro }}</td>
+        <td>{{ e.horario_carril }}</td>
+        <td>{{ e.promedio }}</td>
+        <td>{{ e.fecha }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

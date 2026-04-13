@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h2>Certificado Médico</h2>
 
 <p>Nadador: {{ certificado.nadador.nombre }}</p>
@@ -6,6 +10,7 @@
 <p>Temperatura: {{ certificado.temperatura }}</p>
 <p>Presión arterial: {{ certificado.presion_arterial }}</p>
 <p>Frecuencia cardiaca: {{ certificado.frecuencia_cardiaca }}</p>
+<p>Frecuencia respiratoria: {{ certificado.frecuencia_respiratoria }}</p>
 
 <p>Conclusión: {{ certificado.conclusion }}</p>
 
@@ -13,3 +18,5 @@
 <p>Cédula: {{ certificado.medico.cedula_profesional }}</p>
 
 <button onclick="window.print()">Imprimir</button>
+
+{% endblock %}
