@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Recepción - Pendientes</h2>
+
+<table border="1">
+<tr>
+    <th>Nombre</th>
+    <th>Estado</th>
+</tr>
+
+{% for r in pendientes %}
+<tr>
+    <td>{{ r.nombre }}</td>
+    <td>{{ r.estado }}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="2">Sin registros</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

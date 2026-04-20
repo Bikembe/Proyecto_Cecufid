@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Usuario</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<input type="text" name="nombre" placeholder="Nombre" value="{{ usuario.first_name }}">
+<input type="text" name="apellido_paterno" placeholder="Apellido paterno" value="{{ usuario.last_name }}">
+<input type="text" name="apellido_materno" placeholder="Apellido materno" value="{{ usuario.apellido_materno }}">
+
+<input type="email" name="email" placeholder="Correo" value="{{ usuario.email }}">
+
+<input type="password" name="password" placeholder="Contraseña">
+
+<select name="rol">
+    {% for r in roles %}
+        <option value="{{ r.id }}" {% if usuario.rol.id == r.id %}selected{% endif %}>
+            {{ r.nombre }}
+        </option>
+    {% endfor %}
+</select>
+
+<select name="estado">
+    <option value="activo">Activo</option>
+    <option value="inactivo">Inactivo</option>
+</select>
+
+<button type="submit">Guardar</button>
+
+</form>
+
+{% endblock %}

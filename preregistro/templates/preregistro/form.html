@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>🧾 Registro</h2>
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<!-- ================= DATOS PERSONALES ================= -->
+<h3>Datos personales</h3>
+
+<input type="text" name="nombre" placeholder="Nombre" required>
+<input type="text" name="apellido_paterno" placeholder="Apellido paterno" required>
+<input type="text" name="apellido_materno" placeholder="Apellido materno" required>
+
+<label>Fecha de nacimiento</label>
+<input type="date" name="fecha_nacimiento" required>
+
+<select name="sexo" required>
+    <option value="">Sexo</option>
+    <option value="M">Masculino</option>
+    <option value="F">Femenino</option>
+</select>
+
+<input type="text" name="telefono" placeholder="Teléfono">
+<input type="email" name="correo" placeholder="Correo">
+
+<!-- ================= TIPO PERSONA ================= -->
+<h3>Tipo de usuario</h3>
+
+<label>
+<input type="checkbox" id="es_menor"> Es menor de edad
+</label>
+
+<!-- ================= ADULTO ================= -->
+<div id="bloque_adulto">
+
+    <h4>Documentos (Adulto)</h4>
+
+    <label>📸 Fotografía del usuario</label>
+    <input type="file" name="foto" required>
+
+    <label>🪪 INE (Identificación oficial)</label>
+    <input type="file" name="identificacion" required>
+
+</div>
+
+<!-- ================= MENOR ================= -->
+<div id="bloque_menor" style="display:none; border:1px solid #ccc; padding:10px; margin-top:10px;">
+
+    <h4>Documentos del menor</h4>
+
+    <label>📸 Fotografía del menor</label>
+    <input type="file" name="foto_menor">
+
+    <label>📄 Acta de nacimiento</label>
+    <input type="file" name="acta_nacimiento">
+
+    <label>🧾 CURP</label>
+    <input type="file" name="curp">
+
+    <h4>Datos del tutor</h4>
+
+    <input type="text" name="tutor_nombre" placeholder="Nombre del tutor">
+
+    <label>📸 Foto del tutor</label>
+    <input type="file" name="foto_tutor">
+
+    <label>🪪 INE del tutor</label>
+    <input type="file" name="ine_tutor">
+
+</div>
+
+<!-- ================= NIVEL ================= -->
+<h3>Nivel</h3>
+<select name="nivel" id="nivel" required>
+    <option value="">Selecciona</option>
+    {% for n in niveles %}
+        <option value="{{ n.id }}">{{ n.nombre }}</option>
+    {% endfor %}
+</select>
+
+<!-- ================= DIAS ================= -->
+<h3>Días</h3>
+<select name="dias_seleccionados" id="dias" required>
+    <option value="">Selecciona</option>
+    <option value="L-V">Lunes a Viernes</option>
+    <option value="L-M-V">Lunes, Miércoles y Viernes</option>
+    <option value="M-J">Martes y Jueves</option>
+</select>
+
+<label>
+<input type="checkbox" id="extra_sabado"> Agregar sábado
+</label>
+
+<!-- ================= HORARIO ================= -->
+<h3>Horario principal</h3>
+
+<select name="horario" id="horario" required>
+<option value="">Selecciona</option>
+
+{% for h in horarios %}
+<option 
+value="{{ h.id }}"
+data-nivel="{{ h.nivel }}"
+data-dias="{{ h.dias }}"
+>
+{{ h.texto }} | Cupos: {{ h.disponibles }}
+</option>
+{% endfor %}
+
+</select>
+
+<!-- ================= SABADO ================= -->
+<div id="bloque_sabado" style="display:none;">
+
+<h3>Horario sábado</h3>
+
+<select name="horario_sabado">
+<option value="">Selecciona</option>
+
+{% for h in horarios %}
+{% if h.dias == "SAB" %}
+<option value="{{ h.id }}">
+{{ h.texto }} | Cupos: {{ h.disponibles }}
+</option>
+{% endif %}
+{% endfor %}
+
+</select>
+
+</div>
+
+<!-- ================= EMERGENCIA ================= -->
+<h3>Contacto de emergencia</h3>
+
+<input type="text" name="emergencia_nombre" placeholder="Nombre" required>
+<input type="text" name="emergencia_tel" placeholder="Teléfono" required>
+<input type="text" name="emergencia_trabajo" placeholder="Teléfono trabajo">
+<input type="text" name="emergencia_parentesco" placeholder="Parentesco" required>
+
+<br><br>
+<button type="submit">Guardar</button>
+
+</form>
+
+<!-- ================= JS ================= -->
+<script>
+
+// 🔹 MENOR / ADULTO
+const checkMenor = document.getElementById("es_menor");
+const menor = document.getElementById("bloque_menor");
+const adulto = document.getElementById("bloque_adulto");
+
+checkMenor.addEventListener("change", () => {
+    if (checkMenor.checked) {
+        menor.style.display = "block";
+        adulto.style.display = "none";
+    } else {
+        menor.style.display = "none";
+        adulto.style.display = "block";
+    }
+});
+
+// 🔹 SABADO
+document.getElementById("extra_sabado").onchange = function(){
+    document.getElementById("bloque_sabado").style.display = this.checked ? "block" : "none";
+};
+
+// 🔹 FILTROS
+const nivel = document.getElementById("nivel");
+const dias = document.getElementById("dias");
+const opciones = document.getElementById("horario").options;
+
+function filtrar(){
+    for(let op of opciones){
+        if(!op.value) continue;
+
+        let okNivel = !nivel.value || op.dataset.nivel === nivel.value;
+        let okDias = !dias.value || op.dataset.dias === dias.value;
+
+        op.style.display = (okNivel && okDias) ? "block" : "none";
+    }
+}
+
+nivel.onchange = filtrar;
+dias.onchange = filtrar;
+
+</script>
+
+{% endblock %}

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'reportes',
     'medico.apps.MedicoConfig',
     'evaluaciones',
+    'preregistro',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'reportes.middleware.HistorialMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -104,11 +106,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+USE_TZ = True
+
+TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)

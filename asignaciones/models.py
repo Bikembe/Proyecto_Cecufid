@@ -30,6 +30,15 @@ class HorarioCarril(models.Model):
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
 
+    DIAS_CHOICES = (
+    ('L-V', 'Lunes a Viernes'),
+    ('L-M-V', 'Lunes, Miércoles y Viernes'),
+    ('M-J', 'Martes y Jueves'),
+    ('SAB', 'Sábado'),
+)
+
+    dias = models.CharField(max_length=10, choices=DIAS_CHOICES)
+
     capacidad_maxima = models.PositiveIntegerField()
 
     class Meta:

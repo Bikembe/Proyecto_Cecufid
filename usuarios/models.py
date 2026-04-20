@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from datetime import timedelta
 
-
 class UsuarioManager(BaseUserManager):
     use_in_migrations = True
 

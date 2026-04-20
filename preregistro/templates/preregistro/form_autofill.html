@@ -1,0 +1,48 @@
+<h2>Datos detectados</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Nombre</label>
+    <input type="text" name="nombre" value="{{ datos.nombre }}"><br>
+
+    <label>Apellido Paterno</label>
+    <input type="text" name="apellido_paterno" value="{{ datos.apellido_paterno }}"><br>
+
+    <label>Apellido Materno</label>
+    <input type="text" name="apellido_materno" value="{{ datos.apellido_materno }}"><br>
+
+    <label>CURP</label>
+    <input type="text" name="curp" value="{{ datos.curp }}"><br>
+
+    <label>Fecha nacimiento</label>
+    <input type="date" name="fecha_nacimiento" value="{{ datos.fecha_nacimiento }}"><br>
+
+    <label>Sexo</label>
+    <select name="sexo">
+        <option value="M" {% if datos.sexo == "M" %}selected{% endif %}>Masculino</option>
+        <option value="F" {% if datos.sexo == "F" %}selected{% endif %}>Femenino</option>
+    </select><br><br>
+
+    <h3>Domicilio</h3>
+
+    <label>Calle</label>
+    <input type="text" name="calle" value="{{ datos.calle }}"><br>
+
+    <label>Número</label>
+    <input type="text" name="numero" value="{{ datos.numero }}"><br>
+
+    <label>Colonia</label>
+    <input type="text" name="colonia" value="{{ datos.colonia }}"><br>
+
+    <label>Municipio</label>
+    <input type="text" name="municipio" value="{{ datos.municipio }}"><br>
+
+    <label>Estado</label>
+    <input type="text" name="estado" value="{{ datos.estado }}"><br>
+
+    <label>CP</label>
+    <input type="text" name="cp" value="{{ datos.cp }}"><br><br>
+
+    <button type="submit">Guardar</button>
+</form>

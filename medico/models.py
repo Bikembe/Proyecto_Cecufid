@@ -1,7 +1,5 @@
 from django.db import models
 from django.conf import settings
-from usuarios.models import Nadador
-from usuarios.models import Rol
 
 
 class Medico(models.Model):
@@ -28,10 +26,21 @@ class CertificadoMedico(models.Model):
         ('PARANATACION', 'Paranatación'),
     )
 
-    nadador = models.ForeignKey(
-        Nadador,
+    # 🔹 UNO U OTRO (no ambos obligatorios)
+    preregistro = models.ForeignKey(
+        "preregistro.PreRegistro",
         on_delete=models.CASCADE,
-        related_name='certificados'
+        null=True,
+        blank=True,
+        related_name="certificados"
+    )
+
+    nadador = models.ForeignKey(
+        "usuarios.Nadador",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="certificados"
     )
 
     medico = models.ForeignKey(
@@ -62,5 +71,16 @@ class CertificadoMedico(models.Model):
 
     conclusion = models.TextField()
 
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        if not self.preregistro and not self.nadador:
+            raise ValidationError("Debe tener preregistro o nadador")
+
+        if self.preregistro and self.nadador:
+            raise ValidationError("Solo puede tener preregistro o nadador, no ambos")
+
     def __str__(self):
-        return f"Certificado - {self.nadador} - {self.fecha_examen.date()}"
+        if self.preregistro:
+            return f"Certificado - PR {self.preregistro.folio}"
+        return f"Certificado - ND {self.nadador.id}"

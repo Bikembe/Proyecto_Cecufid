@@ -2,21 +2,93 @@
 
 {% block content %}
 
-<h2>Certificado Médico</h2>
+<style>
+    .contenedor {
+        max-width: 800px;
+        margin: auto;
+        font-family: Arial, sans-serif;
+    }
 
-<p>Nadador: {{ certificado.nadador.nombre }}</p>
-<p>Fecha: {{ certificado.fecha_examen }}</p>
+    h2 {
+        text-align: center;
+    }
 
-<p>Temperatura: {{ certificado.temperatura }}</p>
-<p>Presión arterial: {{ certificado.presion_arterial }}</p>
-<p>Frecuencia cardiaca: {{ certificado.frecuencia_cardiaca }}</p>
-<p>Frecuencia respiratoria: {{ certificado.frecuencia_respiratoria }}</p>
+    .seccion {
+        margin-bottom: 15px;
+    }
 
-<p>Conclusión: {{ certificado.conclusion }}</p>
+    .label {
+        font-weight: bold;
+    }
 
-<p>Médico: {{ certificado.medico.usuario.get_full_name }}</p>
-<p>Cédula: {{ certificado.medico.cedula_profesional }}</p>
+    hr {
+        margin: 20px 0;
+    }
 
-<button onclick="window.print()">Imprimir</button>
+    @media print {
+        button {
+            display: none;
+        }
+    }
+</style>
+
+<div class="contenedor">
+
+    <h2>Certificado Médico</h2>
+
+    <hr>
+
+    <div class="seccion">
+        <p><span class="label">Nombre:</span> 
+            {% if certificado.nadador %}
+                {{ certificado.nadador.nombre }} {{ certificado.nadador.apellido_paterno }} {{ certificado.nadador.apellido_materno }}
+            {% elif certificado.preregistro %}
+                {{ certificado.preregistro.nombre }} {{ certificado.preregistro.apellido_paterno }} {{ certificado.preregistro.apellido_materno }}
+            {% endif %}
+        </p>
+
+        <p><span class="label">Fecha:</span> {{ certificado.fecha_examen|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <hr>
+
+    <div class="seccion">
+        <p><span class="label">Temperatura:</span> {{ certificado.temperatura }}</p>
+        <p><span class="label">Presión arterial:</span> {{ certificado.presion_arterial }}</p>
+        <p><span class="label">Frecuencia cardiaca:</span> {{ certificado.frecuencia_cardiaca }}</p>
+        <p><span class="label">Frecuencia respiratoria:</span> {{ certificado.frecuencia_respiratoria }}</p>
+        <p><span class="label">Peso:</span> {{ certificado.peso }}</p>
+        <p><span class="label">Talla:</span> {{ certificado.talla }}</p>
+        <p><span class="label">IMC:</span> {{ certificado.imc }}</p>
+        <p><span class="label">Saturación O₂:</span> {{ certificado.saturacion_oxigeno }}</p>
+        <p><span class="label">Grupo RH:</span> {{ certificado.grupo_rh }}</p>
+    </div>
+
+    <hr>
+
+    <div class="seccion">
+        <p><span class="label">Alergias:</span> {{ certificado.alergias }}</p>
+        <p><span class="label">Afiliación:</span> {{ certificado.afiliacion }}</p>
+    </div>
+
+    <hr>
+
+    <div class="seccion">
+        <p><span class="label">Conclusión médica:</span></p>
+        <p>{{ certificado.conclusion }}</p>
+    </div>
+
+    <br><br>
+
+    <div class="seccion" style="text-align:right;">
+        <p><strong>{{ certificado.medico.nombre_completo }}</strong></p>
+        <p>Cédula profesional: {{ certificado.medico.cedula_profesional }}</p>
+    </div>
+
+    <br><br>
+
+    <button onclick="window.print()">🖨 Imprimir</button>
+
+</div>
 
 {% endblock %}

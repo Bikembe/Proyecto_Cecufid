@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Historial de Accesos</h2>
+
+<table border="1">
+    <tr>
+        <th>Nadador</th>
+        <th>Tipo</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+    </tr>
+
+    {% for a in accesos %}
+    <tr>
+        <td>{{ a.nadador }}</td>
+        <td>
+            {% if a.tipo == "ENTRADA" %}
+                🟢 Entrada
+            {% else %}
+                🔴 Salida
+            {% endif %}
+        </td>
+        <td>{{ a.fecha|date:"Y-m-d" }}</td>
+        <td>{{ a.fecha|date:"H:i:s" }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">Sin registros</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

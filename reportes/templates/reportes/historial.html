@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Historial del Sistema</h2>
+
+<table border="1">
+<tr>
+    <th>Usuario</th>
+    <th>Módulo</th>
+    <th>Acción</th>
+    <th>Descripción</th>
+    <th>IP</th>
+    <th>Fecha</th>
+</tr>
+
+{% for h in historial %}
+<tr>
+    <td>{{ h.usuario.email }}</td>
+    <td>{{ h.modulo }}</td>
+    <td>{{ h.accion }}</td>
+    <td>{{ h.descripcion }}</td>
+    <td>{{ h.ip_address }}</td>
+    <td>{{ h.fecha }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>✅ PreRegistro completado</h2>
+
+<div style="border:1px solid #ccc; padding:20px; width:400px;">
+
+    <h3>Datos del usuario</h3>
+
+    <p><strong>Nombre:</strong> {{ preregistro.nombre }} {{ preregistro.apellido_paterno }}</p>
+    <p><strong>Teléfono:</strong> {{ preregistro.telefono }}</p>
+    <p><strong>Estado:</strong> {{ preregistro.estado }}</p>
+
+    <hr>
+
+    <h3>📌 Código de registro</h3>
+
+    <div style="font-size:24px; font-weight:bold; text-align:center;">
+        {{ codigo }}
+    </div>
+
+    <p style="text-align:center;">
+        Presenta este código en <strong>Cajas</strong> y <strong>Servicio Médico</strong>
+    </p>
+
+    <hr>
+
+    <button onclick="window.print()">🖨 Imprimir</button>
+
+</div>
+
+{% endblock %}

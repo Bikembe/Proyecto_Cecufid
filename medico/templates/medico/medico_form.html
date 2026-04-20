@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{% if medico %}Editar{% else %}Nuevo{% endif %} Médico</h2>
+
+{% if error %}
+    <div style="color:red;">{{ error }}</div>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Usuario:</label>
+    <select name="usuario" required>
+        <option value="">Seleccionar</option>
+        {% for u in usuarios %}
+            <option value="{{ u.id }}"
+                {% if medico and medico.usuario.id == u.id %}selected{% endif %}>
+                {{ u }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Nombre completo:</label>
+    <input type="text" name="nombre_completo"
+        value="{{ medico.nombre_completo|default:'' }}" required>
+
+    <br><br>
+
+    <label>Cédula profesional:</label>
+    <input type="text" name="cedula"
+        value="{{ medico.cedula_profesional|default:'' }}" required>
+
+    <br><br>
+
+    <button type="submit">Guardar</button>
+
+</form>
+
+{% endblock %}

@@ -2,40 +2,77 @@
 
 {% block content %}
 
-<h2>Historial médico</h2>
+<h2>📄 Historial médico</h2>
 
-<p>Nadador: {{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+<div style="margin-bottom:20px; padding:15px; border:1px solid #ccc; border-radius:10px;">
+    
+    {% if nadador %}
+        <p><strong>Tipo:</strong> Nadador</p>
+        <p><strong>Nombre:</strong> {{ nadador.nombre }} {{ nadador.apellido_paterno }} {{ nadador.apellido_materno }}</p>
+        <p><strong>Código:</strong> {{ nadador.codigo_barras }}</p>
+    {% elif preregistro %}
+        <p><strong>Tipo:</strong> PreRegistro</p>
+        <p><strong>Nombre:</strong> {{ preregistro.nombre }} {{ preregistro.apellido_paterno }} {{ preregistro.apellido_materno }}</p>
+        <p><strong>Folio:</strong> {{ preregistro.folio }}</p>
+    {% endif %}
 
-<table border="1">
+</div>
 
-<tr>
-    <th>Fecha</th>
-    <th>Médico</th>
-    <th>Acción</th>
-</tr>
 
-{% for c in certificados %}
+{% if certificados %}
 
-<tr>
-    <td>{{ c.fecha_examen }}</td>
+<table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
 
-    <td>
-        {% if c.medico %}
-            {{ c.medico.nombre_completo }}
-        {% else %}
-            Sin médico
-        {% endif %}
-    </td>
+    <tr style="background:#eee;">
+        <th>Fecha</th>
+        <th>Médico</th>
+        <th>Estatus</th>
+        <th>Acción</th>
+    </tr>
 
-    <td>
-        <a href="{% url 'imprimir_evaluacion' c.id %}">
-            Ver / imprimir
-        </a>
-    </td>
-</tr>
+    {% for c in certificados %}
 
-{% endfor %}
+    <tr>
+        <td>{{ c.fecha_examen|date:"d/m/Y H:i" }}</td>
+
+        <td>
+            {% if c.medico %}
+                {{ c.medico.nombre_completo }}
+            {% else %}
+                Sin médico
+            {% endif %}
+        </td>
+
+        <td>
+            {% if c.estatus == "APTO" %}
+                <span style="color:green;font-weight:bold;">APTO</span>
+            {% elif c.estatus == "NO_APTO" %}
+                <span style="color:red;font-weight:bold;">NO APTO</span>
+            {% else %}
+                <span style="color:orange;font-weight:bold;">{{ c.estatus }}</span>
+            {% endif %}
+        </td>
+
+        <td>
+            <a href="{% url 'medico:imprimir_evaluacion' c.id %}">
+                🖨 Ver / imprimir
+            </a>
+        </td>
+    </tr>
+
+    {% endfor %}
 
 </table>
+
+{% else %}
+
+<p style="color:gray;">No hay certificados registrados.</p>
+
+{% endif %}
+
+
+<br>
+
+<a href="javascript:history.back()">⬅ Volver</a>
 
 {% endblock %}

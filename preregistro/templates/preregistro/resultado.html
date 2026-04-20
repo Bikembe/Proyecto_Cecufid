@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>🧠 Resultado OCR</h2>
+
+<p><b>Tipo detectado:</b> {{ datos.tipo }}</p>
+
+{% if datos.nombre %}
+<p><b>Nombre:</b> {{ datos.nombre }}</p>
+{% endif %}
+
+{% if datos.curp %}
+<p><b>CURP:</b> {{ datos.curp }}</p>
+{% endif %}
+
+{% if datos.fecha_nacimiento %}
+<p><b>Fecha nacimiento:</b> {{ datos.fecha_nacimiento }}</p>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'preregistro:scan' %}">Escanear otro documento</a>
+
+{% endblock %}

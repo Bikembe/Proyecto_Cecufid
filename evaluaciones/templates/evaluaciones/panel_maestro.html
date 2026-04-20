@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<h2>👨‍🏫 Panel Maestro</h2>
+<h2>Panel Maestro</h2>
 
-<h3>📌 Mis Grupos</h3>
+<h3>Mis Grupos</h3>
 <ul>
     {% for h in horarios %}
         <li>{{ h.carril }} - {{ h.nivel }}</li>
     {% endfor %}
 </ul>
 
-<h3>🏊 Inscritos</h3>
+<h3>Inscritos</h3>
 <ul>
     {% for i in inscripciones %}
         <li>
@@ -21,7 +21,7 @@
     {% endfor %}
 </ul>
 
-<h3>📊 Mis Evaluaciones</h3>
+<h3>Mis Evaluaciones</h3>
 <table border="1">
     <tr>
         <th>Nadador</th>

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Plan de curso</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<input type="text" name="nombre" placeholder="Nombre" value="{{ plan.nombre }}">
+
+<select name="tipo_curso">
+    <option value="ANUAL">Anual</option>
+    <option value="VERANO">Verano</option>
+    <option value="INTENSIVO">Intensivo</option>
+</select>
+
+<select name="sede">
+    {% for s in sedes %}
+        <option value="{{ s.id }}" {% if plan.sede.id == s.id %}selected{% endif %}>
+            {{ s.nombre }}
+        </option>
+    {% endfor %}
+</select>
+
+<select name="categoria">
+    {% for c in categorias %}
+        <option value="{{ c.id }}" {% if plan.categoria.id == c.id %}selected{% endif %}>
+            {{ c.nombre }}
+        </option>
+    {% endfor %}
+</select>
+
+<input type="text" name="dias" placeholder="Ej: L-V" value="{{ plan.dias_permitidos }}">
+<input type="time" name="hora_inicio" value="{{ plan.horario_inicio }}">
+<input type="time" name="hora_fin" value="{{ plan.horario_fin }}">
+
+<input type="number" name="duracion" placeholder="Duración días" value="{{ plan.duracion_dias }}">
+<input type="number" step="0.01" name="precio" placeholder="Precio" value="{{ plan.precio }}">
+
+<label>
+    <input type="checkbox" name="activo" {% if plan.activo %}checked{% endif %}>
+    Activo
+</label>
+
+<button type="submit">Guardar</button>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Reportes Generados</h2>
+
+<table border="1">
+<tr>
+    <th>Título</th>
+    <th>Tipo</th>
+    <th>Generado por</th>
+    <th>Fecha</th>
+</tr>
+
+{% for r in reportes %}
+<tr>
+    <td>{{ r.titulo }}</td>
+    <td>{{ r.tipo }}</td>
+    <td>{{ r.generado_por.email }}</td>
+    <td>{{ r.fecha_generacion }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

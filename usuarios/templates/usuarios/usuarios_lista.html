@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Usuarios</h2>
+
+<a href="{% url 'usuario_crear' %}">➕ Nuevo usuario</a>
+
+<table border="1">
+<tr>
+    <th>Nombre</th>
+    <th>Email</th>
+    <th>Rol</th>
+    <th>Estado</th>
+    <th>Acciones</th>
+</tr>
+
+{% for u in usuarios %}
+<tr>
+    <td>{{ u.first_name }} {{ u.last_name }}</td>
+    <td>{{ u.email }}</td>
+    <td>{{ u.rol }}</td>
+    <td>{{ u.estado }}</td>
+    <td>
+        <a href="{% url 'usuario_editar' u.id %}">✏️</a>
+        <a href="{% url 'usuario_eliminar' u.id %}">🗑</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

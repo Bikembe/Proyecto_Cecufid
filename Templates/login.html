@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - CECUFID</title>
 
     <style>
@@ -9,10 +11,11 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #0d47a1, #1565c0);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 15px;
         }
 
         .login-container {
@@ -63,6 +66,7 @@
             border-radius: 6px;
             outline: none;
             transition: 0.2s;
+            box-sizing: border-box;
         }
 
         input:focus {
@@ -102,6 +106,35 @@
             border-radius: 6px;
             margin-bottom: 10px;
             font-size: 13px;
+        }
+
+        /* ========================= */
+        /* 📱 RESPONSIVE */
+        /* ========================= */
+
+        @media (max-width: 480px) {
+
+            .login-container {
+                border-radius: 10px;
+            }
+
+            .login-body {
+                padding: 18px;
+            }
+
+            .login-header h2 {
+                font-size: 18px;
+            }
+
+            input {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .btn {
+                padding: 14px;
+                font-size: 15px;
+            }
         }
 
     </style>

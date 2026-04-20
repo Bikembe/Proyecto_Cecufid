@@ -2,32 +2,66 @@
 
 {% block content %}
 
-<h2>Escanear credencial</h2>
+<h2>🔍 Escanear credencial</h2>
 
-<form method="POST">
+<form method="POST" style="margin-bottom:20px;">
     {% csrf_token %}
 
-    <input type="text" name="codigo" autofocus placeholder="Escanea código">
+    <input 
+        type="text" 
+        name="codigo" 
+        autofocus 
+        placeholder="Escanea o escribe el código de barras o folio"
+        style="padding:10px;width:300px;"
+    >
+
     <button type="submit">Buscar</button>
 </form>
 
 {% if mensaje %}
-    <p style="color:red;">{{ mensaje }}</p>
+    <div style="background:#ffdddd;color:#900;padding:10px;margin-bottom:15px;">
+        {{ mensaje }}
+    </div>
 {% endif %}
 
-{% if nadador %}
+{% if nadador or preregistro %}
 
-    <h3>Nadador encontrado</h3>
+<div style="border:1px solid #ccc;padding:15px;border-radius:10px;">
 
-    <p>{{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+    <h3>👤 Persona encontrada</h3>
 
-    <a href="{% url 'crear_certificado' nadador.id %}">
-        Realizar examen médico
-    </a>
+    {% if nadador %}
+        <p><strong>Tipo:</strong> Nadador</p>
+        <p><strong>Nombre:</strong> {{ nadador.nombre }} {{ nadador.apellido_paterno }} {{ nadador.apellido_materno }}</p>
+        <p><strong>Código:</strong> {{ nadador.codigo_barras }}</p>
 
-    <a href="{% url 'historial_medico' nadador.id %}">
-        Ver historial
-    </a>
+        <a href="{% url 'medico:crear_certificado' nadador.id %}">
+            🩺 Realizar examen médico
+        </a>
+
+        <br><br>
+
+        <a href="{% url 'medico:historial_medico' nadador.id %}">
+            📄 Ver historial médico
+        </a>
+
+    {% elif preregistro %}
+        <p><strong>Tipo:</strong> PreRegistro</p>
+        <p><strong>Nombre:</strong> {{ preregistro.nombre }} {{ preregistro.apellido_paterno }} {{ preregistro.apellido_materno }}</p>
+        <p><strong>Folio:</strong> {{ preregistro.folio }}</p>
+
+        <a href="{% url 'medico:crear_certificado_preregistro' preregistro.id %}">
+            🩺 Realizar examen médico
+        </a>
+
+        <br><br>
+
+        <a href="{% url 'medico:historial_medico_preregistro' preregistro.id %}">
+            📄 Ver historial médico
+        </a>
+    {% endif %}
+
+</div>
 
 {% endif %}
 

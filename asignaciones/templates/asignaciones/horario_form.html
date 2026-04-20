@@ -6,8 +6,9 @@
 <form method="post">
     {% csrf_token %}
 
+    <!-- ================= CARRIL ================= -->
     <label>Carril:</label>
-    <select name="carril">
+    <select name="carril" required>
         {% for c in carriles %}
             <option value="{{ c.id }}"
                 {% if horario and horario.carril.id == c.id %}selected{% endif %}>
@@ -16,10 +17,13 @@
         {% endfor %}
     </select>
 
-    <br>
+    <a href="{% url 'asignaciones:carril_crear' %}">➕ Agregar Carril</a>
 
+    <br><br>
+
+    <!-- ================= NIVEL ================= -->
     <label>Nivel:</label>
-    <select name="nivel">
+    <select name="nivel" required>
         {% for n in niveles %}
             <option value="{{ n.id }}"
                 {% if horario and horario.nivel.id == n.id %}selected{% endif %}>
@@ -30,10 +34,11 @@
 
     <a href="{% url 'asignaciones:nivel_crear' %}">➕ Agregar Nivel</a>
 
-    <br>
+    <br><br>
 
+    <!-- ================= MAESTRO ================= -->
     <label>Maestro:</label>
-    <select name="maestro">
+    <select name="maestro" required>
         {% for m in maestros %}
             <option value="{{ m.id }}"
                 {% if horario and horario.maestro.id == m.id %}selected{% endif %}>
@@ -46,26 +51,57 @@
         {% endfor %}
     </select>
 
-    <br>
+    <br><br>
 
+    <!-- ================= DIAS ================= -->
+  <label>Días:</label>
+<select name="dias" required>
+    <option value="">Selecciona</option>
+
+    <option value="L-V"
+        {% if horario and horario.dias == "L-V" %}selected{% endif %}>
+        Lunes a Viernes
+    </option>
+
+    <option value="L-M-V"
+        {% if horario and horario.dias == "L-M-V" %}selected{% endif %}>
+        Lunes, Miércoles y Viernes
+    </option>
+
+    <option value="M-J"
+        {% if horario and horario.dias == "M-J" %}selected{% endif %}>
+        Martes y Jueves
+    </option>
+
+    <option value="SAB"
+        {% if horario and horario.dias == "SAB" %}selected{% endif %}>
+        Sábado
+    </option>
+
+</select>
+ <br><br>
+
+    <!-- ================= HORAS ================= -->
     <label>Hora Inicio:</label>
     <input type="time" name="hora_inicio"
-           value="{{ horario.hora_inicio|default:'' }}">
+           value="{{ horario.hora_inicio|default:'' }}" required>
 
-    <br>
+    <br><br>
 
     <label>Hora Fin:</label>
     <input type="time" name="hora_fin"
-           value="{{ horario.hora_fin|default:'' }}">
+           value="{{ horario.hora_fin|default:'' }}" required>
 
-    <br>
+    <br><br>
 
+    <!-- ================= CAPACIDAD ================= -->
     <label>Capacidad:</label>
     <input type="number" name="capacidad"
-           value="{{ horario.capacidad_maxima|default:'' }}">
+           value="{{ horario.capacidad_maxima|default:'' }}" required>
 
     <br><br>
 
     <button type="submit">Guardar</button>
 </form>
+
 {% endblock %}

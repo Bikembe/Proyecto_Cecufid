@@ -6,26 +6,21 @@ app_name = 'asignaciones'
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
 
-    # Carriles
     path('carriles/', views.carril_lista, name='carril_lista'),
     path('carriles/nuevo/', views.carril_crear, name='carril_crear'),
     path('carriles/<int:pk>/editar/', views.carril_editar, name='carril_editar'),
     path('carriles/<int:pk>/eliminar/', views.carril_eliminar, name='carril_eliminar'),
 
-    # Horarios (CLAVE)
     path('horarios/', views.horario_lista, name='horario_lista'),
     path('horarios/nuevo/', views.horario_crear, name='horario_crear'),
     path('horarios/<int:pk>/editar/', views.horario_editar, name='horario_editar'),
     path('horarios/<int:pk>/eliminar/', views.horario_eliminar, name='horario_eliminar'),
 
-    # Vista visual
     path('cuadricula/', views.asignacion_cuadricula, name='cuadricula'),
 
-    # Reporte
     path('reportes/', views.reporte_uso_carriles, name='reporte'),
     path('grupo/<int:pk>/', views.grupo_detalle, name='grupo_detalle'),
 
-    # INSCRIPCIONES
     path('inscripciones/', views.inscripcion_lista, name='inscripcion_lista'),
     path('inscripciones/nuevo/', views.inscripcion_crear, name='inscripcion_crear'),
     path('inscripciones/<int:pk>/baja/', views.inscripcion_baja, name='inscripcion_baja'),

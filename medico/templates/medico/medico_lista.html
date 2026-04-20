@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>👨‍⚕️ Médicos</h2>
+
+<a href="{% url 'medico:medico_crear' %}">➕ Nuevo médico</a>
+
+<br><br>
+
+<table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
+
+    <tr style="background:#eee;">
+        <th>Nombre</th>
+        <th>Cédula</th>
+        <th>Usuario</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for m in medicos %}
+    <tr>
+        <td>{{ m.nombre_completo }}</td>
+        <td>{{ m.cedula_profesional }}</td>
+        <td>{{ m.usuario }}</td>
+        <td>
+            <a href="{% url 'medico:medico_editar' m.id %}">✏ Editar</a> |
+            <a href="{% url 'medico:medico_eliminar' m.id %}">🗑 Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

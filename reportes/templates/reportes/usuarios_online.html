@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Usuarios en Línea</h2>
+
+<table border="1">
+<tr>
+    <th>Usuario</th>
+    <th>Última actividad</th>
+    <th>Estado</th>
+</tr>
+
+{% for u in usuarios %}
+<tr>
+    <td>{{ u.usuario.email }}</td>
+    <td>{{ u.ultima_actividad }}</td>
+    <td>
+        {% if u.esta_en_linea %}
+            🟢 En línea
+        {% else %}
+            ⚪ Inactivo
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

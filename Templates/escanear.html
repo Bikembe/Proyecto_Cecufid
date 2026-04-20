@@ -1,37 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Control de Accesos</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h1>Escanear Código</h1>
+{% block content %}
+
+<div style="max-width:600px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+
+<h2>Control de Accesos</h2>
 
 <form method="post">
     {% csrf_token %}
-    <input type="text" name="codigo" autofocus>
-    <button type="submit">Validar</button>
+    <input type="text" name="codigo" autofocus style="width:100%;padding:10px;margin:10px 0;">
+    <button type="submit" style="width:100%;padding:10px;background:#1565c0;color:white;border:none;">Validar</button>
 </form>
 
 {% if mensaje %}
-    <h2>
+    <div style="margin-top:10px;padding:10px;background:#f4f6f9;">
         {{ mensaje }}
-    </h2>
+    </div>
 {% endif %}
 
 {% if estado_actual %}
     <h3>
         {% if estado_actual == "DENTRO" %}
-            Nadador actualmente DENTRO
+            🟢 Nadador actualmente DENTRO
         {% else %}
-            Nadador actualmente FUERA
+            🔴 Nadador actualmente FUERA
         {% endif %}
     </h3>
 {% endif %}
 
 {% if nadador %}
     <hr>
-    <h2>Datos del Nadador</h2>
+
+    <h3>Datos del Nadador</h3>
 
     <p><strong>Nombre:</strong> {{ nadador }}</p>
 
@@ -48,15 +48,14 @@
 
 <hr>
 
-<h4>
-    Nadadores actualmente dentro: {{ dentro_count }}
-</h4>
+<h4>Nadadores dentro hoy: {{ dentro_count }}</h4>
 
 <a href="{% url 'logout' %}">Cerrar sesión</a>
 
 <script>
-    document.querySelector("input[name='codigo']").focus();
+document.querySelector("input[name='codigo']").focus();
 </script>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

@@ -4,49 +4,77 @@
 
 <h2>Certificado médico</h2>
 
-<p>Nadador: {{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+{% if nadador %}
+<p><strong>Nadador:</strong> {{ nadador.nombre }} {{ nadador.apellido_paterno }}</p>
+{% elif preregistro %}
+<p><strong>PreRegistro:</strong> {{ preregistro.nombre }} {{ preregistro.apellido_paterno }}</p>
+{% endif %}
 
 {% if error %}
-    <p style="color:red;">{{ error }}</p>
+    <div style="background:red;color:white;padding:10px;margin-bottom:10px;">
+        {{ error }}
+    </div>
 {% endif %}
 
 <form method="POST">
     {% csrf_token %}
 
-    Temperatura
-    <input type="number" name="temperatura"><br>
+    <h3>Signos vitales</h3>
 
-    Presión arterial
-    <input type="number" name="presion"><br>
+    <label>Temperatura (°C)</label>
+    <input type="number" step="0.1" name="temperatura"><br>
 
-    Frecuencia cardiaca
+    <label>Presión arterial</label>
+    <input type="text" name="presion"><br>
+
+    <label>Frecuencia cardiaca</label>
     <input type="number" name="fc"><br>
 
-    Frecuencia respiratoria
+    <label>Frecuencia respiratoria</label>
     <input type="number" name="fr"><br>
 
-    Peso
-    <input type="number" name="peso"><br>
-
-    Talla
-    <input type="number" name="talla"><br>
-
-    Saturación
+    <label>Saturación de oxígeno (%)</label>
     <input type="number" name="sat"><br>
 
-    Grupo RH
+    <h3>Medidas corporales</h3>
+
+    <label>Peso (kg)</label>
+    <input type="number" step="0.01" name="peso"><br>
+
+    <label>Talla (m)</label>
+    <input type="number" step="0.01" name="talla"><br>
+
+    <h3>Información adicional</h3>
+
+    <label>Grupo sanguíneo</label>
     <input type="text" name="rh"><br>
 
-    Alergias
+    <label>Alergias</label>
     <input type="text" name="alergias"><br>
 
-    Afiliación
+    <label>Afiliación médica</label>
     <input type="text" name="afiliacion"><br>
 
-    Conclusión
-    <textarea name="conclusion"></textarea><br>
+    <h3>Resultado</h3>
 
+    <label>Estatus</label>
+    <select name="estatus" required>
+        <option value="">Seleccionar</option>
+        <option value="APTO">Apto</option>
+        <option value="NO_APTO">No Apto</option>
+        <option value="DIFICULTADES">Apto con dificultades</option>
+        <option value="PARANATACION">Paranatación</option>
+    </select><br><br>
+
+    <label>Motivos (opcional)</label>
+    <textarea name="motivos"></textarea><br>
+
+    <label>Conclusión médica</label>
+    <textarea name="conclusion" required></textarea><br>
+
+    <br>
     <button type="submit">Guardar certificado</button>
+
 </form>
 
 {% endblock %}
