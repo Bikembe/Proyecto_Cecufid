@@ -10,14 +10,9 @@ from .views import (
 )
 
 urlpatterns = [
-    # 🔐 Autenticación
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
-
-    # 🏠 Dashboard
     path("", dashboard, name="dashboard"),
-
-    # 👤 CRUD USUARIOS
     path("usuarios/", usuario_lista, name="usuarios_lista"),
     path("usuarios/nuevo/", usuario_crear, name="usuario_crear"),
     path("usuarios/editar/<int:pk>/", usuario_editar, name="usuario_editar"),

@@ -6,9 +6,6 @@ from .models import Evaluacion
 from reportes.utils import registrar_accion
 
 
-# =========================
-# FORMULARIO PRINCIPAL
-# =========================
 @login_required
 @rol_requerido(['Maestro'])
 def evaluaciones(request):
@@ -34,9 +31,6 @@ def evaluaciones(request):
     })
 
 
-# =========================
-# CALIFICAR NADADOR
-# =========================
 @login_required
 @rol_requerido(['Maestro'])
 def evaluar_nadador(request, inscripcion_id):
@@ -82,9 +76,6 @@ def evaluar_nadador(request, inscripcion_id):
     })
 
 
-# =========================
-# DETALLE EVALUACIÓN
-# =========================
 @login_required
 @rol_requerido(['Maestro'])
 def detalle_evaluacion(request, id):
@@ -104,9 +95,6 @@ def detalle_evaluacion(request, id):
     })
 
 
-# =========================
-# HISTORIAL MAESTRO
-# =========================
 @login_required
 @rol_requerido(['Maestro'])
 def historial_maestro(request):
@@ -128,9 +116,6 @@ def historial_maestro(request):
     })
 
 
-# =========================
-# REVISIÓN ADMIN
-# =========================
 @login_required
 @rol_requerido(['Administrador'])
 def revisar_evaluaciones(request):
@@ -152,9 +137,6 @@ def revisar_evaluaciones(request):
     })
 
 
-# =========================
-# PROMOCIÓN
-# =========================
 @login_required
 @rol_requerido(['Maestro', 'Administrador'])
 def solicitar_promocion(request, evaluacion_id):
@@ -181,9 +163,6 @@ def solicitar_promocion(request, evaluacion_id):
     return redirect("evaluaciones:historial")
 
 
-# =========================
-# DASHBOARD MAESTRO
-# =========================
 @login_required
 @rol_requerido(['Maestro', 'Administrador'])
 def dashboard_evaluaciones(request):
@@ -217,10 +196,8 @@ def dashboard_evaluaciones(request):
     })
 
 
-# =========================
-# APP DASHBOARD
-# =========================
 @login_required
+@rol_requerido(['Maestro', 'Administrador'])
 def app_dashboard(request):
 
     evaluaciones = Evaluacion.objects.select_related(
@@ -252,9 +229,6 @@ def app_dashboard(request):
     })
 
 
-# =========================
-# PANEL MAESTRO
-# =========================
 @login_required
 @rol_requerido(['Maestro'])
 def panel_maestro(request):
@@ -285,9 +259,6 @@ def panel_maestro(request):
     })
 
 
-# =========================
-# PANEL ADMIN
-# =========================
 @login_required
 @rol_requerido(['Administrador'])
 def panel_admin(request):

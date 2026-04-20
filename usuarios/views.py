@@ -4,11 +4,9 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Usuario, Rol, Sede, PlanCurso, Categoria
 from reportes.utils import registrar_accion
+from usuarios.decorators import rol_requerido
 
 
-# =========================
-# LOGIN
-# =========================
 class CustomLoginView(LoginView):
     template_name = "login.html"
     redirect_authenticated_user = True
@@ -27,9 +25,6 @@ class CustomLoginView(LoginView):
         return response
 
 
-# =========================
-# LOGOUT
-# =========================
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy("login")
 
@@ -45,10 +40,8 @@ class CustomLogoutView(LogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
-# =========================
-# DASHBOARD
-# =========================
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Recepcion', 'Caja', 'Medico', 'Maestro'])
 def dashboard(request):
 
     registrar_accion(
@@ -71,7 +64,7 @@ def dashboard(request):
         return redirect("evaluaciones:app_dashboard")
 
     elif rol == "Medico":
-        return redirect("medico:escanear_medico")
+        return redirect("medico:escanear")
 
     elif rol == "Caja":
         return render(request, "dashboard.html")
@@ -82,11 +75,8 @@ def dashboard(request):
     return render(request, "dashboard.html")
 
 
-# =========================
-# USUARIOS DEL SISTEMA
-# =========================
-
 @login_required
+@rol_requerido(['Administrador'])
 def usuario_lista(request):
 
     registrar_accion(
@@ -105,6 +95,7 @@ def usuario_lista(request):
 
 
 @login_required
+@rol_requerido(['Administrador'])
 def usuario_crear(request):
     roles = Rol.objects.all()
 
@@ -137,6 +128,7 @@ def usuario_crear(request):
 
 
 @login_required
+@rol_requerido(['Administrador'])
 def usuario_editar(request, pk):
     usuario = get_object_or_404(Usuario, pk=pk)
     roles = Rol.objects.all()
@@ -172,6 +164,7 @@ def usuario_editar(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador'])
 def usuario_eliminar(request, pk):
     usuario = get_object_or_404(Usuario, pk=pk)
 
@@ -188,11 +181,8 @@ def usuario_eliminar(request, pk):
     return redirect("usuarios_lista")
 
 
-# =========================
-# PLAN CURSOS
-# =========================
-
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def plan_lista(request):
 
     registrar_accion(
@@ -211,6 +201,7 @@ def plan_lista(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def plan_crear(request):
     sedes = Sede.objects.all()
     categorias = Categoria.objects.all()
@@ -247,6 +238,7 @@ def plan_crear(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def plan_editar(request, pk):
     plan = get_object_or_404(PlanCurso, pk=pk)
     sedes = Sede.objects.all()
@@ -285,6 +277,7 @@ def plan_editar(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def plan_eliminar(request, pk):
     plan = get_object_or_404(PlanCurso, pk=pk)
 

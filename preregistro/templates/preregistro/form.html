@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>🧾 Registro</h2>
+<h2>Registro</h2>
 
 {% if error %}
 <p style="color:red;">{{ error }}</p>
@@ -10,7 +10,6 @@
 <form method="POST" enctype="multipart/form-data">
 {% csrf_token %}
 
-<!-- ================= DATOS PERSONALES ================= -->
 <h3>Datos personales</h3>
 
 <input type="text" name="nombre" placeholder="Nombre" required>
@@ -29,53 +28,49 @@
 <input type="text" name="telefono" placeholder="Teléfono">
 <input type="email" name="correo" placeholder="Correo">
 
-<!-- ================= TIPO PERSONA ================= -->
 <h3>Tipo de usuario</h3>
 
 <label>
 <input type="checkbox" id="es_menor"> Es menor de edad
 </label>
 
-<!-- ================= ADULTO ================= -->
 <div id="bloque_adulto">
 
     <h4>Documentos (Adulto)</h4>
 
-    <label>📸 Fotografía del usuario</label>
+    <label>Fotografía del usuario</label>
     <input type="file" name="foto" required>
 
-    <label>🪪 INE (Identificación oficial)</label>
+    <label>INE (Identificación oficial)</label>
     <input type="file" name="identificacion" required>
 
 </div>
 
-<!-- ================= MENOR ================= -->
 <div id="bloque_menor" style="display:none; border:1px solid #ccc; padding:10px; margin-top:10px;">
 
     <h4>Documentos del menor</h4>
 
-    <label>📸 Fotografía del menor</label>
+    <label>Fotografía del menor</label>
     <input type="file" name="foto_menor">
 
-    <label>📄 Acta de nacimiento</label>
+    <label>Acta de nacimiento</label>
     <input type="file" name="acta_nacimiento">
 
-    <label>🧾 CURP</label>
+    <label>CURP</label>
     <input type="file" name="curp">
 
     <h4>Datos del tutor</h4>
 
     <input type="text" name="tutor_nombre" placeholder="Nombre del tutor">
 
-    <label>📸 Foto del tutor</label>
+    <label>Foto del tutor</label>
     <input type="file" name="foto_tutor">
 
-    <label>🪪 INE del tutor</label>
+    <label>INE del tutor</label>
     <input type="file" name="ine_tutor">
 
 </div>
 
-<!-- ================= NIVEL ================= -->
 <h3>Nivel</h3>
 <select name="nivel" id="nivel" required>
     <option value="">Selecciona</option>
@@ -84,7 +79,6 @@
     {% endfor %}
 </select>
 
-<!-- ================= DIAS ================= -->
 <h3>Días</h3>
 <select name="dias_seleccionados" id="dias" required>
     <option value="">Selecciona</option>
@@ -97,7 +91,6 @@
 <input type="checkbox" id="extra_sabado"> Agregar sábado
 </label>
 
-<!-- ================= HORARIO ================= -->
 <h3>Horario principal</h3>
 
 <select name="horario" id="horario" required>
@@ -115,7 +108,6 @@ data-dias="{{ h.dias }}"
 
 </select>
 
-<!-- ================= SABADO ================= -->
 <div id="bloque_sabado" style="display:none;">
 
 <h3>Horario sábado</h3>
@@ -135,7 +127,6 @@ data-dias="{{ h.dias }}"
 
 </div>
 
-<!-- ================= EMERGENCIA ================= -->
 <h3>Contacto de emergencia</h3>
 
 <input type="text" name="emergencia_nombre" placeholder="Nombre" required>
@@ -148,10 +139,8 @@ data-dias="{{ h.dias }}"
 
 </form>
 
-<!-- ================= JS ================= -->
 <script>
 
-// 🔹 MENOR / ADULTO
 const checkMenor = document.getElementById("es_menor");
 const menor = document.getElementById("bloque_menor");
 const adulto = document.getElementById("bloque_adulto");
@@ -166,12 +155,10 @@ checkMenor.addEventListener("change", () => {
     }
 });
 
-// 🔹 SABADO
 document.getElementById("extra_sabado").onchange = function(){
     document.getElementById("bloque_sabado").style.display = this.checked ? "block" : "none";
 };
 
-// 🔹 FILTROS
 const nivel = document.getElementById("nivel");
 const dias = document.getElementById("dias");
 const opciones = document.getElementById("horario").options;

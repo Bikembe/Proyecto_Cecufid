@@ -121,10 +121,6 @@ def crear_certificado(request, nadador_id):
 
         return redirect("medico:historial_medico", nadador_id=nadador.id)
 
-    return render(request, "medico/formulario.html", {
-        "nadador": nadador
-    })
-
 
 @login_required
 @rol_requerido(['Medico', 'Administrador'])
@@ -182,11 +178,9 @@ def crear_certificado_preregistro(request, preregistro_id):
 
         return redirect("medico:historial_medico_preregistro", preregistro_id=preregistro.id)
 
-    return render(request, "medico/formulario.html", {
-        "preregistro": preregistro
-    })
 
-
+@login_required
+@rol_requerido(['Medico', 'Administrador'])
 def historial_medico(request, nadador_id):
 
     nadador = get_object_or_404(Nadador, id=nadador_id)
@@ -196,7 +190,7 @@ def historial_medico(request, nadador_id):
     ).select_related("medico").order_by("-fecha_examen")
 
     registrar_accion(
-        usuario=request.user if request.user.is_authenticated else None,
+        usuario=request.user,
         modulo="MEDICO",
         accion="CONSULTA",
         descripcion=f"Consulta historial médico nadador {nadador_id}",
@@ -209,6 +203,8 @@ def historial_medico(request, nadador_id):
     })
 
 
+@login_required
+@rol_requerido(['Medico', 'Administrador'])
 def historial_medico_preregistro(request, preregistro_id):
 
     preregistro = get_object_or_404(PreRegistro, id=preregistro_id)
@@ -218,7 +214,7 @@ def historial_medico_preregistro(request, preregistro_id):
     ).select_related("medico").order_by("-fecha_examen")
 
     registrar_accion(
-        usuario=request.user if request.user.is_authenticated else None,
+        usuario=request.user,
         modulo="MEDICO",
         accion="CONSULTA",
         descripcion=f"Consulta historial preregistro {preregistro_id}",

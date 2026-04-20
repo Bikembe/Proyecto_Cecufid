@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from usuarios.decorators import rol_requerido
 
 from .models import Carril, HorarioCarril, InscripcionCarril, Nivel
 from usuarios.models import Usuario, Nadador
@@ -9,6 +10,7 @@ from reportes.utils import registrar_accion
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def dashboard(request):
     total_carriles = Carril.objects.count()
     total_horarios = HorarioCarril.objects.count()
@@ -27,6 +29,7 @@ def dashboard(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Recepcion'])
 def carril_lista(request):
 
     registrar_accion(
@@ -41,6 +44,7 @@ def carril_lista(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def carril_crear(request):
     if request.method == "POST":
         numero = request.POST.get("numero")
@@ -59,6 +63,7 @@ def carril_crear(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def carril_editar(request, pk):
     carril = get_object_or_404(Carril, pk=pk)
 
@@ -80,6 +85,7 @@ def carril_editar(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador'])
 def carril_eliminar(request, pk):
     carril = get_object_or_404(Carril, pk=pk)
 
@@ -94,6 +100,7 @@ def carril_eliminar(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Maestro'])
 def horario_lista(request):
 
     registrar_accion(
@@ -109,6 +116,7 @@ def horario_lista(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def horario_crear(request):
     carriles = Carril.objects.all()
     niveles = Nivel.objects.all()
@@ -147,6 +155,7 @@ def horario_crear(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def horario_editar(request, pk):
     horario = get_object_or_404(HorarioCarril, pk=pk)
 
@@ -179,6 +188,7 @@ def horario_editar(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador'])
 def horario_eliminar(request, pk):
     horario = get_object_or_404(HorarioCarril, pk=pk)
 
@@ -193,6 +203,7 @@ def horario_eliminar(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Maestro', 'Recepcion'])
 def asignacion_cuadricula(request):
     horarios = HorarioCarril.objects.select_related('carril', 'maestro', 'nivel').order_by('hora_inicio')
 
@@ -202,6 +213,7 @@ def asignacion_cuadricula(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def reporte_uso_carriles(request):
     horarios = HorarioCarril.objects.all()
 
@@ -221,6 +233,7 @@ def reporte_uso_carriles(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Recepcion'])
 def grupo_detalle(request, pk):
     horario = get_object_or_404(HorarioCarril, pk=pk)
 
@@ -236,6 +249,7 @@ def grupo_detalle(request, pk):
 
 
 @login_required
+@rol_requerido(['Recepcion', 'Administrador'])
 def inscribir_nadador(request, pk):
     horario = get_object_or_404(HorarioCarril, pk=pk)
 
@@ -256,6 +270,7 @@ def inscribir_nadador(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Recepcion'])
 def inscripcion_lista(request):
     inscripciones = InscripcionCarril.objects.select_related(
         'nadador', 'horario_carril'
@@ -267,6 +282,7 @@ def inscripcion_lista(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Recepcion'])
 def inscripcion_crear(request):
     nadadores = Nadador.objects.all()
     horarios = []
@@ -317,6 +333,7 @@ def inscripcion_crear(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Recepcion'])
 def inscripcion_baja(request, pk):
     inscripcion = get_object_or_404(InscripcionCarril, pk=pk)
     inscripcion.activo = False
@@ -332,6 +349,7 @@ def inscripcion_baja(request, pk):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador', 'Recepcion'])
 def api_horarios(request):
 
     maestro_id = request.GET.get("maestro")
@@ -359,6 +377,7 @@ def api_horarios(request):
 
 
 @login_required
+@rol_requerido(['Administrador', 'Coordinador'])
 def nivel_crear(request):
     if request.method == "POST":
         nivel = Nivel.objects.create(

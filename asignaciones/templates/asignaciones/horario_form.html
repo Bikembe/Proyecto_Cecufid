@@ -6,7 +6,6 @@
 <form method="post">
     {% csrf_token %}
 
-    <!-- ================= CARRIL ================= -->
     <label>Carril:</label>
     <select name="carril" required>
         {% for c in carriles %}
@@ -17,11 +16,10 @@
         {% endfor %}
     </select>
 
-    <a href="{% url 'asignaciones:carril_crear' %}">➕ Agregar Carril</a>
+    <a href="{% url 'asignaciones:carril_crear' %}">Agregar Carril</a>
 
     <br><br>
 
-    <!-- ================= NIVEL ================= -->
     <label>Nivel:</label>
     <select name="nivel" required>
         {% for n in niveles %}
@@ -32,11 +30,10 @@
         {% endfor %}
     </select>
 
-    <a href="{% url 'asignaciones:nivel_crear' %}">➕ Agregar Nivel</a>
+    <a href="{% url 'asignaciones:nivel_crear' %}">Agregar Nivel</a>
 
     <br><br>
 
-    <!-- ================= MAESTRO ================= -->
     <label>Maestro:</label>
     <select name="maestro" required>
         {% for m in maestros %}
@@ -53,7 +50,6 @@
 
     <br><br>
 
-    <!-- ================= DIAS ================= -->
   <label>Días:</label>
 <select name="dias" required>
     <option value="">Selecciona</option>
@@ -81,7 +77,6 @@
 </select>
  <br><br>
 
-    <!-- ================= HORAS ================= -->
     <label>Hora Inicio:</label>
     <input type="time" name="hora_inicio"
            value="{{ horario.hora_inicio|default:'' }}" required>
@@ -94,7 +89,6 @@
 
     <br><br>
 
-    <!-- ================= CAPACIDAD ================= -->
     <label>Capacidad:</label>
     <input type="number" name="capacidad"
            value="{{ horario.capacidad_maxima|default:'' }}" required>

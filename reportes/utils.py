@@ -1,10 +1,6 @@
 from django.utils import timezone
 from .models import HistorialAccion, UsuarioActivo
 
-
-# =========================
-# REGISTRAR ACCIÓN GLOBAL
-# =========================
 def registrar_accion(usuario, modulo, accion, descripcion="", request=None):
 
     ip = None
@@ -15,7 +11,6 @@ def registrar_accion(usuario, modulo, accion, descripcion="", request=None):
         ip = x_forwarded.split(',')[0] if x_forwarded else request.META.get('REMOTE_ADDR')
         user_agent = request.META.get('HTTP_USER_AGENT', '')
 
-    # Guardar historial
     HistorialAccion.objects.create(
         usuario=usuario,
         modulo=modulo,
@@ -25,7 +20,6 @@ def registrar_accion(usuario, modulo, accion, descripcion="", request=None):
         user_agent=user_agent
     )
 
-    # Actualizar usuario en línea (si aplica)
     if usuario:
 
         UsuarioActivo.objects.update_or_create(
@@ -36,10 +30,6 @@ def registrar_accion(usuario, modulo, accion, descripcion="", request=None):
             }
         )
 
-
-# =========================
-# MARCAR INACTIVIDAD (OPCIONAL FUTURO)
-# =========================
 def marcar_desconexion(usuario):
     UsuarioActivo.objects.filter(usuario=usuario).update(
         conectado=False

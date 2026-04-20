@@ -5,6 +5,8 @@ from .models import PreRegistro
 from asignaciones.models import HorarioCarril, InscripcionCarril, Nivel
 from reportes.utils import registrar_accion
 
+from usuarios.decorators import rol_requerido
+
 
 def calcular_edad(fecha_nacimiento):
     hoy = date.today()
@@ -16,6 +18,7 @@ def calcular_edad(fecha_nacimiento):
     return edad
 
 
+@rol_requerido(['Administrador', 'Recepcion'])
 def detalle_preregistro(request, pk):
 
     preregistro = get_object_or_404(PreRegistro, pk=pk)
@@ -34,6 +37,7 @@ def detalle_preregistro(request, pk):
     })
 
 
+@rol_requerido(['Administrador', 'Recepcion'])
 def crear_preregistro(request):
 
     niveles = Nivel.objects.all()

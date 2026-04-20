@@ -74,7 +74,6 @@ def escanear_acceso(request):
                         fecha__date=hoy
                     ).order_by('-fecha').first()
 
-                    # 🔥 PRIMERA VEZ O ENTRADA
                     if not ultimo_acceso or ultimo_acceso.tipo == "SALIDA":
 
                         hora_inicio = horario.hora_inicio
@@ -113,7 +112,6 @@ def escanear_acceso(request):
                                 f"Entrada registrada: {nadador}", request
                             )
 
-                    # 🔥 SALIDA (NO SE VALIDA HORARIO)
                     else:
 
                         nuevo_tipo = "SALIDA"
@@ -166,7 +164,7 @@ def escanear_acceso(request):
 
 
 @login_required
-@rol_requerido(['Administrador', 'Recepcion'])
+@rol_requerido(['Administrador', 'Recepcion', 'Coordinador'])
 def historial_accesos(request):
 
     registrar_accion(

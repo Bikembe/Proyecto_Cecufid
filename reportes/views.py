@@ -4,6 +4,10 @@ from datetime import timedelta
 from usuarios.models import Usuario
 from .models import HistorialAccion, UsuarioActivo, Reporte
 
+from usuarios.decorators import rol_requerido
+
+
+@rol_requerido(['Administrador', 'Coordinador'])
 def historial_lista(request):
     historial = HistorialAccion.objects.select_related('usuario').all()
 
@@ -11,6 +15,8 @@ def historial_lista(request):
         'historial': historial
     })
 
+
+@rol_requerido(['Administrador', 'Coordinador'])
 def usuarios_en_linea(request):
     limite = timezone.now() - timedelta(minutes=5)
 
@@ -22,6 +28,8 @@ def usuarios_en_linea(request):
         'usuarios': usuarios
     })
 
+
+@rol_requerido(['Administrador', 'Coordinador'])
 def reporte_lista(request):
     reportes = Reporte.objects.select_related('generado_por').all()
 

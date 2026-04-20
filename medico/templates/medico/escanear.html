@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h2>🔍 Escanear credencial</h2>
+<h2>Escanear credencial</h2>
 
 <form method="POST" style="margin-bottom:20px;">
     {% csrf_token %}
@@ -28,7 +28,7 @@
 
 <div style="border:1px solid #ccc;padding:15px;border-radius:10px;">
 
-    <h3>👤 Persona encontrada</h3>
+    <h3>Persona encontrada</h3>
 
     {% if nadador %}
         <p><strong>Tipo:</strong> Nadador</p>
@@ -36,13 +36,13 @@
         <p><strong>Código:</strong> {{ nadador.codigo_barras }}</p>
 
         <a href="{% url 'medico:crear_certificado' nadador.id %}">
-            🩺 Realizar examen médico
+            Realizar examen médico
         </a>
 
         <br><br>
 
         <a href="{% url 'medico:historial_medico' nadador.id %}">
-            📄 Ver historial médico
+            Ver historial médico
         </a>
 
     {% elif preregistro %}
@@ -51,13 +51,13 @@
         <p><strong>Folio:</strong> {{ preregistro.folio }}</p>
 
         <a href="{% url 'medico:crear_certificado_preregistro' preregistro.id %}">
-            🩺 Realizar examen médico
+            Realizar examen médico
         </a>
 
         <br><br>
 
         <a href="{% url 'medico:historial_medico_preregistro' preregistro.id %}">
-            📄 Ver historial médico
+            Ver historial médico
         </a>
     {% endif %}
 

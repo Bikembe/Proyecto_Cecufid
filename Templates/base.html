@@ -13,7 +13,6 @@
             background-color: #f4f6f9;
         }
 
-        /* NAVBAR */
         .navbar {
             background-color: #0d47a1;
             color: white;
@@ -29,7 +28,6 @@
             font-size: 18px;
         }
 
-        /* MENU */
         .menu {
             background-color: #1565c0;
             padding: 10px;
@@ -51,14 +49,12 @@
             background-color: rgba(255,255,255,0.2);
         }
 
-        /* CONTENIDO */
         .content {
             padding: 20px;
             max-width: 1200px;
             margin: auto;
         }
 
-        /* ALERTAS */
         .alert {
             padding: 10px;
             margin-bottom: 15px;
@@ -75,11 +71,7 @@
             color: #c62828;
         }
 
-        /* ========================= */
-        /* 📱 RESPONSIVE MOBILE */
-        /* ========================= */
         @media (max-width: 768px) {
-
             .navbar {
                 flex-direction: column;
                 align-items: flex-start;
@@ -117,44 +109,80 @@
 
 <div class="menu">
 
-    {% if request.user.is_authenticated %}
+{% if request.user.is_authenticated %}
 
-        {% with rol=request.user.rol.nombre|default_if_none:'' %}
+    {% with rol=request.user.rol.nombre|default_if_none:'' %}
 
-            <a href="/">Dashboard</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
 
-            {% if rol == "Administrador" %}
-                <a href="/admin/">Admin</a>
-                <a href="/asignaciones/">Asignaciones</a>
-                <a href="/accesos/escanear/">Accesos</a>
-                <a href="/medico/escanear/">Médico</a>
-            {% endif %}
+        {# ================= ADMINISTRADOR ================= #}
+        {% if rol == "Administrador" %}
 
-            {% if rol == "Coordinador" %}
-                <a href="/asignaciones/">Asignaciones</a>
-                <a href="/asignaciones/horarios/">Horarios</a>
-                <a href="/asignaciones/reportes/">Reportes</a>
-                <a href="/asignaciones/inscripciones/">Inscripciones</a>
-            {% endif %}
+            <a href="/admin/">Admin</a>
 
-            {% if rol == "Maestro" %}
-                <a href="/asignaciones/horarios/">Mis Horarios</a>
-            {% endif %}
+            <a href="{% url 'usuarios_lista' %}">Usuarios</a>
 
-            {% if rol == "Recepcionista" %}
-                <a href="/accesos/escanear/">Accesos</a>
-            {% endif %}
+            <a href="{% url 'asignaciones:dashboard' %}">Asignaciones</a>
+            <a href="{% url 'asignaciones:carril_lista' %}">Carriles</a>
+            <a href="{% url 'asignaciones:horario_lista' %}">Horarios</a>
+            <a href="{% url 'asignaciones:inscripcion_lista' %}">Inscripciones</a>
 
-            {% if rol == "Médico" %}
-                <a href="/medico/escanear/">Escanear Nadador</a>
-                <a href="/medico/historial/">Historial</a>
-            {% endif %}
+            <a href="{% url 'accesos:escanear' %}">Accesos</a>
+            <a href="{% url 'accesos:historial' %}">Historial accesos</a>
 
-            {% if rol == "Caja" %}
-                <a href="/accesos/escanear/">Control de Acceso</a>
-            {% endif %}
+            <a href="{% url 'medico:escanear' %}">Médico</a>
+            <a href="{% url 'medico:historial_general' %}">Historial médico</a>
 
-        {% endwith %}
+            <a href="{% url 'evaluaciones:panel_admin' %}">Evaluaciones</a>
+
+            <a href="{% url 'reportes:historial_lista' %}">Reportes</a>
+
+        {% endif %}
+
+        {# ================= COORDINADOR ================= #}
+        {% if rol == "Coordinador" %}
+
+            <a href="{% url 'asignaciones:dashboard' %}">Asignaciones</a>
+            <a href="{% url 'asignaciones:horario_lista' %}">Horarios</a>
+            <a href="{% url 'asignaciones:inscripcion_lista' %}">Inscripciones</a>
+            <a href="{% url 'asignaciones:reporte' %}">Reportes</a>
+
+            <a href="{% url 'accesos:historial' %}">Accesos</a>
+
+        {% endif %}
+
+        {# ================= MAESTRO ================= #}
+        {% if rol == "Maestro" %}
+
+            <a href="{% url 'evaluaciones:panel_maestro' %}">Mis evaluaciones</a>
+            <a href="{% url 'asignaciones:horario_lista' %}">Mis horarios</a>
+
+        {% endif %}
+
+        {# ================= RECEPCION ================= #}
+        {% if rol == "Recepcion" %}
+
+            <a href="{% url 'accesos:escanear' %}">Escanear acceso</a>
+            <a href="{% url 'accesos:historial' %}">Historial accesos</a>
+
+            <a href="{% url 'preregistro:crear' %}">Pre-registro</a>
+
+        {% endif %}
+
+        {# ================= MÉDICO ================= #}
+        {% if rol == "Medico" %}
+
+            <a href="{% url 'medico:escanear' %}">Escanear</a>
+            <a href="{% url 'medico:historial_general' %}">Historial</a>
+
+        {% endif %}
+
+        {# ================= CAJA ================= #}
+        {% if rol == "Caja" %}
+
+            <a href="{% url 'accesos:escanear' %}">Control acceso</a>
+
+        {% endif %}
 
         <form method="post" action="{% url 'logout' %}" style="display:inline;">
             {% csrf_token %}
@@ -170,7 +198,9 @@
             </button>
         </form>
 
-    {% endif %}
+    {% endwith %}
+
+{% endif %}
 
 </div>
 
