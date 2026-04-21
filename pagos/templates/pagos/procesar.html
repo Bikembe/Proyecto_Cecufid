@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Procesar Pago</h2>
+
+<p><strong>{{ preregistro.nombre }}</strong></p>
+
+<ul>
+<li>Mensualidad: ${{ monto_mensual }}</li>
+<li>Inscripción: ${{ monto_inscripcion }}</li>
+<li>Examen: ${{ monto_examen }}</li>
+<li>Descuento: -${{ descuento }}</li>
+<li>Recargo: ${{ recargo }}</li>
+</ul>
+
+<h3>Total: ${{ total }}</h3>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>Descuento</label>
+    <select name="descuento">
+        <option value="">Ninguno</option>
+        {% for d in descuentos %}
+            <option value="{{ d.id }}">{{ d.nombre }} ({{ d.porcentaje }}%)</option>
+        {% endfor %}
+    </select>
+
+    <label>Método</label>
+    <select name="metodo">
+        <option>Efectivo</option>
+        <option>Transferencia</option>
+    </select>
+
+    <label>Referencia</label>
+    <input type="text" name="referencia">
+
+    <button>Pagar</button>
+</form>
+
+{% endblock %}

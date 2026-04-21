@@ -4,12 +4,12 @@
 
 <style>
 .dashboard {
-    padding: 20px;
+    padding: 10px;
 }
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -19,17 +19,19 @@
     border-radius: 12px;
     color: white;
     font-weight: bold;
+    text-align: center;
 }
 
-.card.blue { background: #3498db; }
-.card.green { background: #2ecc71; }
-.card.orange { background: #f39c12; }
-.card.red { background: #e74c3c; }
+.card.blue { background: #1565c0; }
+.card.green { background: #2e7d32; }
+.card.orange { background: #ef6c00; }
+.card.red { background: #c62828; }
 
 .table-box {
     background: white;
     padding: 15px;
     border-radius: 12px;
+    overflow-x: auto;
 }
 
 table {
@@ -38,7 +40,7 @@ table {
 }
 
 th {
-    background: #2c3e50;
+    background: #1565c0;
     color: white;
     padding: 10px;
 }
@@ -55,10 +57,9 @@ td {
     font-size: 12px;
 }
 
-.badge.ok { background: #2ecc71; }
-.badge.mid { background: #f39c12; }
-.badge.low { background: #e74c3c; }
-
+.badge.ok { background: #2e7d32; }
+.badge.mid { background: #ef6c00; }
+.badge.low { background: #c62828; }
 </style>
 
 <div class="dashboard">

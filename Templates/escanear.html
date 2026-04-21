@@ -2,34 +2,88 @@
 
 {% block content %}
 
-<div style="max-width:600px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+<style>
+.card {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.mensaje {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f4f6f9;
+    border-radius: 6px;
+}
+
+.estado {
+    text-align: center;
+    font-size: 18px;
+    margin: 15px 0;
+}
+
+.dentro { color: #2ecc71; }
+.fuera { color: #e74c3c; }
+
+.info {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+</style>
+
+<div class="card">
 
 <h2>Control de Accesos</h2>
 
 <form method="post">
     {% csrf_token %}
-    <input type="text" name="codigo" autofocus style="width:100%;padding:10px;margin:10px 0;">
-    <button type="submit" style="width:100%;padding:10px;background:#1565c0;color:white;border:none;">Validar</button>
+    <input type="text" name="codigo" autofocus>
+    <button type="submit">Validar</button>
 </form>
 
 {% if mensaje %}
-    <div style="margin-top:10px;padding:10px;background:#f4f6f9;">
+    <div class="mensaje">
         {{ mensaje }}
     </div>
 {% endif %}
 
 {% if estado_actual %}
-    <h3>
+    <div class="estado">
         {% if estado_actual == "DENTRO" %}
-            🟢 Nadador actualmente DENTRO
+            <span class="dentro">🟢 Nadador actualmente DENTRO</span>
         {% else %}
-            🔴 Nadador actualmente FUERA
+            <span class="fuera">🔴 Nadador actualmente FUERA</span>
         {% endif %}
-    </h3>
+    </div>
 {% endif %}
 
 {% if nadador %}
     <hr>
+
+    <div class="info">
 
     <h3>Datos del Nadador</h3>
 
@@ -44,6 +98,8 @@
     {% else %}
         <p><strong>Sin horario asignado</strong></p>
     {% endif %}
+
+    </div>
 {% endif %}
 
 <hr>

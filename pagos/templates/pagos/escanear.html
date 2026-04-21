@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Escanear Folio</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="folio" autofocus>
+    <button>Buscar</button>
+</form>
+
+{% if mensaje %}
+<p>{{ mensaje }}</p>
+{% endif %}
+
+{% if preregistro %}
+<p>{{ preregistro.nombre }}</p>
+
+<a href="{% url 'pagos:procesar_pago' preregistro.id %}">
+    Ir a cobrar
+</a>
+{% endif %}
+
+{% endblock %}

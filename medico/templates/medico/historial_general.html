@@ -2,7 +2,33 @@
 
 {% block content %}
 
+<style>
+.box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1565c0;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+</style>
+
 <h2>Historial general de certificados médicos</h2>
+
+<div class="box">
 
 <form method="GET" style="margin-bottom:20px;">
 
@@ -37,10 +63,9 @@
 
 </form>
 
+<table>
 
-<table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
-
-    <tr style="background:#eee;">
+    <tr>
         <th>Fecha</th>
         <th>Hora</th>
         <th>Médico</th>
@@ -100,5 +125,7 @@
     {% endfor %}
 
 </table>
+
+</div>
 
 {% endblock %}

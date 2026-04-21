@@ -15,7 +15,6 @@ class Pago(models.Model):
         ('CANCELADO', 'Cancelado'),
     )
 
-    # 🔹 PAGO ANTES DE INSCRIPCIÓN
     preregistro = models.ForeignKey(
         "preregistro.PreRegistro",
         on_delete=models.CASCADE,
@@ -24,7 +23,6 @@ class Pago(models.Model):
         related_name="pagos"
     )
 
-    # 🔹 PAGO DESPUÉS (YA INSCRITO)
     inscripcion = models.ForeignKey(
         "usuarios.Inscripcion",
         on_delete=models.CASCADE,
@@ -64,3 +62,40 @@ class Pago(models.Model):
         if self.preregistro:
             return f"Pago {self.tipo_pago} - PR {self.preregistro.folio}"
         return f"Pago {self.tipo_pago} - INS {self.inscripcion.id}"
+
+class Descuento(models.Model):
+    nombre = models.CharField(max_length=100)
+    porcentaje = models.IntegerField()  # 50 = 50%
+    requiere_credencial = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.nombre} - {self.porcentaje}%"
+
+class Tarifa(models.Model):
+
+    TIPO = (
+        ('INSCRIPCION', 'Inscripción'),
+        ('EXAMEN', 'Examen Médico'),
+        ('MENSUALIDAD', 'Mensualidad'),
+    )
+
+    DIAS_OPCIONES = (
+        (1, '1 día'),
+        (2, '2 días'),
+        (3, '3 días'),
+        (5, '5 días'),
+    )
+
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=20, choices=TIPO)
+
+    dias = models.IntegerField(choices=DIAS_OPCIONES, null=True, blank=True)
+
+    monto = models.DecimalField(max_digits=8, decimal_places=2)
+
+    activo = models.BooleanField(default=True)
+
+    def __str__(self):
+        if self.tipo == "MENSUALIDAD":
+            return f"{self.nombre} ({self.dias} días) - ${self.monto}"
+        return f"{self.nombre} - ${self.monto}"

@@ -2,42 +2,39 @@
 
 {% block content %}
 
+<style>
+.table-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+</style>
+
 <h2>Mis Evaluaciones</h2>
 
-<table border="1">
-    <tr>
-        <th>Nadador</th>
-        <th>Grupo</th>
-        <th>Respiración</th>
-        <th>Libre</th>
-        <th>Espalda</th>
-        <th>Mariposa</th>
-        <th>Resistencia</th>
-        <th>Promedio</th>
-        <th>Fecha</th>
-        <th>Acción</th>
-    </tr>
+<div class="table-box">
+<table>
+<tr>
+    <th>Nadador</th>
+    <th>Grupo</th>
+    <th>Promedio</th>
+    <th>Fecha</th>
+    <th>Acción</th>
+</tr>
 
-    {% for e in evaluaciones %}
-    <tr>
-        <td>{{ e.nadador }}</td>
-        <td>{{ e.horario_carril }}</td>
-        <td>{{ e.respiracion }}</td>
-        <td>{{ e.libre }}</td>
-        <td>{{ e.espalda }}</td>
-        <td>{{ e.mariposa }}</td>
-        <td>{{ e.resistencia }}</td>
-        <td>{{ e.promedio }}</td>
-        <td>{{ e.fecha }}</td>
-        <td>
-            <a href="{% url 'evaluaciones:detalle' e.id %}">Ver</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="10">No hay evaluaciones</td>
-    </tr>
-    {% endfor %}
+{% for e in evaluaciones %}
+<tr>
+    <td>{{ e.nadador }}</td>
+    <td>{{ e.horario_carril }}</td>
+    <td>{{ e.promedio }}</td>
+    <td>{{ e.fecha }}</td>
+    <td>
+        <a href="{% url 'evaluaciones:detalle' e.id %}">Ver</a>
+    </td>
+</tr>
+{% endfor %}
 </table>
+</div>
 
 {% endblock %}

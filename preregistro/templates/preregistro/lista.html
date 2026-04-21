@@ -1,9 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
 
+<style>
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+th {
+    background: #0d47a1;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+</style>
+
 <h2>Lista de PreRegistros</h2>
 
-<table border="1">
+<div class="card">
+<table>
 <tr>
     <th>ID</th>
     <th>Nombre</th>
@@ -19,5 +47,6 @@
 {% endfor %}
 
 </table>
+</div>
 
 {% endblock %}

@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="card">
+
 <h2>Lista de Carriles</h2>
 
-<a href="{% url 'asignaciones:carril_crear' %}">Nuevo Carril</a>
+<a class="btn" href="{% url 'asignaciones:carril_crear' %}">Nuevo Carril</a>
 
-<table border="1">
+<br><br>
+
+<div class="table-container">
+
+<table>
     <tr>
         <th>Número</th>
         <th>Acciones</th>
@@ -15,10 +22,15 @@
     <tr>
         <td>{{ c.numero }}</td>
         <td>
-            <a href="{% url 'asignaciones:carril_editar' c.id %}">Editar</a>
-            <a href="{% url 'asignaciones:carril_eliminar' c.id %}">Eliminar</a>
+            <a class="btn" href="{% url 'asignaciones:carril_editar' c.id %}">Editar</a>
+            <a class="btn" href="{% url 'asignaciones:carril_eliminar' c.id %}">Eliminar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+
+</div>
+
+</div>
+
 {% endblock %}

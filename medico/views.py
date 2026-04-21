@@ -121,6 +121,10 @@ def crear_certificado(request, nadador_id):
 
         return redirect("medico:historial_medico", nadador_id=nadador.id)
 
+    return render(request, "medico/formulario.html", {
+        "nadador": nadador
+    })
+
 
 @login_required
 @rol_requerido(['Medico', 'Administrador'])
@@ -177,6 +181,10 @@ def crear_certificado_preregistro(request, preregistro_id):
         )
 
         return redirect("medico:historial_medico_preregistro", preregistro_id=preregistro.id)
+
+    return render(request, "medico/formulario.html", {
+        "preregistro": preregistro
+    })
 
 
 @login_required

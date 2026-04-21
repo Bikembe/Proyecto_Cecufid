@@ -1,9 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Planes de curso</h2>
+<style>
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-<a href="{% url 'usuarios:plan_crear' %}">➕ Nuevo plan</a>
+.btn {
+    background: #1565c0;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+th {
+    background: #0d47a1;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+</style>
+
+<div class="top-bar">
+    <h2>Planes de curso</h2>
+    <a href="{% url 'usuarios:plan_crear' %}" class="btn">➕ Nuevo plan</a>
+</div>
+
+<div class="card">
 
 <table border="1">
 <tr>
@@ -30,5 +75,7 @@
 {% endfor %}
 
 </table>
+
+</div>
 
 {% endblock %}

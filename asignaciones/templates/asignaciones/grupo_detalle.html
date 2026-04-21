@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<div class="card">
+
 <h2>Grupo (Horario)</h2>
 
 <p><strong>Carril:</strong> {{ horario.carril }}</p>
@@ -12,7 +14,9 @@
 
 <h3>Inscritos</h3>
 
-<table border="1">
+<div class="table-container">
+
+<table>
     <tr>
         <th>Nadador</th>
         <th>Estado</th>
@@ -32,7 +36,7 @@
         </td>
 
         <td>
-            <a href="{% url 'evaluaciones:evaluar' ins.id %}">
+            <a class="btn" href="{% url 'evaluaciones:evaluar' ins.id %}">
                 Evaluar
             </a>
         </td>
@@ -43,5 +47,9 @@
     </tr>
     {% endfor %}
 </table>
+
+</div>
+
+</div>
 
 {% endblock %}

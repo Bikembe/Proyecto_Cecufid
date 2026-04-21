@@ -1,9 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+.table-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1565c0;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+</style>
+
 <h2>Reporte de Uso de Carriles</h2>
 
-<table border="1">
+<div class="table-box">
+<table>
     <tr>
         <th>Horario</th>
         <th>Ocupados</th>
@@ -21,4 +48,6 @@
     </tr>
     {% endfor %}
 </table>
+</div>
+
 {% endblock %}

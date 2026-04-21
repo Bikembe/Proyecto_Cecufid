@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="card">
+
 <h2>{% if horario %}Editar{% else %}Nuevo{% endif %} Horario</h2>
 
 <form method="post">
@@ -16,7 +19,7 @@
         {% endfor %}
     </select>
 
-    <a href="{% url 'asignaciones:carril_crear' %}">Agregar Carril</a>
+    <a class="btn" href="{% url 'asignaciones:carril_crear' %}">Agregar Carril</a>
 
     <br><br>
 
@@ -30,7 +33,7 @@
         {% endfor %}
     </select>
 
-    <a href="{% url 'asignaciones:nivel_crear' %}">Agregar Nivel</a>
+    <a class="btn" href="{% url 'asignaciones:nivel_crear' %}">Agregar Nivel</a>
 
     <br><br>
 
@@ -50,7 +53,7 @@
 
     <br><br>
 
-  <label>Días:</label>
+<label>Días:</label>
 <select name="dias" required>
     <option value="">Selecciona</option>
 
@@ -75,7 +78,8 @@
     </option>
 
 </select>
- <br><br>
+
+<br><br>
 
     <label>Hora Inicio:</label>
     <input type="time" name="hora_inicio"
@@ -95,7 +99,9 @@
 
     <br><br>
 
-    <button type="submit">Guardar</button>
+    <button class="btn" type="submit">Guardar</button>
 </form>
+
+</div>
 
 {% endblock %}

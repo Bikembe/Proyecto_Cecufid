@@ -2,18 +2,26 @@
 
 {% block content %}
 
+<style>
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+</style>
+
 <h2>Panel Administrador</h2>
 
-<div>
-    <p>Total Evaluaciones: {{ total }}</p>
-    <p>Aprobados: {{ aprobados }}</p>
-    <p>Reprobados: {{ reprobados }}</p>
-    <p>Promedio General: {{ promedio_general|floatformat:2 }}</p>
+<div class="box">
+<p>Total Evaluaciones: {{ total }}</p>
+<p>Aprobados: {{ aprobados }}</p>
+<p>Reprobados: {{ reprobados }}</p>
+<p>Promedio General: {{ promedio_general|floatformat:2 }}</p>
 </div>
 
 <h3>Evaluaciones recientes</h3>
 
-<table border="1">
+<table>
     <tr>
         <th>Nadador</th>
         <th>Maestro</th>

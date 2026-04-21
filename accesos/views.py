@@ -5,6 +5,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 
 from usuarios.models import Nadador
+from preregistro.models import PreRegistro
 from .models import Acceso
 from usuarios.decorators import rol_requerido
 from asignaciones.models import InscripcionCarril
@@ -24,6 +25,7 @@ def escanear_acceso(request):
     estado_actual = None
     info_horario = None
     nadador = None
+    preregistro = None
 
     hoy = timezone.now().date()
     ahora = timezone.now()
@@ -133,13 +135,27 @@ def escanear_acceso(request):
                         )
 
         except Nadador.DoesNotExist:
-            mensaje = "CÓDIGO NO REGISTRADO"
-            tipo = "error"
 
-            registrar_accion(
-                request.user, "ACCESOS", "ERROR",
-                "Código no registrado", request
-            )
+            try:
+                preregistro = PreRegistro.objects.get(folio=codigo)
+
+                mensaje = f"PREREGISTRO ENCONTRADO: {preregistro.nombre} {preregistro.apellido_paterno}"
+                tipo = "info"
+
+                registrar_accion(
+                    request.user, "ACCESOS", "PREREGISTRO",
+                    f"Escaneo preregistro {preregistro.folio}", request
+                )
+
+            except PreRegistro.DoesNotExist:
+
+                mensaje = "CÓDIGO NO REGISTRADO"
+                tipo = "error"
+
+                registrar_accion(
+                    request.user, "ACCESOS", "ERROR",
+                    "Código no registrado", request
+                )
 
     subquery = Acceso.objects.filter(
         nadador=OuterRef('pk')
@@ -159,6 +175,7 @@ def escanear_acceso(request):
         "estado_actual": estado_actual,
         "dentro_count": dentro_count,
         "nadador": nadador,
+        "preregistro": preregistro,
         "info_horario": info_horario
     })
 

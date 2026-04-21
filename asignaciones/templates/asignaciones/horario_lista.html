@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="card">
+
 <h2>Horarios de Carril</h2>
 
-<a href="{% url 'asignaciones:horario_crear' %}">Nuevo Horario</a>
+<a class="btn" href="{% url 'asignaciones:horario_crear' %}">Nuevo Horario</a>
 
-<table border="1">
+<br><br>
+
+<div class="table-container">
+
+<table>
     <tr>
         <th>Carril</th>
         <th>Maestro</th>
@@ -23,14 +30,16 @@
         <td>{{ h.hora_inicio }} - {{ h.hora_fin }}</td>
         <td>{{ h.capacidad_maxima }}</td>
         <td>
-            <a href="{% url 'asignaciones:horario_editar' h.id %}">Editar</a>
-            <a href="{% url 'asignaciones:horario_eliminar' h.id %}">Eliminar</a>
-            <a href="{% url 'asignaciones:grupo_detalle' h.id %}">
-    Ver grupo
-</a>
+            <a class="btn" href="{% url 'asignaciones:horario_editar' h.id %}">Editar</a>
+            <a class="btn" href="{% url 'asignaciones:horario_eliminar' h.id %}">Eliminar</a>
+            <a class="btn" href="{% url 'asignaciones:grupo_detalle' h.id %}">Ver grupo</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+
+</div>
+
+</div>
 
 {% endblock %}

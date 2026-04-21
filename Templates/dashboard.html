@@ -1,12 +1,81 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Panel Interno</title>
-</head>
-<body>
-    <h1>Bienvenido {{ request.user.first_name }}</h1>
-    <p>Rol: {{ request.user.rol.nombre }}</p>
-</body>
-</html>
+{% block content %}
+
+<style>
+.dashboard {
+    display: grid;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.box {
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.box.blue { background: #1565c0; }
+.box.green { background: #2ecc71; }
+.box.orange { background: #f39c12; }
+.box.red { background: #e74c3c; }
+
+h1 {
+    margin: 0;
+}
+
+p {
+    margin-top: 5px;
+    color: #555;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 15px;
+    }
+}
+</style>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h1>Bienvenido {{ request.user.first_name }}</h1>
+        <p>Rol: {{ request.user.rol.nombre }}</p>
+    </div>
+
+    <div class="grid">
+
+        <div class="box blue">
+            Sistema CECUFID
+        </div>
+
+        <div class="box green">
+            Control de accesos
+        </div>
+
+        <div class="box orange">
+            Gestión de usuarios
+        </div>
+
+        <div class="box red">
+            Módulos activos
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -2,6 +2,38 @@
 
 {% block content %}
 
+<style>
+.form-box {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.form-box input, .form-box textarea, .form-box select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.section {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    background: #1565c0;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+}
+</style>
+
+<div class="form-box">
+
 <h2>Certificado médico</h2>
 
 {% if nadador %}
@@ -19,42 +51,49 @@
 <form method="POST">
     {% csrf_token %}
 
+    <div class="section">
     <h3>Signos vitales</h3>
 
     <label>Temperatura (°C)</label>
-    <input type="number" step="0.1" name="temperatura"><br>
+    <input type="number" step="0.1" name="temperatura">
 
     <label>Presión arterial</label>
-    <input type="text" name="presion"><br>
+    <input type="text" name="presion">
 
     <label>Frecuencia cardiaca</label>
-    <input type="number" name="fc"><br>
+    <input type="number" name="fc">
 
     <label>Frecuencia respiratoria</label>
-    <input type="number" name="fr"><br>
+    <input type="number" name="fr">
 
     <label>Saturación de oxígeno (%)</label>
-    <input type="number" name="sat"><br>
+    <input type="number" name="sat">
+    </div>
 
+    <div class="section">
     <h3>Medidas corporales</h3>
 
     <label>Peso (kg)</label>
-    <input type="number" step="0.01" name="peso"><br>
+    <input type="number" step="0.01" name="peso">
 
     <label>Talla (m)</label>
-    <input type="number" step="0.01" name="talla"><br>
+    <input type="number" step="0.01" name="talla">
+    </div>
 
+    <div class="section">
     <h3>Información adicional</h3>
 
     <label>Grupo sanguíneo</label>
-    <input type="text" name="rh"><br>
+    <input type="text" name="rh">
 
     <label>Alergias</label>
-    <input type="text" name="alergias"><br>
+    <input type="text" name="alergias">
 
     <label>Afiliación médica</label>
-    <input type="text" name="afiliacion"><br>
+    <input type="text" name="afiliacion">
+    </div>
 
+    <div class="section">
     <h3>Resultado</h3>
 
     <label>Estatus</label>
@@ -64,17 +103,19 @@
         <option value="NO_APTO">No Apto</option>
         <option value="DIFICULTADES">Apto con dificultades</option>
         <option value="PARANATACION">Paranatación</option>
-    </select><br><br>
+    </select>
 
     <label>Motivos (opcional)</label>
-    <textarea name="motivos"></textarea><br>
+    <textarea name="motivos"></textarea>
 
     <label>Conclusión médica</label>
-    <textarea name="conclusion" required></textarea><br>
+    <textarea name="conclusion" required></textarea>
+    </div>
 
-    <br>
-    <button type="submit">Guardar certificado</button>
+    <button type="submit" class="btn">Guardar certificado</button>
 
 </form>
+
+</div>
 
 {% endblock %}

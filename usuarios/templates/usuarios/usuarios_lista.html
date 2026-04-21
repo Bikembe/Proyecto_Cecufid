@@ -1,9 +1,60 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Usuarios</h2>
+<style>
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-<a href="{% url 'usuario_crear' %}">➕ Nuevo usuario</a>
+.btn {
+    background: #1565c0;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+th {
+    background: #0d47a1;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.acciones a {
+    margin-right: 8px;
+    text-decoration: none;
+}
+
+</style>
+
+<div class="top-bar">
+    <h2>Usuarios</h2>
+    <a href="{% url 'usuario_crear' %}" class="btn">➕ Nuevo usuario</a>
+</div>
+
+<div class="card">
 
 <table border="1">
 <tr>
@@ -20,7 +71,7 @@
     <td>{{ u.email }}</td>
     <td>{{ u.rol }}</td>
     <td>{{ u.estado }}</td>
-    <td>
+    <td class="acciones">
         <a href="{% url 'usuario_editar' u.id %}">✏️</a>
         <a href="{% url 'usuario_eliminar' u.id %}">🗑</a>
     </td>
@@ -28,5 +79,7 @@
 {% endfor %}
 
 </table>
+
+</div>
 
 {% endblock %}

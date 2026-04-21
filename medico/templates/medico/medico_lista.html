@@ -2,15 +2,50 @@
 
 {% block content %}
 
+<style>
+.table-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+.btn {
+    display: inline-block;
+    background: #1565c0;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1565c0;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+</style>
+
 <h2>Médicos</h2>
 
-<a href="{% url 'medico:medico_crear' %}">➕ Nuevo médico</a>
+<a href="{% url 'medico:medico_crear' %}" class="btn">➕ Nuevo médico</a>
 
-<br><br>
+<div class="table-box">
 
-<table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
+<table>
 
-    <tr style="background:#eee;">
+    <tr>
         <th>Nombre</th>
         <th>Cédula</th>
         <th>Usuario</th>
@@ -30,5 +65,7 @@
     {% endfor %}
 
 </table>
+
+</div>
 
 {% endblock %}

@@ -1,13 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="card">
+
 <h2>{% if carril %}Editar{% else %}Nuevo{% endif %} Carril</h2>
 
 <form method="post">
     {% csrf_token %}
+
     <label>Número:</label>
     <input type="number" name="numero" value="{{ carril.numero|default:'' }}" required>
 
-    <button type="submit">Guardar</button>
+    <button class="btn" type="submit">Guardar</button>
 </form>
+
+</div>
+
 {% endblock %}

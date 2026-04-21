@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from usuarios.decorators import rol_requerido
+from django.http import JsonResponse
+from django.db.models import OuterRef, Subquery
 
+from usuarios.decorators import rol_requerido
 from .models import Carril, HorarioCarril, InscripcionCarril, Nivel
 from usuarios.models import Usuario, Nadador
+from preregistro.models import PreRegistro
 
 from reportes.utils import registrar_accion
 
@@ -256,6 +259,19 @@ def inscribir_nadador(request, pk):
     if request.method == "POST":
         nadador_id = request.POST.get("nadador")
 
+        nadador = Nadador.objects.filter(id=nadador_id).annotate(
+            apto=Subquery(
+                PreRegistro.objects.filter(
+                    nombre=OuterRef('nombre'),
+                    apellido_paterno=OuterRef('apellido_paterno')
+                ).order_by('-id').values('estado')[:1]
+            )
+        ).first()
+
+        if not nadador or nadador.apto != "APTO":
+            messages.error(request, "El nadador no es APTO")
+            return redirect("asignaciones:grupo_detalle", pk=pk)
+
         InscripcionCarril.objects.create(
             nadador_id=nadador_id,
             horario_carril=horario
@@ -284,7 +300,15 @@ def inscripcion_lista(request):
 @login_required
 @rol_requerido(['Administrador', 'Recepcion'])
 def inscripcion_crear(request):
-    nadadores = Nadador.objects.all()
+    nadadores = Nadador.objects.all().annotate(
+        apto=Subquery(
+            PreRegistro.objects.filter(
+                nombre=OuterRef('nombre'),
+                apellido_paterno=OuterRef('apellido_paterno')
+            ).order_by('-id').values('estado')[:1]
+        )
+    )
+
     horarios = []
     maestros = Usuario.objects.filter(rol__nombre="Maestro")
 
@@ -305,6 +329,19 @@ def inscripcion_crear(request):
     if request.method == "POST":
         nadador_id = request.POST.get("nadador")
         horario_id = request.POST.get("horario")
+
+        nadador = Nadador.objects.filter(id=nadador_id).annotate(
+            apto=Subquery(
+                PreRegistro.objects.filter(
+                    nombre=OuterRef('nombre'),
+                    apellido_paterno=OuterRef('apellido_paterno')
+                ).order_by('-id').values('estado')[:1]
+            )
+        ).first()
+
+        if not nadador or nadador.apto != "APTO":
+            messages.error(request, "El nadador no cuenta con examen médico APTO")
+            return redirect("asignaciones:inscripcion_crear")
 
         inscripcion = InscripcionCarril(
             nadador_id=nadador_id,

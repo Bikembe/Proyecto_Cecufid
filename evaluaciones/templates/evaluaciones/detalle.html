@@ -2,6 +2,18 @@
 
 {% block content %}
 
+<style>
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: auto;
+}
+</style>
+
+<div class="box">
+
 <h2>Detalle de Evaluación</h2>
 
 <p><strong>Nadador:</strong> {{ evaluacion.nadador }}</p>
@@ -16,5 +28,7 @@
 <p><strong>Promedio:</strong> {{ evaluacion.promedio }}</p>
 
 <p><strong>Observaciones:</strong> {{ evaluacion.observaciones }}</p>
+
+</div>
 
 {% endblock %}

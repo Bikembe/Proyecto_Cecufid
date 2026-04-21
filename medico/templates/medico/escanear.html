@@ -2,6 +2,46 @@
 
 {% block content %}
 
+<style>
+.box {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.btn {
+    background: #1565c0;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+}
+
+.alert-error {
+    background: #ffcdd2;
+    color: #b71c1c;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+}
+</style>
+
+<div class="box">
+
 <h2>Escanear credencial</h2>
 
 <form method="POST" style="margin-bottom:20px;">
@@ -15,18 +55,18 @@
         style="padding:10px;width:300px;"
     >
 
-    <button type="submit">Buscar</button>
+    <button type="submit" class="btn">Buscar</button>
 </form>
 
 {% if mensaje %}
-    <div style="background:#ffdddd;color:#900;padding:10px;margin-bottom:15px;">
+    <div class="alert-error">
         {{ mensaje }}
     </div>
 {% endif %}
 
 {% if nadador or preregistro %}
 
-<div style="border:1px solid #ccc;padding:15px;border-radius:10px;">
+<div class="card">
 
     <h3>Persona encontrada</h3>
 
@@ -64,5 +104,7 @@
 </div>
 
 {% endif %}
+
+</div>
 
 {% endblock %}

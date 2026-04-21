@@ -2,27 +2,39 @@
 
 {% block content %}
 
+<style>
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+</style>
+
 <h2>Panel Maestro</h2>
+
+<div class="box">
 
 <h3>Mis Grupos</h3>
 <ul>
-    {% for h in horarios %}
-        <li>{{ h.carril }} - {{ h.nivel }}</li>
-    {% endfor %}
+{% for h in horarios %}
+<li>{{ h.carril }} - {{ h.nivel }}</li>
+{% endfor %}
 </ul>
 
 <h3>Inscritos</h3>
 <ul>
-    {% for i in inscripciones %}
-        <li>
-            {{ i.nadador }} - {{ i.horario_carril }}
-            <a href="{% url 'evaluaciones:evaluar' i.id %}">Evaluar</a>
-        </li>
-    {% endfor %}
+{% for i in inscripciones %}
+<li>
+{{ i.nadador }} - {{ i.horario_carril }}
+<a href="{% url 'evaluaciones:evaluar' i.id %}">Evaluar</a>
+</li>
+{% endfor %}
 </ul>
 
+</div>
+
 <h3>Mis Evaluaciones</h3>
-<table border="1">
+<table>
     <tr>
         <th>Nadador</th>
         <th>Grupo</th>

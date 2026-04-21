@@ -13,4 +13,5 @@ urlpatterns = [
     path('evaluaciones/', include('evaluaciones.urls')),
     path('preregistro/', include('preregistro.urls')),
     path('reportes/', include('reportes.urls')),
+    path('pagos/', include('pagos.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+.form-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.form-box input, .form-box textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.btn {
+    margin-top: 15px;
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+}
+</style>
+
+<div class="form-box">
+
 <h2>Nuevo Nivel</h2>
 
 <form method="post">
@@ -9,13 +38,12 @@
     <label>Nombre:</label>
     <input type="text" name="nombre">
 
-    <br>
-
     <label>Descripción:</label>
     <textarea name="descripcion"></textarea>
 
-    <br><br>
-
-    <button type="submit">Guardar</button>
+    <button type="submit" class="btn">Guardar</button>
 </form>
+
+</div>
+
 {% endblock %}

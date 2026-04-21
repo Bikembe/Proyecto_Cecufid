@@ -1,7 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style>
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: auto;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+}
+</style>
+
 <h2>Registro</h2>
+
+<div class="card">
 
 {% if error %}
 <p style="color:red;">{{ error }}</p>
@@ -139,8 +170,9 @@ data-dias="{{ h.dias }}"
 
 </form>
 
-<script>
+</div>
 
+<script>
 const checkMenor = document.getElementById("es_menor");
 const menor = document.getElementById("bloque_menor");
 const adulto = document.getElementById("bloque_adulto");
@@ -176,7 +208,6 @@ function filtrar(){
 
 nivel.onchange = filtrar;
 dias.onchange = filtrar;
-
 </script>
 
 {% endblock %}

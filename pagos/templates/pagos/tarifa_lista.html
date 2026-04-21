@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Tarifas</h2>
+
+<a href="{% url 'pagos:tarifa_crear' %}">Nueva</a>
+
+<table>
+<tr>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Días</th>
+<th>Monto</th>
+<th></th>
+</tr>
+
+{% for t in tarifas %}
+<tr>
+<td>{{ t.nombre }}</td>
+<td>{{ t.tipo }}</td>
+<td>{{ t.dias }}</td>
+<td>${{ t.monto }}</td>
+<td>
+<a href="{% url 'pagos:tarifa_editar' t.id %}">Editar</a>
+<a href="{% url 'pagos:tarifa_eliminar' t.id %}">Eliminar</a>
+</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

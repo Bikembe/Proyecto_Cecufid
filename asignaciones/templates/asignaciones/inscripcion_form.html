@@ -1,19 +1,72 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+.form-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.form-box h2 {
+    margin-bottom: 15px;
+}
+
+.form-box label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.form-box select, .form-box input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.btn {
+    margin-top: 15px;
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.no-apto {
+    color: red;
+    font-size: 12px;
+}
+</style>
+
+<div class="form-box">
+
 <h2>Nueva Inscripción</h2>
 
 <form method="post">
     {% csrf_token %}
 
     <label>Nadador:</label>
-    <select name="nadador">
+    <select name="nadador" id="nadador">
         {% for n in nadadores %}
-            <option value="{{ n.id }}">{{ n }}</option>
+            <option 
+                value="{{ n.id }}"
+                data-apto="{{ n.apto|default:'NO' }}"
+            >
+                {{ n }} 
+                {% if n.apto != "APTO" %}
+                    (NO APTO)
+                {% endif %}
+            </option>
         {% endfor %}
     </select>
 
-    <br>
+    <p id="mensaje_nadador" class="no-apto"></p>
 
     <label>Maestro:</label>
     <select id="maestro">
@@ -23,8 +76,6 @@
         {% endfor %}
     </select>
 
-    <br>
-
     <label>Horario:</label>
     <select id="horario" name="horario">
         <option>Cargando...</option>
@@ -32,13 +83,30 @@
 
     <p id="mensaje" style="color:red;"></p>
 
-    <br><br>
-
-    <button type="submit">Inscribir</button>
+    <button type="submit" class="btn" id="btnSubmit">Inscribir</button>
 </form>
+
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+
+    function validarNadador() {
+        let select = document.getElementById("nadador");
+        let selected = select.options[select.selectedIndex];
+        let apto = selected.getAttribute("data-apto");
+
+        let mensaje = document.getElementById("mensaje_nadador");
+        let btn = document.getElementById("btnSubmit");
+
+        if (apto !== "APTO") {
+            mensaje.innerText = "Este nadador no tiene examen médico aprobado";
+            btn.disabled = true;
+        } else {
+            mensaje.innerText = "";
+            btn.disabled = false;
+        }
+    }
 
     function cargarHorarios() {
         let maestro = document.getElementById("maestro").value;
@@ -87,6 +155,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         mensaje.innerText = (disponibles == 0) ? "Este horario está lleno" : "";
     });
+
+    document.getElementById("nadador").addEventListener("change", validarNadador);
+
+    validarNadador();
 
 });
 </script>

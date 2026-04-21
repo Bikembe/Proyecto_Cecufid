@@ -2,6 +2,32 @@
 
 {% block content %}
 
+<style>
+.form-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.form-box input, .form-box textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.btn {
+    background: #1565c0;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+}
+</style>
+
+<div class="form-box">
+
 <h2>Evaluar nadador</h2>
 
 <p><strong>Nadador:</strong> {{ inscripcion.nadador }}</p>
@@ -27,7 +53,9 @@
     <label>Observaciones</label>
     <textarea name="observaciones"></textarea>
 
-    <button type="submit">Guardar evaluación</button>
+    <button type="submit" class="btn">Guardar evaluación</button>
 </form>
+
+</div>
 
 {% endblock %}

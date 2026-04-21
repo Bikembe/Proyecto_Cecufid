@@ -7,98 +7,177 @@
     <title>CECUFID - Sistema de Albercas</title>
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-        }
+:root {
+    --primary: #0d47a1;
+    --secondary: #1565c0;
+    --bg: #f4f6f9;
+    --white: #ffffff;
+    --text: #333;
+    --radius: 10px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
-        .navbar {
-            background-color: #0d47a1;
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
 
-        .navbar h2 {
-            margin: 0;
-            font-size: 18px;
-        }
+.navbar {
+    background: var(--primary);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .menu {
-            background-color: #1565c0;
-            padding: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+.menu-toggle {
+    display: none;
+    background: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
 
-        .menu a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+.menu {
+    background: var(--secondary);
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
-        .menu a:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    transition: 0.3s;
+}
 
-        .content {
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
+.menu a:hover {
+    background: rgba(255,255,255,0.2);
+}
 
-        .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
+.menu a.active {
+    background: white;
+    color: var(--primary);
+    font-weight: bold;
+}
 
-        .success {
-            background-color: #c8e6c9;
-            color: #256029;
-        }
+.content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 15px;
+}
 
-        .error {
-            background-color: #ffcdd2;
-            color: #c62828;
-        }
+.card {
+    background: var(--white);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
 
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
+.btn {
+    background: var(--secondary);
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
 
-            .menu {
-                flex-direction: column;
-                align-items: stretch;
-            }
+.btn:hover {
+    background: #0b3c8c;
+}
 
-            .menu a {
-                display: block;
-                width: 100%;
-            }
+.table-container {
+    overflow-x: auto;
+}
 
-            .content {
-                padding: 10px;
-            }
-        }
-    </style>
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+th {
+    background: var(--primary);
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: #f9f9f9;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 10px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: var(--radius);
+    margin-bottom: 15px;
+}
+
+.success { background: #c8e6c9; }
+.error { background: #ffcdd2; }
+
+@media (max-width: 768px) {
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        display: none;
+        flex-direction: column;
+    }
+
+    .menu.active {
+        display: flex;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .content {
+        padding: 10px;
+    }
+
+}
+</style>
 </head>
 
 <body>
 
 <div class="navbar">
     <h2>CECUFID</h2>
+
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Menú</button>
 
     <div>
         {% if request.user.is_authenticated %}
@@ -107,80 +186,71 @@
     </div>
 </div>
 
-<div class="menu">
+<div class="menu" id="menu">
 
 {% if request.user.is_authenticated %}
 
     {% with rol=request.user.rol.nombre|default_if_none:'' %}
 
-        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a>
 
-        {# ================= ADMINISTRADOR ================= #}
         {% if rol == "Administrador" %}
 
-            <a href="/admin/">Admin</a>
+            <a href="{% url 'usuarios_lista' %}" class="{% if 'usuarios' in request.path %}active{% endif %}">Usuarios</a>
+            <a href="{% url 'reportes:usuarios_en_linea' %}" class="{% if 'reportes' in request.path %}active{% endif %}">Online</a>
 
-            <a href="{% url 'usuarios_lista' %}">Usuarios</a>
+            <a href="{% url 'asignaciones:dashboard' %}" class="{% if 'asignaciones' in request.path %}active{% endif %}">Asignaciones</a>
+            <a href="{% url 'asignaciones:carril_lista' %}" class="{% if 'carril' in request.path %}active{% endif %}">Carriles</a>
+            <a href="{% url 'asignaciones:horario_lista' %}" class="{% if 'horario' in request.path %}active{% endif %}">Horarios</a>
+            <a href="{% url 'asignaciones:inscripcion_lista' %}" class="{% if 'inscripcion' in request.path %}active{% endif %}">Inscripciones</a>
 
-            <a href="{% url 'asignaciones:dashboard' %}">Asignaciones</a>
-            <a href="{% url 'asignaciones:carril_lista' %}">Carriles</a>
-            <a href="{% url 'asignaciones:horario_lista' %}">Horarios</a>
-            <a href="{% url 'asignaciones:inscripcion_lista' %}">Inscripciones</a>
+            <a href="{% url 'accesos:historial' %}" class="{% if 'historial' in request.path and 'accesos' in request.path %}active{% endif %}">Historial accesos</a>
 
-            <a href="{% url 'accesos:escanear' %}">Accesos</a>
-            <a href="{% url 'accesos:historial' %}">Historial accesos</a>
+            <a href="{% url 'medico:historial_general' %}" class="{% if 'historial_general' in request.path %}active{% endif %}">Historial médico</a>
 
-            <a href="{% url 'medico:escanear' %}">Médico</a>
-            <a href="{% url 'medico:historial_general' %}">Historial médico</a>
+            <a href="{% url 'evaluaciones:panel_admin' %}" class="{% if 'evaluaciones' in request.path %}active{% endif %}">Evaluaciones</a>
 
-            <a href="{% url 'evaluaciones:panel_admin' %}">Evaluaciones</a>
-
-            <a href="{% url 'reportes:historial_lista' %}">Reportes</a>
+            <a href="{% url 'reportes:historial_lista' %}" class="{% if 'reportes' in request.path %}active{% endif %}">Reportes</a>
 
         {% endif %}
 
-        {# ================= COORDINADOR ================= #}
         {% if rol == "Coordinador" %}
 
-            <a href="{% url 'asignaciones:dashboard' %}">Asignaciones</a>
-            <a href="{% url 'asignaciones:horario_lista' %}">Horarios</a>
-            <a href="{% url 'asignaciones:inscripcion_lista' %}">Inscripciones</a>
-            <a href="{% url 'asignaciones:reporte' %}">Reportes</a>
+            <a href="{% url 'asignaciones:dashboard' %}" class="{% if 'asignaciones' in request.path %}active{% endif %}">Asignaciones</a>
+            <a href="{% url 'asignaciones:horario_lista' %}" class="{% if 'horario' in request.path %}active{% endif %}">Horarios</a>
+            <a href="{% url 'asignaciones:inscripcion_lista' %}" class="{% if 'inscripcion' in request.path %}active{% endif %}">Inscripciones</a>
+            <a href="{% url 'asignaciones:reporte' %}" class="{% if 'reporte' in request.path %}active{% endif %}">Reportes</a>
 
-            <a href="{% url 'accesos:historial' %}">Accesos</a>
+            <a href="{% url 'accesos:historial' %}" class="{% if 'accesos' in request.path %}active{% endif %}">Accesos</a>
 
         {% endif %}
 
-        {# ================= MAESTRO ================= #}
         {% if rol == "Maestro" %}
 
-            <a href="{% url 'evaluaciones:panel_maestro' %}">Mis evaluaciones</a>
-            <a href="{% url 'asignaciones:horario_lista' %}">Mis horarios</a>
+            <a href="{% url 'evaluaciones:panel_maestro' %}" class="{% if 'evaluaciones' in request.path %}active{% endif %}">Mis evaluaciones</a>
+            <a href="{% url 'asignaciones:horario_lista' %}" class="{% if 'horario' in request.path %}active{% endif %}">Mis horarios</a>
 
         {% endif %}
 
-        {# ================= RECEPCION ================= #}
         {% if rol == "Recepcion" %}
 
-            <a href="{% url 'accesos:escanear' %}">Escanear acceso</a>
-            <a href="{% url 'accesos:historial' %}">Historial accesos</a>
+            <a href="{% url 'accesos:escanear' %}" class="{% if 'accesos' in request.path %}active{% endif %}">Escanear acceso</a>
+            <a href="{% url 'accesos:historial' %}" class="{% if 'historial' in request.path %}active{% endif %}">Historial accesos</a>
 
-            <a href="{% url 'preregistro:crear' %}">Pre-registro</a>
+            <a href="{% url 'preregistro:crear' %}" class="{% if 'preregistro' in request.path %}active{% endif %}">Pre-registro</a>
 
         {% endif %}
 
-        {# ================= MÉDICO ================= #}
         {% if rol == "Medico" %}
 
-            <a href="{% url 'medico:escanear' %}">Escanear</a>
-            <a href="{% url 'medico:historial_general' %}">Historial</a>
+            <a href="{% url 'medico:escanear' %}" class="{% if 'medico' in request.path %}active{% endif %}">Escanear</a>
+            <a href="{% url 'medico:historial_general' %}" class="{% if 'historial' in request.path %}active{% endif %}">Historial</a>
 
         {% endif %}
 
-        {# ================= CAJA ================= #}
         {% if rol == "Caja" %}
 
-            <a href="{% url 'accesos:escanear' %}">Control acceso</a>
+            <a href="{% url 'accesos:escanear' %}" class="{% if 'accesos' in request.path %}active{% endif %}">Control acceso</a>
 
         {% endif %}
 
@@ -218,6 +288,12 @@
     {% endblock %}
 
 </div>
+
+<script>
+function toggleMenu() {
+    document.getElementById("menu").classList.toggle("active");
+}
+</script>
 
 </body>
 </html>

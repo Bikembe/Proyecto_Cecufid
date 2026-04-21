@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Tarifa</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="nombre" placeholder="Nombre" value="{{ tarifa.nombre }}">
+
+    <select name="tipo">
+        <option value="INSCRIPCION">Inscripción</option>
+        <option value="MENSUALIDAD">Mensualidad</option>
+        <option value="EXAMEN">Examen</option>
+    </select>
+
+    <input type="number" name="dias" placeholder="Días" value="{{ tarifa.dias }}">
+    <input type="number" step="0.01" name="monto" value="{{ tarifa.monto }}">
+
+    <label>
+        <input type="checkbox" name="activo" {% if tarifa.activo %}checked{% endif %}>
+        Activo
+    </label>
+
+    <button>Guardar</button>
+
+</form>
+
+{% endblock %}

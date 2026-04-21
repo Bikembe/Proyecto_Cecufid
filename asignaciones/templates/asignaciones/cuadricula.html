@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="card">
+
 <h2>Cuadrícula de Horarios</h2>
 
-<table border="1">
+<div class="table-container">
+
+<table>
     <tr>
         <th>Carril</th>
         <th>Horario</th>
@@ -19,5 +24,11 @@
         <td>{{ h.nivel }}</td>
     </tr>
     {% endfor %}
+
 </table>
+
+</div>
+
+</div>
+
 {% endblock %}

@@ -3,61 +3,34 @@
 {% block content %}
 
 <style>
-body {
-    background: #f4f6f9;
-}
-
 .app {
-    max-width: 480px;
+    max-width: 600px;
     margin: auto;
-    padding: 15px;
 }
 
 .header {
-    background: linear-gradient(135deg, #2c3e50, #3498db);
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
     color: white;
     padding: 20px;
     border-radius: 18px;
     margin-bottom: 15px;
 }
 
-.header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.header p {
-    margin: 5px 0 0;
-    font-size: 13px;
-    opacity: 0.8;
-}
-
 .cards {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2,1fr);
     gap: 10px;
-    margin-bottom: 15px;
 }
 
 .card {
     background: white;
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 15px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.card h3 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.card span {
-    font-size: 12px;
-    color: #777;
 }
 
 .list {
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -66,61 +39,28 @@ body {
 .item {
     background: white;
     padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-}
-
-.left {
-    display: flex;
-    flex-direction: column;
-}
-
-.name {
-    font-weight: bold;
-}
-
-.sub {
-    font-size: 12px;
-    color: #777;
 }
 
 .badge {
     padding: 5px 10px;
     border-radius: 12px;
-    font-size: 11px;
     color: white;
+    font-size: 12px;
 }
 
-.ok { background: #2ecc71; }
-.mid { background: #f39c12; }
-.low { background: #e74c3c; }
-.fab {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #3498db;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 28px;
-    text-decoration: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
+.ok { background: #2e7d32; }
+.mid { background: #ef6c00; }
+.low { background: #c62828; }
 </style>
 
 <div class="app">
 
 <div class="header">
     <h2>Evaluaciones</h2>
-    <p>Panel maestro tipo app móvil</p>
+    <p>Panel maestro</p>
 </div>
 
 <div class="cards">
@@ -147,28 +87,24 @@ body {
 
 <div class="list">
 
-    {% for e in evaluaciones %}
-    <div class="item">
-
-        <div class="left">
-            <div class="name">{{ e.nadador }}</div>
-            <div class="sub">{{ e.horario_carril }}</div>
-        </div>
-
-        <div>
-            {% if e.promedio >= 4 %}
-                <span class="badge ok">APTO</span>
-            {% elif e.promedio >= 3 %}
-                <span class="badge mid">REV</span>
-            {% else %}
-                <span class="badge low">NO</span>
-            {% endif %}
-        </div>
-
+{% for e in evaluaciones %}
+<div class="item">
+    <div>
+        <strong>{{ e.nadador }}</strong><br>
+        <small>{{ e.horario_carril }}</small>
     </div>
-    {% empty %}
-    <p>No hay evaluaciones</p>
-    {% endfor %}
+
+    <div>
+        {% if e.promedio >= 4 %}
+            <span class="badge ok">APTO</span>
+        {% elif e.promedio >= 3 %}
+            <span class="badge mid">REV</span>
+        {% else %}
+            <span class="badge low">NO</span>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
 
 </div>
 
