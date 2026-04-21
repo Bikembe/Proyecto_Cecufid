@@ -10,10 +10,6 @@ from usuarios.models import Nadador, Inscripcion
 from asignaciones.models import HorarioCarril, InscripcionCarril
 from pagos.models import Pago, Tarifa, Descuento
 
-
-# =========================
-# 🔹 ESCANEAR
-# =========================
 @login_required
 @rol_requerido(['Administrador', 'Caja'])
 def escanear_pago(request):
@@ -34,16 +30,12 @@ def escanear_pago(request):
         "mensaje": mensaje
     })
 
-
-# =========================
-# 🔹 FUNCIONES AUXILIARES
-# =========================
 def calcular_recargo():
     hoy = date.today()
     dia = hoy.day
 
     if dia > 5:
-        return (dia - 5) * 10  # $10 por día
+        return (dia - 5) * 10
     return 0
 
 
@@ -67,7 +59,7 @@ def meses_adeudo(inscripcion):
     ).order_by("-fecha_pago")
 
     if not pagos.exists():
-        return 999  # nunca ha pagado
+        return 999
 
     ultimo_pago = pagos.first().fecha_pago
 
@@ -75,10 +67,6 @@ def meses_adeudo(inscripcion):
 
     return diferencia
 
-
-# =========================
-# 🔹 PROCESAR PAGO
-# =========================
 @login_required
 @rol_requerido(['Administrador', 'Caja'])
 @transaction.atomic
@@ -96,18 +84,17 @@ def procesar_pago(request, preregistro_id):
         activo=True
     ).first()
 
+    monto_mensual = tarifa_mensual.monto if tarifa_mensual else 0
+
     if not tarifa_mensual:
-        messages.error(request, f"No hay tarifa para {total_dias} días")
-        return redirect("pagos:escanear_pago")
+        messages.warning(request, f"No hay tarifa de mensualidad para {total_dias} días")
 
     tarifa_inscripcion = Tarifa.objects.filter(tipo="INSCRIPCION", activo=True).first()
     tarifa_examen = Tarifa.objects.filter(tipo="EXAMEN", activo=True).first()
 
-    monto_mensual = tarifa_mensual.monto
     monto_inscripcion = tarifa_inscripcion.monto if tarifa_inscripcion else 0
     monto_examen = tarifa_examen.monto if tarifa_examen else 0
 
-    # 🔹 DESCUENTO DINAMICO
     descuento_id = request.POST.get("descuento")
     descuento_aplicado = 0
 
@@ -116,14 +103,10 @@ def procesar_pago(request, preregistro_id):
         subtotal = monto_mensual + monto_inscripcion
         descuento_aplicado = subtotal * (descuento.porcentaje / 100)
 
-    # 🔹 RECARGO
     recargo = calcular_recargo()
 
     total = (monto_mensual + monto_inscripcion + monto_examen + recargo) - descuento_aplicado
 
-    # =========================
-    # 🔥 POST
-    # =========================
     if request.method == "POST":
 
         if preregistro.estado != "APTO":
@@ -132,7 +115,6 @@ def procesar_pago(request, preregistro_id):
 
         horario = get_object_or_404(HorarioCarril, id=preregistro.plan_id)
 
-        # 🔹 VALIDAR CUPO
         ocupados = InscripcionCarril.objects.filter(
             horario_carril=horario,
             activo=True
@@ -142,7 +124,6 @@ def procesar_pago(request, preregistro_id):
             messages.error(request, "Horario lleno")
             return redirect("pagos:escanear_pago")
 
-        # 🔹 CREAR NADADOR
         nadador, _ = Nadador.objects.get_or_create(
             codigo_barras=preregistro.folio,
             defaults={
@@ -157,27 +138,22 @@ def procesar_pago(request, preregistro_id):
             }
         )
 
-        # 🔹 INSCRIPCION
         inscripcion, _ = Inscripcion.objects.get_or_create(
             nadador=nadador,
             defaults={"plan_id": preregistro.plan_id}
         )
 
-        # 🔹 VALIDAR ADEUDO
         deuda = meses_adeudo(inscripcion)
 
         if deuda >= 3:
-            # 🔴 BAJA AUTOMATICA (solo inscripción)
             inscripcion.delete()
             messages.error(request, "Baja automática por adeudo de 3 meses")
             return redirect("pagos:escanear_pago")
 
-        # 🔹 VALIDAR SI YA PAGÓ
         if verificar_pago_mes(inscripcion):
             messages.warning(request, "Ya pagó este mes")
             return redirect("pagos:escanear_pago")
 
-        # 🔹 CREAR PAGOS
         Pago.objects.create(
             inscripcion=inscripcion,
             tipo_pago="MENSUALIDAD",
@@ -202,7 +178,6 @@ def procesar_pago(request, preregistro_id):
                 metodo_pago=request.POST.get("metodo"),
             )
 
-        # 🔹 ASIGNAR CARRIL
         InscripcionCarril.objects.get_or_create(
             nadador=nadador,
             horario_carril=horario,
@@ -228,10 +203,6 @@ def procesar_pago(request, preregistro_id):
         "descuentos": descuentos
     })
 
-
-# =========================
-# 🔹 CRUD TARIFAS
-# =========================
 @login_required
 @rol_requerido(['Administrador'])
 def tarifa_lista(request):
