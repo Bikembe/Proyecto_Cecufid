@@ -1,6 +1,15 @@
 from django.db import models
 
 
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField(default=0)
+    activo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.nombre} - Stock: {self.stock}"
+
 class Pago(models.Model):
 
     TIPO_PAGO = (
@@ -39,6 +48,8 @@ class Pago(models.Model):
 
     fecha_pago = models.DateField(auto_now_add=True)
 
+    mes_pagado = models.DateField(null=True, blank=True)
+
     estado = models.CharField(
         max_length=20,
         choices=ESTADO_PAGO,
@@ -46,7 +57,7 @@ class Pago(models.Model):
     )
 
     referencia = models.CharField(max_length=100, blank=True, null=True)
-
+    producto = models.ForeignKey('Producto', null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):

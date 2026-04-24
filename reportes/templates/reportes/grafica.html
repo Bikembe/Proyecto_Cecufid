@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Ingresos por día</h2>
+
+<canvas id="grafica"></canvas>
+
+{{ fechas|json_script:"fechas-data" }}
+{{ totales|json_script:"totales-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const fechas = JSON.parse(document.getElementById('fechas-data').textContent);
+const totales = JSON.parse(document.getElementById('totales-data').textContent);
+
+const ctx = document.getElementById('grafica');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: fechas,
+        datasets: [{
+            label: 'Ingresos',
+            data: totales,
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

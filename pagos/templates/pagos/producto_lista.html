@@ -1,0 +1,24 @@
+<h2>Productos</h2>
+
+<a href="{% url 'pagos:producto_crear' %}">Nuevo</a>
+
+<table>
+<tr>
+    <th>Nombre</th>
+    <th>Precio</th>
+    <th>Stock</th>
+    <th>Acciones</th>
+</tr>
+
+{% for p in productos %}
+<tr>
+    <td>{{ p.nombre }}</td>
+    <td>{{ p.precio }}</td>
+    <td>{{ p.stock }}</td>
+    <td>
+        <a href="{% url 'pagos:producto_editar' p.id %}">Editar</a>
+        <a href="{% url 'pagos:producto_eliminar' p.id %}">Eliminar</a>
+    </td>
+</tr>
+{% endfor %}
+</table>

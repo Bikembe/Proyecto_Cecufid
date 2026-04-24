@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Historial de pagos</h2>
+
+<p><strong>{{ nadador.nombre }} {{ nadador.apellido_paterno }}</strong></p>
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Fecha</th>
+        <th>Mes pagado</th>
+        <th>Tipo</th>
+        <th>Monto</th>
+        <th>Método</th>
+        <th>Referencia</th>
+    </tr>
+
+    {% for p in pagos %}
+    <tr>
+        <td>{{ p.fecha_pago }}</td>
+
+        <td>
+            {% if p.mes_pagado %}
+                {{ p.mes_pagado|date:"F Y" }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+
+        <td>{{ p.tipo_pago }}</td>
+        <td>${{ p.monto }}</td>
+        <td>{{ p.metodo_pago }}</td>
+        <td>{{ p.referencia }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">Sin pagos registrados</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="{% url 'pagos:escanear_pago' %}">← Volver</a>
+
+{% endblock %}

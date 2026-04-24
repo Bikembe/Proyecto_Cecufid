@@ -1,9 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h2>Historial del Sistema</h2>
 
-<table border="1">
+<form method="get" style="margin-bottom:20px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+
+    <select name="usuario">
+        <option value="">Usuario</option>
+        {% for u in usuarios %}
+            <option value="{{ u }}" {% if request.GET.usuario == u %}selected{% endif %}>
+                {{ u }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="modulo">
+        <option value="">Módulo</option>
+        {% for m in modulos %}
+            <option value="{{ m }}" {% if request.GET.modulo == m %}selected{% endif %}>
+                {{ m }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="accion">
+        <option value="">Acción</option>
+        {% for a in acciones %}
+            <option value="{{ a }}" {% if request.GET.accion == a %}selected{% endif %}>
+                {{ a }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <input type="date" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}">
+    <input type="date" name="fecha_fin" value="{{ request.GET.fecha_fin }}">
+
+    <button type="submit">Filtrar</button>
+    <a href="{% url 'reportes:historial_lista' %}">Limpiar</a>
+
+</form>
+
+<table border="1" width="100%" cellpadding="6" cellspacing="0">
+<thead style="background:#f5f5f5;">
 <tr>
     <th>Usuario</th>
     <th>Módulo</th>
@@ -12,7 +51,9 @@
     <th>IP</th>
     <th>Fecha</th>
 </tr>
+</thead>
 
+<tbody>
 {% for h in historial %}
 <tr>
     <td>{{ h.usuario.email }}</td>
@@ -20,8 +61,42 @@
     <td>{{ h.accion }}</td>
     <td>{{ h.descripcion }}</td>
     <td>{{ h.ip_address }}</td>
-    <td>{{ h.fecha }}</td>
+    <td>{{ h.fecha|date:"d/m/Y H:i" }}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="6" style="text-align:center;">No hay registros</td>
 </tr>
 {% endfor %}
+</tbody>
 </table>
+
+<div style="margin-top:20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1&usuario={{ request.GET.usuario }}&modulo={{ request.GET.modulo }}&accion={{ request.GET.accion }}&fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}">
+            ⏮ Primera
+        </a>
+
+        <a href="?page={{ page_obj.previous_page_number }}&usuario={{ request.GET.usuario }}&modulo={{ request.GET.modulo }}&accion={{ request.GET.accion }}&fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}">
+            ◀ Anterior
+        </a>
+    {% endif %}
+
+    <span>
+        Página <strong>{{ page_obj.number }}</strong> de <strong>{{ page_obj.paginator.num_pages }}</strong>
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&usuario={{ request.GET.usuario }}&modulo={{ request.GET.modulo }}&accion={{ request.GET.accion }}&fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}">
+            Siguiente ▶
+        </a>
+
+        <a href="?page={{ page_obj.paginator.num_pages }}&usuario={{ request.GET.usuario }}&modulo={{ request.GET.modulo }}&accion={{ request.GET.accion }}&fecha_inicio={{ request.GET.fecha_inicio }}&fecha_fin={{ request.GET.fecha_fin }}">
+            Última ⏭
+        </a>
+    {% endif %}
+
+</div>
+
 {% endblock %}

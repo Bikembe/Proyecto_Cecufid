@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Reporte mensual</h2>
+
+<table border="1">
+<tr>
+    <th>Mes</th>
+    <th>Total</th>
+</tr>
+
+{% for d in datos %}
+<tr>
+    <td>{{ d.mes|date:"F Y" }}</td>
+    <td>${{ d.total }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

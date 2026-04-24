@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Reporte de Caja</h2>
+
+<form method="get">
+
+    <label>Fecha inicio:</label>
+    <input type="date" name="inicio" value="{{ fecha_inicio }}">
+
+    <label>Fecha fin:</label>
+    <input type="date" name="fin" value="{{ fecha_fin }}">
+
+    <label>Tipo:</label>
+    <select name="tipo">
+        <option value="">Todos</option>
+        <option value="INSCRIPCION" {% if tipo == "INSCRIPCION" %}selected{% endif %}>Inscripción</option>
+        <option value="MENSUALIDAD" {% if tipo == "MENSUALIDAD" %}selected{% endif %}>Mensualidad</option>
+        <option value="EXAMEN" {% if tipo == "EXAMEN" %}selected{% endif %}>Examen</option>
+        <option value="PRODUCTO" {% if tipo == "PRODUCTO" %}selected{% endif %}>Producto</option>
+    </select>
+
+    <button type="submit">Filtrar</button>
+</form>
+
+<hr>
+
+<h3>Totales</h3>
+<ul>
+    <li><strong>Total general:</strong> ${{ total_general }}</li>
+    <li>Inscripciones: ${{ total_inscripciones }}</li>
+    <li>Mensualidades: ${{ total_mensualidades }}</li>
+    <li>Exámenes: ${{ total_examenes }}</li>
+    <li>Productos: ${{ total_productos }}</li>
+</ul>
+
+<hr>
+
+<h3>Movimientos</h3>
+
+<table border="1">
+    <tr>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Detalle</th>
+        <th>Monto</th>
+        <th>Método</th>
+    </tr>
+
+    {% for p in pagos %}
+    <tr>
+        <td>{{ p.fecha_pago }}</td>
+        <td>{{ p.tipo_pago }}</td>
+
+        <td>
+            {% if p.tipo_pago == "MENSUALIDAD" and p.mes_pagado %}
+                {{ p.mes_pagado|date:"F Y" }}
+            {% else %}
+                {{ p.referencia }}
+            {% endif %}
+        </td>
+
+        <td>${{ p.monto }}</td>
+        <td>{{ p.metodo_pago }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Sin registros</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

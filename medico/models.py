@@ -26,7 +26,6 @@ class CertificadoMedico(models.Model):
         ('PARANATACION', 'Paranatación'),
     )
 
-    # 🔹 UNO U OTRO (no ambos obligatorios)
     preregistro = models.ForeignKey(
         "preregistro.PreRegistro",
         on_delete=models.CASCADE,

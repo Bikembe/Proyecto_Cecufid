@@ -5,42 +5,224 @@
 
 <p><strong>{{ preregistro.nombre }}</strong></p>
 
-<ul>
-<li>Mensualidad: ${{ monto_mensual }}</li>
-<li>Inscripción: ${{ monto_inscripcion }}</li>
-<li>Examen: ${{ monto_examen }}</li>
-<li>Descuento: -${{ descuento }}</li>
-<li>Recargo: ${{ recargo }}</li>
-</ul>
+{% if estado_mensualidad %}
+    <div style="background:#eef; padding:10px; margin-bottom:10px;">
+        <strong>{{ estado_mensualidad }}</strong>
+    </div>
+{% endif %}
 
-<h3>Total: ${{ total }}</h3>
-
-<form method="post">
+<form method="post" id="formPago">
     {% csrf_token %}
 
+    <label><strong>Tipo de operación</strong></label>
+    <select name="tipo_operacion" id="tipo" required>
+        <option value="">Seleccionar</option>
+        <option value="INSCRIPCION">Inscripción</option>
+        <option value="MENSUALIDAD">Mensualidad</option>
+        <option value="EXAMEN">Examen médico</option>
+        <option value="PRODUCTO">Producto</option>
+    </select>
+
+    <br><br>
+
+    <div id="meses_container" style="display:none;">
+        <label>Meses a pagar</label>
+        <input type="number" name="meses" id="meses" value="1" min="1">
+        <small>Puede pagar varios meses adelantados</small>
+        <br><br>
+    </div>
+
     <label>Descuento</label>
-    <select name="descuento">
+    <select name="descuento" id="descuento">
         <option value="">Ninguno</option>
         {% for d in descuentos %}
-            <option value="{{ d.id }}">{{ d.nombre }} ({{ d.porcentaje }}%)</option>
+            <option value="{{ d.id }}" data-porcentaje="{{ d.porcentaje }}">
+                {{ d.nombre }} ({{ d.porcentaje }}%)
+            </option>
         {% endfor %}
     </select>
 
+    <br><br>
+
     <label>Método</label>
-    <select name="metodo">
-        <option>Efectivo</option>
-        <option>Transferencia</option>
+    <select name="metodo" required>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Transferencia">Transferencia</option>
     </select>
 
-    <label>
-        <input type="checkbox" name="pagar_examen" value="1">
-        Incluir examen médico
-    </label>
+    <br><br>
 
-    <label>Referencia</label>
-    <input type="text" name="referencia">
+    <div id="producto_container" style="display:none;">
+        <h3>Productos</h3>
 
-    <button>Pagar</button>
+        <select name="producto" id="producto">
+            <option value="">Seleccionar</option>
+            {% for p in productos %}
+                <option value="{{ p.id }}" data-precio="{{ p.precio }}">
+                    {{ p.nombre }} - ${{ p.precio }} (Stock: {{ p.stock }})
+                </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>Cantidad</label>
+        <input type="number" name="cantidad_producto" id="cantidad" value="1" min="1">
+
+        <br><br>
+    </div>
+
+    <input type="text" name="referencia" placeholder="Referencia (opcional)">
+
+    <br><br>
+
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:15px;">
+        <strong>Resumen:</strong>
+        <p id="resumen">Seleccione una operación</p>
+    </div>
+
+    <h2>Total a pagar: $<span id="total">0.00</span></h2>
+
+    <button type="submit">Pagar</button>
 </form>
+
+<hr>
+
+<h3>Historial de pagos</h3>
+
+<table border="1">
+    <tr>
+        <th>Fecha</th>
+        <th>Concepto</th>
+        <th>Detalle</th>
+        <th>Monto</th>
+        <th>Método</th>
+    </tr>
+
+    {% for p in historial %}
+    <tr>
+        <td>{{ p.fecha_pago }}</td>
+        <td>{{ p.tipo_pago }}</td>
+
+        <td>
+            {% if p.tipo_pago == "MENSUALIDAD" and p.mes_pagado %}
+                {{ p.mes_pagado|date:"F Y" }}
+            {% else %}
+                {{ p.referencia }}
+            {% endif %}
+        </td>
+
+        <td>${{ p.monto }}</td>
+        <td>{{ p.metodo_pago }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Sin pagos</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tipo = document.getElementById("tipo");
+    const producto = document.getElementById("producto");
+    const cantidad = document.getElementById("cantidad");
+    const mesesInput = document.getElementById("meses");
+    const descuentoSelect = document.getElementById("descuento");
+
+    const mesesContainer = document.getElementById("meses_container");
+    const productoContainer = document.getElementById("producto_container");
+
+    const resumen = document.getElementById("resumen");
+    const totalSpan = document.getElementById("total");
+
+    const montoInscripcion = parseFloat("{{ monto_inscripcion|default:0 }}");
+    const montoMensual = parseFloat("{{ monto_mensual|default:0 }}");
+    const montoExamen = parseFloat("{{ monto_examen|default:0 }}");
+    const recargo = parseFloat("{{ recargo|default:0 }}");
+
+    let siguienteMes = "{{ siguiente_mes|date:'Y-m-d'|default:'' }}";
+
+    function obtenerBaseMes() {
+        if (!siguienteMes) return new Date();
+        let p = siguienteMes.split("-");
+        return new Date(p[0], p[1]-1, 1);
+    }
+
+    function calcular() {
+
+        let tipoVal = tipo.value;
+        let meses = parseInt(mesesInput.value) || 1;
+
+        let descuento = 0;
+        if (descuentoSelect.value) {
+            descuento = parseFloat(
+                descuentoSelect.options[descuentoSelect.selectedIndex].dataset.porcentaje
+            );
+        }
+
+        let total = 0;
+        let texto = "";
+
+        // UI dinámica
+        mesesContainer.style.display = (tipoVal === "MENSUALIDAD") ? "block" : "none";
+        productoContainer.style.display = (tipoVal === "PRODUCTO") ? "block" : "none";
+
+        if (tipoVal === "INSCRIPCION") {
+            total = montoInscripcion;
+            texto = "Pago de inscripción";
+        }
+
+        else if (tipoVal === "MENSUALIDAD") {
+
+            total = (montoMensual * meses) + recargo;
+
+            let base = obtenerBaseMes();
+            let lista = [];
+
+            for (let i = 0; i < meses; i++) {
+                let f = new Date(base.getFullYear(), base.getMonth() + i);
+                lista.push(f.toLocaleString('es-MX',{month:'long',year:'numeric'}));
+            }
+
+            texto = "Pagando: " + lista.join(", ");
+        }
+
+        else if (tipoVal === "EXAMEN") {
+            total = montoExamen;
+            texto = "Examen médico";
+        }
+
+        else if (tipoVal === "PRODUCTO") {
+
+            let precio = 0;
+            if (producto.selectedIndex > 0) {
+                precio = parseFloat(producto.options[producto.selectedIndex].dataset.precio);
+            }
+
+            let cant = parseInt(cantidad.value) || 0;
+
+            total = precio * cant;
+            texto = `Producto x${cant}`;
+        }
+
+        if (descuento > 0 && tipoVal !== "PRODUCTO") {
+            total -= total * (descuento / 100);
+            texto += ` (-${descuento}%)`;
+        }
+
+        resumen.innerText = texto || "Seleccione una operación";
+        totalSpan.innerText = total.toFixed(2);
+    }
+
+    tipo.addEventListener("change", calcular);
+    mesesInput.addEventListener("input", calcular);
+    producto.addEventListener("change", calcular);
+    cantidad.addEventListener("input", calcular);
+    descuentoSelect.addEventListener("change", calcular);
+
+});
+</script>
 
 {% endblock %}
