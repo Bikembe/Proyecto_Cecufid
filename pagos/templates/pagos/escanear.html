@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
 <h2>Escanear Folio</h2>
 
 <form method="post">
     {% csrf_token %}
-    <input type="text" name="folio" autofocus>
-    <button>Buscar</button>
+    <input type="text" name="folio" autofocus placeholder="Escanea o escribe el folio" style="padding: 10px; width: 300px;">
+    <button style="padding: 10px 15px; background-color: #1565c0; color: white; border: none; border-radius: 5px;">Buscar</button>
 </form>
 
 {% if mensaje %}
-<p>{{ mensaje }}</p>
+<p style="color: red; font-weight: bold;">{{ mensaje }}</p>
 {% endif %}
 
 {% if preregistro %}
-<p>{{ preregistro.nombre }}</p>
+<p><strong>Nombre:</strong> {{ preregistro.nombre }} {{ preregistro.apellido_paterno }} {{ preregistro.apellido_materno }}</p>
 
-<a href="{% url 'pagos:procesar_pago' preregistro.id %}">
-    Ir a cobrar
-</a>
+<a href="{% url 'pagos:procesar_pago' preregistro.id %}" style="background-color: #1565c0; color: white; padding: 10px; border-radius: 5px; text-decoration: none;">Ir a cobrar</a>
 {% endif %}
 
 {% endblock %}

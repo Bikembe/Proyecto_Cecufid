@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Calendario Premium</h2>
+
+<div id="calendar"></div>
+
+<div id="modal" style="display:none; position:fixed; top:20%; left:50%; transform:translate(-50%); background:white; padding:20px; border-radius:10px;">
+
+    <h3>Detalle</h3>
+
+    <p id="info"></p>
+
+    <input type="hidden" id="fecha">
+    <input type="hidden" id="horario">
+
+    <input type="number" id="inscripcion" placeholder="ID inscripción">
+
+    <br><br>
+
+    <button onclick="agendar()">Agendar</button>
+    <button onclick="cerrar()">Cerrar</button>
+
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const eventos = JSON.parse('{{ eventos_json|escapejs }}');
+
+    const calendar = new FullCalendar.Calendar(
+        document.getElementById('calendar'),
+        {
+            initialView: 'timeGridWeek',
+            events: eventos,
+
+            eventClick: function(info) {
+
+                let fecha = info.event.startStr.split("T")[0];
+                let horario_id = info.event.extendedProps.horario_id;
+
+                if (!horario_id) return;
+
+                fetch(`/calendario/api/detalle/?fecha=${fecha}&horario=${horario_id}`)
+                    .then(r => r.json())
+                    .then(data => {
+
+                        document.getElementById("info").innerHTML =
+                            `Nivel: ${data.nivel}<br>
+                             Hora: ${data.hora_inicio} - ${data.hora_fin}<br>
+                             Disponibles: ${data.disponibles}`;
+
+                        document.getElementById("fecha").value = fecha;
+                        document.getElementById("horario").value = horario_id;
+
+                        document.getElementById("modal").style.display = "block";
+                    });
+
+            }
+        }
+    );
+
+    calendar.render();
+});
+
+function cerrar(){
+    document.getElementById("modal").style.display = "none";
+}
+
+function agendar(){
+
+    const fecha = document.getElementById("fecha").value;
+    const horario = document.getElementById("horario").value;
+    const inscripcion = document.getElementById("inscripcion").value;
+
+    fetch("/calendario/api/agendar/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: `fecha=${fecha}&horario=${horario}&inscripcion=${inscripcion}`
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if(data.error){
+            alert(data.error);
+        }else{
+            alert("Agendado");
+            location.reload();
+        }
+
+    });
+}
+</script>
+
+{% endblock %}

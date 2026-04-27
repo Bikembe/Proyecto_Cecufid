@@ -4,25 +4,85 @@
 
 <style>
 .box {
-    background: white;
+    background: rgba(255,255,255,0.96);
+    color: #1e1e1e;
     padding: 15px;
     border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+h2 {
+    color: #ffffff;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    background: rgba(255,255,255,0.96);
+    border-radius: 10px;
+    overflow: hidden;
+    color: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 th {
-    background: #1565c0;
+    background: #0d47a1;
     color: white;
     padding: 10px;
+    text-align: left;
+    font-size: 14px;
 }
 
 td {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 14px;
+}
+
+tr:hover {
+    background: rgba(13, 71, 161, 0.06);
+}
+
+form {
+    margin-bottom: 15px;
+}
+
+form label {
+    color: #1e1e1e;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+form select,
+form input {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    margin-bottom: 8px;
+}
+
+button {
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d47a1;
+}
+
+a {
+    color: #1565c0;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 </style>
 
@@ -30,7 +90,7 @@ td {
 
 <div class="box">
 
-<form method="GET" style="margin-bottom:20px;">
+<form method="GET">
 
     <label>Médico:</label>
     <select name="medico">
@@ -107,11 +167,11 @@ td {
 
         <td>
             {% if c.estatus == "APTO" %}
-                <span style="color:green;font-weight:bold;">APTO</span>
+                <span style="color:#2e7d32;font-weight:bold;">APTO</span>
             {% elif c.estatus == "NO_APTO" %}
-                <span style="color:red;font-weight:bold;">NO APTO</span>
+                <span style="color:#c62828;font-weight:bold;">NO APTO</span>
             {% else %}
-                <span style="color:orange;font-weight:bold;">{{ c.estatus }}</span>
+                <span style="color:#ef6c00;font-weight:bold;">{{ c.estatus }}</span>
             {% endif %}
         </td>
 

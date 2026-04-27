@@ -4,11 +4,64 @@
 
 <style>
 .box {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 600px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 14px;
+    max-width: 650px;
     margin: auto;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    backdrop-filter: blur(6px);
+}
+
+h2 {
+    color: #0d47a1;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.section {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f5f7fa;
+}
+
+.label {
+    font-weight: bold;
+    color: #0d47a1;
+}
+
+.value {
+    color: #1f2d3d;
+    margin-bottom: 8px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.card {
+    background: #eef4ff;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.promedio {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1565c0;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.obs {
+    background: #fff3e0;
+    padding: 10px;
+    border-radius: 8px;
+    color: #5d4037;
 }
 </style>
 
@@ -16,18 +69,55 @@
 
 <h2>Detalle de Evaluación</h2>
 
-<p><strong>Nadador:</strong> {{ evaluacion.nadador }}</p>
-<p><strong>Grupo:</strong> {{ evaluacion.horario_carril }}</p>
+<div class="section">
+    <p class="label">Nadador</p>
+    <p class="value">{{ evaluacion.nadador }}</p>
 
-<p>Respiración: {{ evaluacion.respiracion }}</p>
-<p>Libre: {{ evaluacion.libre }}</p>
-<p>Espalda: {{ evaluacion.espalda }}</p>
-<p>Mariposa: {{ evaluacion.mariposa }}</p>
-<p>Resistencia: {{ evaluacion.resistencia }}</p>
+    <p class="label">Grupo</p>
+    <p class="value">{{ evaluacion.horario_carril }}</p>
+</div>
 
-<p><strong>Promedio:</strong> {{ evaluacion.promedio }}</p>
+<div class="section">
+    <div class="grid">
 
-<p><strong>Observaciones:</strong> {{ evaluacion.observaciones }}</p>
+        <div class="card">
+            <strong>Respiración</strong><br>
+            {{ evaluacion.respiracion }}
+        </div>
+
+        <div class="card">
+            <strong>Libre</strong><br>
+            {{ evaluacion.libre }}
+        </div>
+
+        <div class="card">
+            <strong>Espalda</strong><br>
+            {{ evaluacion.espalda }}
+        </div>
+
+        <div class="card">
+            <strong>Mariposa</strong><br>
+            {{ evaluacion.mariposa }}
+        </div>
+
+        <div class="card">
+            <strong>Resistencia</strong><br>
+            {{ evaluacion.resistencia }}
+        </div>
+
+    </div>
+
+    <div class="promedio">
+        Promedio: {{ evaluacion.promedio }}
+    </div>
+</div>
+
+<div class="section">
+    <p class="label">Observaciones</p>
+    <div class="obs">
+        {{ evaluacion.observaciones|default:"Sin observaciones" }}
+    </div>
+</div>
 
 </div>
 

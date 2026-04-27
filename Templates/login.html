@@ -3,46 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login - CECUFID</title>
 
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0d47a1, #1565c0);
+
+            /* 🎯 FONDO INSTITUCIONAL */
+            background: url("/static/img/fondo.jpg") no-repeat center center fixed;
+            background-size: cover;
+
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 15px;
+
+            position: relative;
         }
 
         .login-container {
             width: 100%;
             max-width: 420px;
-            background: white;
+
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
             overflow: hidden;
+
+            position: relative;
+            z-index: 1;
         }
 
         .login-header {
             background-color: #0d47a1;
             color: white;
-            padding: 20px;
+            padding: 14px 15px;
             text-align: center;
         }
 
         .login-header h2 {
             margin: 0;
-            font-size: 22px;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         .login-header small {
-            display: block;
-            margin-top: 5px;
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.9;
         }
 
@@ -72,6 +80,29 @@
         input:focus {
             border-color: #1565c0;
             box-shadow: 0 0 5px rgba(21,101,192,0.3);
+        }
+
+        /* 🔒 password */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 14px;
+            color: #1565c0;
+        }
+
+        /* ⚠ caps lock */
+        .caps-warning {
+            display: none;
+            color: #b71c1c;
+            font-size: 12px;
+            margin-top: 5px;
         }
 
         .btn {
@@ -108,35 +139,10 @@
             font-size: 13px;
         }
 
-        /* ========================= */
-        /* 📱 RESPONSIVE */
-        /* ========================= */
-
         @media (max-width: 480px) {
-
-            .login-container {
-                border-radius: 10px;
-            }
-
-            .login-body {
-                padding: 18px;
-            }
-
-            .login-header h2 {
-                font-size: 18px;
-            }
-
-            input {
-                font-size: 14px;
-                padding: 12px;
-            }
-
-            .btn {
-                padding: 14px;
-                font-size: 15px;
-            }
+            .login-body { padding: 18px; }
+            .btn { font-size: 15px; padding: 14px; }
         }
-
     </style>
 </head>
 
@@ -164,7 +170,15 @@
             {{ form.username }}
 
             <label>Contraseña</label>
-            {{ form.password }}
+
+            <div class="password-wrapper">
+                {{ form.password }}
+                <span class="toggle-password" onclick="togglePassword()">👁</span>
+            </div>
+
+            <div id="capsWarning" class="caps-warning">
+                ⚠️ Bloq Mayús activado
+            </div>
 
             <button type="submit" class="btn">Iniciar Sesión</button>
         </form>
@@ -176,6 +190,31 @@
     </div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const passwordInput = document.querySelector('input[type="password"]');
+    const capsWarning = document.getElementById("capsWarning");
+
+    if (passwordInput) {
+        passwordInput.addEventListener("keyup", function (e) {
+            if (e.getModifierState && e.getModifierState("CapsLock")) {
+                capsWarning.style.display = "block";
+            } else {
+                capsWarning.style.display = "none";
+            }
+        });
+    }
+});
+
+function togglePassword() {
+    const input = document.querySelector('input[type="password"]');
+    if (!input) return;
+
+    input.type = input.type === "password" ? "text" : "password";
+}
+</script>
 
 </body>
 </html>

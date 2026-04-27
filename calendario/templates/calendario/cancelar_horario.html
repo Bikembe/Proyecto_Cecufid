@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+
+<h2>Cancelar Horario</h2>
+
+<form method="POST">
+  {% csrf_token %}
+
+  <label>Seleccionar Horario</label>
+  <select name="horario" required>
+    <option value="">-- Seleccionar --</option>
+    {% for h in horarios %}
+      <option value="{{ h.id }}">
+        {{ h.nivel }} | {{ h.carril }} | {{ h.dia_semana }} | {{ h.hora_inicio }} - {{ h.hora_fin }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <label>Fecha</label>
+  <input type="date" name="fecha" required>
+
+  <label>Motivo</label>
+  <textarea name="motivo" required></textarea>
+
+  <label>
+    <input type="checkbox" name="permite_recuperacion" id="check_rec">
+    Permitir recuperación
+  </label>
+
+  <div id="fechas_box" style="display:none;">
+    <label>Fechas disponibles</label>
+    <input type="date" name="fechas_recuperacion">
+    <button type="button" onclick="agregarFecha()">Agregar</button>
+
+    <ul id="lista_fechas"></ul>
+  </div>
+
+  <button type="submit">Cancelar Horario</button>
+</form>
+
+{% if messages %}
+  {% for m in messages %}
+    <div class="mensaje">{{ m }}</div>
+  {% endfor %}
+{% endif %}
+
+</div>
+
+<script>
+const fechas = [];
+
+document.getElementById("check_rec").addEventListener("change", function () {
+    document.getElementById("fechas_box").style.display =
+        this.checked ? "block" : "none";
+});
+
+function agregarFecha(){
+    const input = document.querySelector('input[name="fechas_recuperacion"]');
+    if(!input.value) return;
+
+    fechas.push(input.value);
+
+    const li = document.createElement("li");
+    li.textContent = input.value;
+
+    const hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.name = "fechas_recuperacion";
+    hidden.value = input.value;
+
+    li.appendChild(hidden);
+    document.getElementById("lista_fechas").appendChild(li);
+
+    input.value = "";
+}
+</script>
+
+{% endblock %}

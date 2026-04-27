@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Recepción - Recuperación de Clase</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="codigo" placeholder="Código de barras">
+    <button type="submit" name="buscar">Buscar</button>
+</form>
+
+{% if nadador %}
+    <h3>{{ nadador.nombre }} {{ nadador.apellido_paterno }}</h3>
+{% endif %}
+
+{% if inscripcion %}
+
+<hr>
+
+<h3>Agendar recuperación</h3>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="hidden" name="inscripcion_id" value="{{ inscripcion.id }}">
+
+    <label>Fecha:</label>
+    <input type="date" name="fecha" id="fecha" required>
+
+    <label>Horario disponible:</label>
+    <select name="horario_id" id="horarios" required>
+        <option value="">Seleccione fecha primero</option>
+    </select>
+
+    <button type="submit" name="guardar">Guardar</button>
+</form>
+
+<p id="estado_fecha"></p>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fechaInput = document.getElementById("fecha");
+    const selectHorarios = document.getElementById("horarios");
+    const estado = document.getElementById("estado_fecha");
+
+    fechaInput.addEventListener("change", function () {
+
+        const fecha = this.value;
+
+        if (!fecha) return;
+
+        selectHorarios.innerHTML = "<option>Cargando...</option>";
+
+        fetch(`/calendario/api/horarios-disponibles/?fecha=${fecha}`)
+            .then(response => response.json())
+            .then(data => {
+
+                selectHorarios.innerHTML = "";
+
+                if (data.cancelado) {
+                    estado.innerHTML = "🚫 Día cancelado";
+                    estado.style.color = "orange";
+                    return;
+                }
+
+                if (data.mensaje) {
+                    estado.innerHTML = "⚠️ " + data.mensaje;
+                    estado.style.color = "orange";
+                }
+
+                if (data.horarios.length === 0) {
+                    estado.innerHTML = "❌ No hay horarios disponibles";
+                    estado.style.color = "red";
+                    return;
+                }
+
+                estado.innerHTML = "✅ Selecciona un horario";
+                estado.style.color = "green";
+
+                data.horarios.forEach(h => {
+                    const option = document.createElement("option");
+                    option.value = h.id;
+                    option.text = `${h.hora_inicio} - ${h.hora_fin} | ${h.nivel} | ${h.disponibles}/${h.total}`;
+                    selectHorarios.appendChild(option);
+                });
+
+            })
+            .catch(() => {
+                estado.innerHTML = "❌ Error al cargar";
+                estado.style.color = "red";
+            });
+    });
+
+});
+</script>
+
+{% endif %}
+
+{% endblock %}

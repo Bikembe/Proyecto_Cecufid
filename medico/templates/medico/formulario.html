@@ -4,31 +4,66 @@
 
 <style>
 .form-box {
-    max-width: 700px;
+    max-width: 750px;
     margin: auto;
-    background: white;
+    background: rgba(255,255,255,0.96);
+    color: #1e1e1e;
     padding: 20px;
     border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
-.form-box input, .form-box textarea, .form-box select {
-    width: 100%;
-    padding: 8px;
+.form-box h2 {
+    margin-top: 0;
+    color: #0d47a1;
+}
+
+.form-box h3 {
+    color: #0d47a1;
     margin-bottom: 10px;
+}
+
+.form-box input,
+.form-box textarea,
+.form-box select {
+    width: 100%;
+    padding: 9px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: #fff;
+    color: #1e1e1e;
 }
 
 .section {
     margin-top: 15px;
     padding-top: 10px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #e5e5e5;
 }
 
 .btn {
     background: #1565c0;
     color: white;
-    padding: 10px;
+    padding: 12px;
     width: 100%;
     border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background: #0d47a1;
+}
+
+.error-box {
+    background: #ffcdd2;
+    color: #b71c1c;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 </style>
 
@@ -43,7 +78,7 @@
 {% endif %}
 
 {% if error %}
-    <div style="background:red;color:white;padding:10px;margin-bottom:10px;">
+    <div class="error-box">
         {{ error }}
     </div>
 {% endif %}
@@ -52,64 +87,64 @@
     {% csrf_token %}
 
     <div class="section">
-    <h3>Signos vitales</h3>
+        <h3>Signos vitales</h3>
 
-    <label>Temperatura (°C)</label>
-    <input type="number" step="0.1" name="temperatura">
+        <label>Temperatura (°C)</label>
+        <input type="number" step="0.1" name="temperatura">
 
-    <label>Presión arterial</label>
-    <input type="text" name="presion">
+        <label>Presión arterial</label>
+        <input type="text" name="presion">
 
-    <label>Frecuencia cardiaca</label>
-    <input type="number" name="fc">
+        <label>Frecuencia cardiaca</label>
+        <input type="number" name="fc">
 
-    <label>Frecuencia respiratoria</label>
-    <input type="number" name="fr">
+        <label>Frecuencia respiratoria</label>
+        <input type="number" name="fr">
 
-    <label>Saturación de oxígeno (%)</label>
-    <input type="number" name="sat">
+        <label>Saturación de oxígeno (%)</label>
+        <input type="number" name="sat">
     </div>
 
     <div class="section">
-    <h3>Medidas corporales</h3>
+        <h3>Medidas corporales</h3>
 
-    <label>Peso (kg)</label>
-    <input type="number" step="0.01" name="peso">
+        <label>Peso (kg)</label>
+        <input type="number" step="0.01" name="peso">
 
-    <label>Talla (m)</label>
-    <input type="number" step="0.01" name="talla">
+        <label>Talla (m)</label>
+        <input type="number" step="0.01" name="talla">
     </div>
 
     <div class="section">
-    <h3>Información adicional</h3>
+        <h3>Información adicional</h3>
 
-    <label>Grupo sanguíneo</label>
-    <input type="text" name="rh">
+        <label>Grupo sanguíneo</label>
+        <input type="text" name="rh">
 
-    <label>Alergias</label>
-    <input type="text" name="alergias">
+        <label>Alergias</label>
+        <input type="text" name="alergias">
 
-    <label>Afiliación médica</label>
-    <input type="text" name="afiliacion">
+        <label>Afiliación médica</label>
+        <input type="text" name="afiliacion">
     </div>
 
     <div class="section">
-    <h3>Resultado</h3>
+        <h3>Resultado</h3>
 
-    <label>Estatus</label>
-    <select name="estatus" required>
-        <option value="">Seleccionar</option>
-        <option value="APTO">Apto</option>
-        <option value="NO_APTO">No Apto</option>
-        <option value="DIFICULTADES">Apto con dificultades</option>
-        <option value="PARANATACION">Paranatación</option>
-    </select>
+        <label>Estatus</label>
+        <select name="estatus" required>
+            <option value="">Seleccionar</option>
+            <option value="APTO">Apto</option>
+            <option value="NO_APTO">No Apto</option>
+            <option value="DIFICULTADES">Apto con dificultades</option>
+            <option value="PARANATACION">Paranatación</option>
+        </select>
 
-    <label>Motivos (opcional)</label>
-    <textarea name="motivos"></textarea>
+        <label>Motivos (opcional)</label>
+        <textarea name="motivos"></textarea>
 
-    <label>Conclusión médica</label>
-    <textarea name="conclusion" required></textarea>
+        <label>Conclusión médica</label>
+        <textarea name="conclusion" required></textarea>
     </div>
 
     <button type="submit" class="btn">Guardar certificado</button>

@@ -4,19 +4,52 @@
 
 <style>
 .box {
-    background: white;
+    background: rgba(255,255,255,0.96);
+    color: #1e1e1e;
     padding: 20px;
     border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    margin-bottom: 20px;
+}
+
+h2, h3 {
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.96);
+    color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #0d47a1;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+tr:hover {
+    background: rgba(13, 71, 161, 0.06);
 }
 </style>
 
 <h2>Panel Administrador</h2>
 
 <div class="box">
-<p>Total Evaluaciones: {{ total }}</p>
-<p>Aprobados: {{ aprobados }}</p>
-<p>Reprobados: {{ reprobados }}</p>
-<p>Promedio General: {{ promedio_general|floatformat:2 }}</p>
+    <p><strong>Total Evaluaciones:</strong> {{ total }}</p>
+    <p><strong>Aprobados:</strong> {{ aprobados }}</p>
+    <p><strong>Reprobados:</strong> {{ reprobados }}</p>
+    <p><strong>Promedio General:</strong> {{ promedio_general|floatformat:2 }}</p>
 </div>
 
 <h3>Evaluaciones recientes</h3>

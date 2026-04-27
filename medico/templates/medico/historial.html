@@ -4,9 +4,68 @@
 
 <style>
 .box {
-    background: white;
-    padding: 15px;
+    background: rgba(255,255,255,0.95);
+    padding: 18px;
     border-radius: 12px;
+    color: #0b1b2b;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+/* tarjeta info superior */
+.info-card {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    background: #f9fbff;
+}
+
+/* tabla mejorada */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.95);
+    color: #0b1b2b;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #0d47a1;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+tr:hover {
+    background: rgba(13,71,161,0.08);
+}
+
+/* estados */
+.apto { color: green; font-weight: bold; }
+.noapto { color: red; font-weight: bold; }
+.otro { color: orange; font-weight: bold; }
+
+/* link back */
+.back {
+    display: inline-block;
+    margin-top: 15px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back:hover {
+    text-decoration: underline;
 }
 </style>
 
@@ -14,12 +73,13 @@
 
 <div class="box">
 
-<div style="margin-bottom:20px; padding:15px; border:1px solid #ccc; border-radius:10px;">
-    
+<div class="info-card">
+
     {% if nadador %}
         <p><strong>Tipo:</strong> Nadador</p>
         <p><strong>Nombre:</strong> {{ nadador.nombre }} {{ nadador.apellido_paterno }} {{ nadador.apellido_materno }}</p>
         <p><strong>Código:</strong> {{ nadador.codigo_barras }}</p>
+
     {% elif preregistro %}
         <p><strong>Tipo:</strong> PreRegistro</p>
         <p><strong>Nombre:</strong> {{ preregistro.nombre }} {{ preregistro.apellido_paterno }} {{ preregistro.apellido_materno }}</p>
@@ -31,6 +91,7 @@
 {% if certificados %}
 
 <table>
+
     <tr>
         <th>Fecha</th>
         <th>Médico</th>
@@ -52,11 +113,11 @@
 
         <td>
             {% if c.estatus == "APTO" %}
-                <span style="color:green;font-weight:bold;">APTO</span>
+                <span class="apto">APTO</span>
             {% elif c.estatus == "NO_APTO" %}
-                <span style="color:red;font-weight:bold;">NO APTO</span>
+                <span class="noapto">NO APTO</span>
             {% else %}
-                <span style="color:orange;font-weight:bold;">{{ c.estatus }}</span>
+                <span class="otro">{{ c.estatus }}</span>
             {% endif %}
         </td>
 
@@ -67,18 +128,17 @@
         </td>
     </tr>
     {% endfor %}
+
 </table>
 
 {% else %}
 
-<p style="color:gray;">No hay certificados registrados.</p>
+<p style="color:#eaf2ff;">No hay certificados registrados.</p>
 
 {% endif %}
 
 </div>
 
-<br>
-
-<a href="javascript:history.back()">⬅ Volver</a>
+<a class="back" href="javascript:history.back()">⬅ Volver</a>
 
 {% endblock %}

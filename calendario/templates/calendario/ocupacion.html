@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Ocupación</h2>
+
+<table border="1">
+<tr>
+    <th>Horario</th>
+    <th>Fecha</th>
+    <th>Nivel</th>
+    <th>Total</th>
+</tr>
+
+{% for d in datos %}
+<tr>
+    <td>{{ d.horario_carril }}</td>
+    <td>{{ d.fecha }}</td>
+    <td>{{ d.nivel }}</td>
+    <td>{{ d.total }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

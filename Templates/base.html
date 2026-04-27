@@ -12,77 +12,132 @@
     --secondary: #1565c0;
     --bg: #f4f6f9;
     --white: #ffffff;
-    --text: #333;
+    --text: #1e1e1e;
     --radius: 10px;
-    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
+/* =========================
+   FONDO GLOBAL
+========================= */
 body {
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+
+    background: url("/static/img/fondo-sistema.jpg") no-repeat center center fixed;
+    background-size: cover;
+
+    color: #f5f7fa;
+    min-height: 100vh;
 }
 
+/* overlay mejorado (más suave para no matar contraste) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 20, 45, 0.45);
+    z-index: 0;
+}
+
+/* =========================
+   LAYOUT GENERAL
+========================= */
+.navbar,
+.menu,
+.content {
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================
+   NAVBAR
+========================= */
 .navbar {
-    background: var(--primary);
+    background: rgba(13, 71, 161, 0.95);
     color: white;
-    padding: 15px 20px;
+    padding: 12px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    backdrop-filter: blur(6px);
 }
 
-.menu-toggle {
-    display: none;
+.navbar h2 {
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+/* =========================
+   LOGO
+========================= */
+.navbar-logo {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
     background: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: var(--radius);
-    cursor: pointer;
+    padding: 3px 6px;
+    border-radius: 6px;
 }
 
+/* =========================
+   MENU
+========================= */
 .menu {
-    background: var(--secondary);
+    background: rgba(21, 101, 192, 0.95);
     padding: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    backdrop-filter: blur(6px);
 }
 
 .menu a {
-    color: white;
+    color: #ffffff;
     text-decoration: none;
     font-weight: 500;
-    padding: 6px 12px;
-    border-radius: var(--radius);
-    transition: 0.3s;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: 0.2s;
+    font-size: 14px;
 }
 
 .menu a:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.15);
 }
 
 .menu a.active {
-    background: white;
-    color: var(--primary);
-    font-weight: bold;
+    background: #ffffff;
+    color: #0d47a1;
+    font-weight: 700;
 }
 
+/* =========================
+   CONTENT
+========================= */
 .content {
     max-width: 1200px;
     margin: 20px auto;
     padding: 15px;
+    color: #f5f7fa;
 }
 
+/* =========================
+   CARDS
+========================= */
 .card {
-    background: var(--white);
-    padding: 20px;
+    background: rgba(255,255,255,0.96);
+    color: #1e1e1e;
+    padding: 18px;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     margin-bottom: 20px;
 }
 
+/* =========================
+   BOTONES
+========================= */
 .btn {
     background: var(--secondary);
     color: white;
@@ -92,12 +147,16 @@ body {
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    font-weight: 500;
 }
 
 .btn:hover {
     background: #0b3c8c;
 }
 
+/* =========================
+   TABLAS (FIX DE CONTRASTE)
+========================= */
 .table-container {
     overflow-x: auto;
 }
@@ -105,44 +164,67 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    background: rgba(255,255,255,0.96);
+    color: #1e1e1e;
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
 }
 
 th {
-    background: var(--primary);
-    color: white;
+    background: #0d47a1;
+    color: #ffffff;
     padding: 10px;
     text-align: left;
+    font-size: 14px;
 }
 
 td {
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e5e5e5;
+    color: #1e1e1e;
 }
 
 tr:hover {
-    background: #f9f9f9;
+    background: rgba(13, 71, 161, 0.06);
 }
 
+/* =========================
+   FORMULARIOS
+========================= */
 input, select, textarea {
     width: 100%;
     padding: 8px;
     margin: 5px 0 10px;
     border-radius: var(--radius);
     border: 1px solid #ccc;
+    background: white;
+    color: #1e1e1e;
 }
 
+/* =========================
+   ALERTAS
+========================= */
 .alert {
     padding: 10px;
     border-radius: var(--radius);
     margin-bottom: 15px;
+    color: #1e1e1e;
 }
 
 .success { background: #c8e6c9; }
 .error { background: #ffcdd2; }
+
+/* =========================
+   RESPONSIVE
+========================= */
+.menu-toggle {
+    display: none;
+    background: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
 
 @media (max-width: 768px) {
 
@@ -162,12 +244,12 @@ input, select, textarea {
     .navbar {
         flex-direction: column;
         align-items: flex-start;
+        gap: 10px;
     }
 
     .content {
         padding: 10px;
     }
-
 }
 </style>
 </head>
@@ -175,7 +257,10 @@ input, select, textarea {
 <body>
 
 <div class="navbar">
-    <h2>CECUFID</h2>
+
+    <div style="display:flex; align-items:center; gap:10px;">
+        <img src="/static/img/logo-cecufid.jpeg" alt="CECUFID" class="navbar-logo">
+    </div>
 
     <button class="menu-toggle" onclick="toggleMenu()">☰ Menú</button>
 
@@ -190,85 +275,26 @@ input, select, textarea {
 
 {% if request.user.is_authenticated %}
 
-    {% with rol=request.user.rol.nombre|default_if_none:'' %}
+    {% for nombre, url in menu_items %}
+        <a href="{% url url %}"
+           class="{% if request.resolver_match.url_name in url %}active{% endif %}">
+           {{ nombre }}
+        </a>
+    {% endfor %}
 
-        <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a>
-
-        {% if rol == "Administrador" %}
-
-            <a href="{% url 'usuarios_lista' %}" class="{% if 'usuarios' in request.path %}active{% endif %}">Usuarios</a>
-            <a href="{% url 'reportes:usuarios_en_linea' %}" class="{% if 'reportes' in request.path %}active{% endif %}">Online</a>
-
-            <a href="{% url 'asignaciones:dashboard' %}" class="{% if 'asignaciones' in request.path %}active{% endif %}">Asignaciones</a>
-            <a href="{% url 'asignaciones:carril_lista' %}" class="{% if 'carril' in request.path %}active{% endif %}">Carriles</a>
-            <a href="{% url 'asignaciones:horario_lista' %}" class="{% if 'horario' in request.path %}active{% endif %}">Horarios</a>
-            <a href="{% url 'asignaciones:inscripcion_lista' %}" class="{% if 'inscripcion' in request.path %}active{% endif %}">Inscripciones</a>
-
-            <a href="{% url 'accesos:historial' %}" class="{% if 'historial' in request.path and 'accesos' in request.path %}active{% endif %}">Historial accesos</a>
-
-            <a href="{% url 'medico:historial_general' %}" class="{% if 'historial_general' in request.path %}active{% endif %}">Historial médico</a>
-
-            <a href="{% url 'evaluaciones:panel_admin' %}" class="{% if 'evaluaciones' in request.path %}active{% endif %}">Evaluaciones</a>
-
-            <a href="{% url 'reportes:historial_lista' %}" class="{% if 'reportes' in request.path %}active{% endif %}">Reportes</a>
-
-        {% endif %}
-
-        {% if rol == "Coordinador" %}
-
-            <a href="{% url 'asignaciones:dashboard' %}" class="{% if 'asignaciones' in request.path %}active{% endif %}">Asignaciones</a>
-            <a href="{% url 'asignaciones:horario_lista' %}" class="{% if 'horario' in request.path %}active{% endif %}">Horarios</a>
-            <a href="{% url 'asignaciones:inscripcion_lista' %}" class="{% if 'inscripcion' in request.path %}active{% endif %}">Inscripciones</a>
-            <a href="{% url 'asignaciones:reporte' %}" class="{% if 'reporte' in request.path %}active{% endif %}">Reportes</a>
-
-            <a href="{% url 'accesos:historial' %}" class="{% if 'accesos' in request.path %}active{% endif %}">Accesos</a>
-
-        {% endif %}
-
-        {% if rol == "Maestro" %}
-
-            <a href="{% url 'evaluaciones:panel_maestro' %}" class="{% if 'evaluaciones' in request.path %}active{% endif %}">Mis evaluaciones</a>
-            <a href="{% url 'asignaciones:horario_lista' %}" class="{% if 'horario' in request.path %}active{% endif %}">Mis horarios</a>
-
-        {% endif %}
-
-        {% if rol == "Recepcion" %}
-
-            <a href="{% url 'accesos:escanear' %}" class="{% if 'accesos' in request.path %}active{% endif %}">Escanear acceso</a>
-            <a href="{% url 'accesos:historial' %}" class="{% if 'historial' in request.path %}active{% endif %}">Historial accesos</a>
-
-            <a href="{% url 'preregistro:crear' %}" class="{% if 'preregistro' in request.path %}active{% endif %}">Pre-registro</a>
-
-        {% endif %}
-
-        {% if rol == "Medico" %}
-
-            <a href="{% url 'medico:escanear' %}" class="{% if 'medico' in request.path %}active{% endif %}">Escanear</a>
-            <a href="{% url 'medico:historial_general' %}" class="{% if 'historial' in request.path %}active{% endif %}">Historial</a>
-
-        {% endif %}
-
-        {% if rol == "Caja" %}
-
-            <a href="{% url 'accesos:escanear' %}" class="{% if 'accesos' in request.path %}active{% endif %}">Control acceso</a>
-
-        {% endif %}
-
-        <form method="post" action="{% url 'logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" style="
-                background:none;
-                border:none;
-                color:white;
-                font-weight:bold;
-                cursor:pointer;
-                padding:6px 10px;
-            ">
-                Cerrar sesión
-            </button>
-        </form>
-
-    {% endwith %}
+    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" style="
+            background:none;
+            border:none;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            padding:6px 10px;
+        ">
+            Cerrar sesión
+        </button>
+    </form>
 
 {% endif %}
 

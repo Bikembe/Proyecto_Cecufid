@@ -4,16 +4,69 @@
 
 <style>
 .contenedor {
-    max-width: 800px;
-    margin: auto;
-    background: white;
-    padding: 20px;
+    max-width: 850px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.96);
+    padding: 25px;
     border-radius: 12px;
+    color: #0b1b2b;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
+h2 {
+    text-align: center;
+    color: #0d47a1;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 15px 0;
+}
+
+p {
+    margin: 6px 0;
+    font-size: 15px;
+}
+
+/* firma */
+.firma {
+    margin-top: 40px;
+    text-align: right;
+    font-weight: bold;
+    color: #0d47a1;
+}
+
+/* botón */
+button {
+    margin-top: 20px;
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d47a1;
+}
+
+/* impresión limpia */
 @media print {
     button {
         display: none;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .contenedor {
+        box-shadow: none;
+        margin: 0;
     }
 }
 </style>
@@ -24,8 +77,7 @@
 
 <hr>
 
-<div>
-<p><strong>Nombre:</strong> 
+<p><strong>Nombre:</strong>
 {% if certificado.nadador %}
 {{ certificado.nadador.nombre }} {{ certificado.nadador.apellido_paterno }} {{ certificado.nadador.apellido_materno }}
 {% else %}
@@ -34,7 +86,6 @@
 </p>
 
 <p><strong>Fecha:</strong> {{ certificado.fecha_examen|date:"d/m/Y H:i" }}</p>
-</div>
 
 <hr>
 
@@ -53,9 +104,9 @@
 <p><strong>Conclusión:</strong></p>
 <p>{{ certificado.conclusion }}</p>
 
-<br><br>
-
-<p><strong>{{ certificado.medico.nombre_completo }}</strong></p>
+<div class="firma">
+    {{ certificado.medico.nombre_completo }}
+</div>
 
 <button onclick="window.print()">Imprimir</button>
 

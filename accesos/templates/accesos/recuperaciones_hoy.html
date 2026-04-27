@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+
+<h2>Recuperaciones de Hoy</h2>
+
+<table>
+    <tr>
+        <th>Nadador</th>
+        <th>Horario</th>
+        <th>Hora</th>
+    </tr>
+
+    {% for r in recuperaciones %}
+    <tr>
+        <td>{{ r.inscripcion.nadador }}</td>
+        <td>{{ r.horario_carril }}</td>
+        <td>{{ r.hora_inicio }} - {{ r.hora_fin }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">Sin recuperaciones</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</div>
+
+{% endblock %}

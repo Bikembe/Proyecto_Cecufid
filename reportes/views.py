@@ -81,7 +81,7 @@ def reporte_mensual(request):
 from usuarios.models import Usuario
 from django.db.models import Sum
 
-@rol_requerido(['Administrador', 'Coordinador'])
+@rol_requerido(['Administrador', 'Coordinador', 'Caja'])
 def corte_caja(request):
 
     usuarios = Usuario.objects.all()
@@ -120,7 +120,7 @@ def grafica_ingresos(request):
         "totales": totales
     })
 
-@rol_requerido(['Administrador', 'Coordinador'])
+@rol_requerido(['Administrador', 'Coordinador', 'Caja'])
 def exportar_excel_caja(request):
 
     pagos = Pago.objects.all().order_by("-id")
@@ -154,7 +154,7 @@ def exportar_excel_caja(request):
     wb.save(response)
     return response
 
-@rol_requerido(['Administrador', 'Coordinador'])
+@rol_requerido(['Administrador', 'Coordinador', 'Caja'])
 def reporte_caja(request):
 
     fecha_inicio = request.GET.get("inicio")

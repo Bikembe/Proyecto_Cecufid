@@ -15,6 +15,9 @@ from django.db.models import Count
 
 from reportes.utils import registrar_accion
 
+# 🔥 NUEVO (IMPORTANTE)
+from calendario.models import EventoCalendario, RecuperacionClase
+
 
 @login_required
 @rol_requerido(['Administrador', 'Recepcion'])
@@ -71,68 +74,122 @@ def escanear_acceso(request):
 
                     horario = inscripcion.horario_carril
 
-                    ultimo_acceso = Acceso.objects.filter(
-                        nadador=nadador,
-                        fecha__date=hoy
-                    ).order_by('-fecha').first()
+                    # =====================================================
+                    # 🔴 VALIDAR CANCELACIÓN DE DÍA
+                    # =====================================================
+                    cancelacion_dia = EventoCalendario.objects.filter(
+                        tipo='CANCELACION_DIA',
+                        fecha=hoy
+                    ).exists()
 
-                    if not ultimo_acceso or ultimo_acceso.tipo == "SALIDA":
+                    if cancelacion_dia:
+                        mensaje = "INSTALACIÓN CERRADA HOY"
+                        tipo = "error"
 
-                        hora_inicio = horario.hora_inicio
-
-                        inicio_datetime = timezone.make_aware(
-                            datetime.combine(hoy, hora_inicio)
+                        registrar_accion(
+                            request.user, "ACCESOS", "BLOQUEADO",
+                            f"Día cancelado: {nadador}", request
                         )
 
-                        tolerancia = inicio_datetime + timedelta(minutes=5)
+                    else:
 
-                        if ahora > tolerancia:
-                            mensaje = "ACCESO BLOQUEADO - FUERA DE TIEMPO"
+                        # =====================================================
+                        # 🔴 VALIDAR CANCELACIÓN DE HORARIO
+                        # =====================================================
+                        cancelacion_horario = EventoCalendario.objects.filter(
+                            tipo='CANCELACION_HORARIO',
+                            fecha=hoy,
+                            horario_carril=horario
+                        ).exists()
+
+                        if cancelacion_horario:
+                            mensaje = "CLASE CANCELADA EN ESTE HORARIO"
                             tipo = "error"
 
                             registrar_accion(
                                 request.user, "ACCESOS", "BLOQUEADO",
-                                f"Fuera de horario: {nadador}", request
+                                f"Horario cancelado: {nadador}", request
                             )
 
                         else:
-                            nuevo_tipo = "ENTRADA"
-                            estado_actual = "DENTRO"
 
-                            Acceso.objects.create(
+                            # =====================================================
+                            # 🟢 VALIDAR RECUPERACIÓN
+                            # =====================================================
+                            recuperacion = RecuperacionClase.objects.filter(
+                                inscripcion__nadador=nadador,
+                                fecha=hoy,
+                                estado='PROGRAMADA'
+                            ).first()
+
+                            if recuperacion:
+                                hora_inicio = recuperacion.hora_inicio
+                                hora_fin = recuperacion.hora_fin
+                                horario = recuperacion.horario_carril
+                            else:
+                                hora_inicio = horario.hora_inicio
+                                hora_fin = horario.hora_fin
+
+                            ultimo_acceso = Acceso.objects.filter(
                                 nadador=nadador,
-                                tipo=nuevo_tipo
-                            )
+                                fecha__date=hoy
+                            ).order_by('-fecha').first()
 
-                            mensaje = "ENTRADA REGISTRADA"
-                            tipo = "success"
+                            if not ultimo_acceso or ultimo_acceso.tipo == "SALIDA":
 
-                            info_horario = horario
+                                inicio_datetime = timezone.make_aware(
+                                    datetime.combine(hoy, hora_inicio)
+                                )
 
-                            registrar_accion(
-                                request.user, "ACCESOS", "ENTRADA",
-                                f"Entrada registrada: {nadador}", request
-                            )
+                                tolerancia = inicio_datetime + timedelta(minutes=5)
 
-                    else:
+                                if ahora > tolerancia:
+                                    mensaje = "ACCESO BLOQUEADO - FUERA DE TIEMPO"
+                                    tipo = "error"
 
-                        nuevo_tipo = "SALIDA"
-                        estado_actual = "FUERA"
+                                    registrar_accion(
+                                        request.user, "ACCESOS", "BLOQUEADO",
+                                        f"Fuera de horario: {nadador}", request
+                                    )
 
-                        Acceso.objects.create(
-                            nadador=nadador,
-                            tipo=nuevo_tipo
-                        )
+                                else:
+                                    nuevo_tipo = "ENTRADA"
+                                    estado_actual = "DENTRO"
 
-                        mensaje = "SALIDA REGISTRADA"
-                        tipo = "success"
+                                    Acceso.objects.create(
+                                        nadador=nadador,
+                                        tipo=nuevo_tipo
+                                    )
 
-                        info_horario = horario
+                                    mensaje = "ENTRADA REGISTRADA"
+                                    tipo = "success"
 
-                        registrar_accion(
-                            request.user, "ACCESOS", "SALIDA",
-                            f"Salida registrada: {nadador}", request
-                        )
+                                    info_horario = horario
+
+                                    registrar_accion(
+                                        request.user, "ACCESOS", "ENTRADA",
+                                        f"Entrada registrada: {nadador}", request
+                                    )
+
+                            else:
+
+                                nuevo_tipo = "SALIDA"
+                                estado_actual = "FUERA"
+
+                                Acceso.objects.create(
+                                    nadador=nadador,
+                                    tipo=nuevo_tipo
+                                )
+
+                                mensaje = "SALIDA REGISTRADA"
+                                tipo = "success"
+
+                                info_horario = horario
+
+                                registrar_accion(
+                                    request.user, "ACCESOS", "SALIDA",
+                                    f"Salida registrada: {nadador}", request
+                                )
 
         except Nadador.DoesNotExist:
 
@@ -179,6 +236,18 @@ def escanear_acceso(request):
         "info_horario": info_horario
     })
 
+@login_required
+def recuperaciones_hoy(request):
+    hoy = timezone.now().date()
+
+    recuperaciones = RecuperacionClase.objects.filter(
+        fecha=hoy,
+        estado='PROGRAMADA'
+    ).select_related('inscripcion__nadador', 'horario_carril')
+
+    return render(request, "accesos/recuperaciones_hoy.html", {
+        "recuperaciones": recuperaciones
+    })
 
 @login_required
 @rol_requerido(['Administrador', 'Recepcion', 'Coordinador'])
